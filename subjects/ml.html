@@ -1,0 +1,3326 @@
+﻿﻿<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTCS1104 — Machine Learning & Techniques | Study App</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Playfair+Display:wght@700;900&display=swap');
+
+:root {
+  --bg: #0a0a14;
+  --bg2: #10101e;
+  --bg3: #16162a;
+  --glass: rgba(255,255,255,0.04);
+  --glass2: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.10);
+  --accent: #7c6fcd;
+  --accent2: #4fc3f7;
+  --accent3: #f06292;
+  --accent4: #66bb6a;
+  --accent5: #ffb74d;
+  --text: #e8e8f0;
+  --text2: #a0a0c0;
+  --text3: #6060a0;
+  --card: rgba(22,22,42,0.85);
+  --shadow: 0 8px 40px rgba(0,0,0,0.5);
+  --radius: 16px;
+  --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+[data-theme="light"] {
+  --bg: #f0f0f8;
+  --bg2: #e4e4f0;
+  --bg3: #d8d8ec;
+  --glass: rgba(255,255,255,0.6);
+  --glass2: rgba(255,255,255,0.8);
+  --border: rgba(0,0,0,0.10);
+  --text: #1a1a2e;
+  --text2: #40406a;
+  --text3: #7070a0;
+  --card: rgba(240,240,252,0.9);
+  --shadow: 0 8px 40px rgba(100,100,180,0.15);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Space Grotesk',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  transition:background var(--transition),color var(--transition);
+}
+
+/* BG MESH */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(124,111,205,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 90%, rgba(79,195,247,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 60% 40%, rgba(240,98,146,0.06) 0%, transparent 50%);
+  pointer-events:none;z-index:0;
+}
+[data-theme="light"] body::before{
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(124,111,205,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 90%, rgba(79,195,247,0.06) 0%, transparent 60%);
+}
+
+/* PROGRESS BAR */
+#progress-bar{
+  position:fixed;top:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));
+  width:0%;z-index:9999;transition:width 0.1s;
+}
+
+/* HEADER */
+header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,10,20,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;
+  transition:background var(--transition);
+}
+[data-theme="light"] header{background:rgba(240,240,248,0.85);}
+.header-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;gap:16px;
+  height:64px;flex-wrap:wrap;
+}
+.logo{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:900;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  white-space:nowrap;
+}
+.logo span{font-size:11px;display:block;
+  font-family:'Space Grotesk',sans-serif;font-weight:500;
+  -webkit-text-fill-color:var(--text2);color:var(--text2);
+  letter-spacing:2px;text-transform:uppercase;margin-top:-4px;
+}
+.header-actions{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.btn-icon{
+  background:var(--glass2);border:1px solid var(--border);
+  color:var(--text);padding:8px 14px;border-radius:10px;
+  cursor:pointer;font-size:13px;font-family:'Space Grotesk',sans-serif;
+  font-weight:500;transition:all var(--transition);white-space:nowrap;
+  display:flex;align-items:center;gap:6px;
+}
+.btn-icon:hover{background:var(--accent);border-color:var(--accent);color:#fff;transform:translateY(-1px);}
+
+/* SEARCH */
+.search-wrap{
+  position:relative;flex:1;min-width:180px;max-width:320px;
+}
+.search-wrap input{
+  width:100%;background:var(--glass2);border:1px solid var(--border);
+  color:var(--text);padding:9px 36px 9px 14px;border-radius:10px;
+  font-size:13px;font-family:'Space Grotesk',sans-serif;
+  outline:none;transition:all var(--transition);
+}
+.search-wrap input:focus{border-color:var(--accent);background:var(--glass);}
+.search-wrap input::placeholder{color:var(--text3);}
+.search-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;}
+
+/* UNIT NAV */
+.unit-nav{
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  position:sticky;top:64px;z-index:99;
+  overflow-x:auto;transition:background var(--transition);
+}
+.unit-nav-inner{
+  display:flex;gap:4px;padding:10px 24px;
+  max-width:1200px;margin:0 auto;min-width:max-content;
+}
+.unit-btn{
+  padding:8px 20px;border-radius:10px;border:none;cursor:pointer;
+  font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;
+  background:transparent;color:var(--text2);
+  transition:all var(--transition);white-space:nowrap;
+}
+.unit-btn:hover{background:var(--glass2);color:var(--text);}
+.unit-btn.active{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;box-shadow:0 4px 16px rgba(124,111,205,0.3);
+}
+
+/* MAIN */
+main{max-width:1200px;margin:0 auto;padding:32px 24px 80px;}
+.unit-section{display:none;}
+.unit-section.active{display:block;animation:fadeUp 0.4s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+/* UNIT HEADER */
+.unit-header{
+  display:flex;align-items:center;gap:16px;margin-bottom:28px;flex-wrap:wrap;
+}
+.unit-badge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:600;
+  padding:4px 12px;border-radius:20px;
+  letter-spacing:1px;text-transform:uppercase;
+}
+.unit-title{
+  font-family:'Playfair Display',serif;
+  font-size:28px;font-weight:700;
+  background:linear-gradient(135deg,var(--text),var(--text2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.unit-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;}
+
+/* CHEAT SHEET */
+.cheat-sheet{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px 24px;
+  margin-bottom:24px;backdrop-filter:blur(10px);
+}
+.cheat-sheet h3{
+  font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px;
+}
+.cs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;}
+.cs-item{
+  background:var(--glass);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;
+}
+.cs-item .cs-label{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.cs-item .cs-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent2);line-height:1.5;}
+
+/* MEMORY TIPS */
+.memory-tips{
+  background:linear-gradient(135deg,rgba(124,111,205,0.1),rgba(79,195,247,0.08));
+  border:1px solid rgba(124,111,205,0.3);
+  border-radius:var(--radius);padding:16px 20px;margin-bottom:24px;
+}
+.memory-tips h3{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent3);margin-bottom:10px;}
+.tips-list{display:flex;flex-wrap:wrap;gap:8px;}
+.tip-tag{
+  background:rgba(240,98,146,0.12);border:1px solid rgba(240,98,146,0.25);
+  color:var(--accent3);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;
+}
+
+/* ACCORDION */
+.q-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);margin-bottom:12px;
+  overflow:hidden;backdrop-filter:blur(10px);
+  transition:border-color var(--transition),box-shadow var(--transition);
+}
+.q-card:hover{border-color:rgba(124,111,205,0.3);box-shadow:var(--shadow);}
+.q-card.bookmarked{border-color:var(--accent5);}
+.q-card.highlighted .q-header{background:rgba(124,111,205,0.08);}
+
+.q-header{
+  display:flex;align-items:center;gap:12px;padding:16px 20px;
+  cursor:pointer;transition:background var(--transition);user-select:none;
+}
+.q-header:hover{background:var(--glass);}
+.q-num{
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;
+  padding:3px 10px;border-radius:6px;white-space:nowrap;min-width:42px;text-align:center;
+}
+.q-text{flex:1;font-size:14px;line-height:1.5;color:var(--text);}
+.q-meta{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.mark-badge{
+  font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;
+  font-family:'JetBrains Mono',monospace;
+}
+.m5{background:rgba(102,187,106,0.15);color:#66bb6a;}
+.m7{background:rgba(79,195,247,0.15);color:#4fc3f7;}
+.m8{background:rgba(240,98,146,0.15);color:#f06292;}
+
+.btn-bookmark{background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:4px;transition:color var(--transition);}
+.btn-bookmark.active{color:var(--accent5);}
+.btn-copy-ans{background:none;border:none;cursor:pointer;color:var(--text3);font-size:13px;padding:4px 8px;border-radius:6px;transition:all var(--transition);font-family:'Space Grotesk',sans-serif;}
+.btn-copy-ans:hover{background:var(--glass2);color:var(--text);}
+.q-toggle{color:var(--text3);font-size:12px;transition:transform var(--transition);}
+.q-card.open .q-toggle{transform:rotate(180deg);}
+
+/* ANSWER BODY */
+.q-body{
+  display:none;padding:20px 24px 24px;
+  border-top:1px solid var(--border);
+  animation:fadeIn 0.25s ease;
+}
+.q-card.open .q-body{display:block;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+.ans-section{margin-bottom:16px;}
+.ans-section:last-child{margin-bottom:0;}
+.ans-label{
+  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:8px;display:flex;align-items:center;gap:6px;
+}
+.ans-label.def{color:var(--accent2);}
+.ans-label.core{color:var(--accent);}
+.ans-label.formula{color:var(--accent3);}
+.ans-label.algo{color:#66bb6a;}
+.ans-label.dia{color:var(--accent5);}
+.ans-label.table-lbl{color:#ab47bc;}
+.ans-label.conc{color:var(--accent2);}
+.ans-label.prop{color:#ff7043;}
+
+.ans-text{font-size:14px;line-height:1.7;color:var(--text2);}
+.ans-list{list-style:none;padding:0;}
+.ans-list li{
+  font-size:14px;line-height:1.6;color:var(--text2);padding:4px 0 4px 18px;
+  position:relative;
+}
+.ans-list li::before{content:'▸';position:absolute;left:0;color:var(--accent);font-size:12px;}
+
+.formula-box{
+  background:rgba(240,98,146,0.06);border:1px solid rgba(240,98,146,0.2);
+  border-radius:10px;padding:12px 16px;
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  color:var(--accent3);line-height:1.7;white-space:pre-wrap;overflow-x:auto;
+}
+
+.algo-box{
+  background:rgba(22,22,40,0.8);border:1px solid rgba(102,187,106,0.2);
+  border-radius:10px;padding:14px 16px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  color:#a5d6a7;line-height:1.8;white-space:pre-wrap;overflow-x:auto;
+}
+[data-theme="light"] .algo-box{background:rgba(240,255,240,0.8);color:#2e7d32;}
+
+.dia-box{
+  background:rgba(10,10,20,0.6);border:1px solid rgba(255,183,77,0.2);
+  border-radius:10px;padding:14px 16px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:#ffe082;line-height:1.7;white-space:pre;overflow-x:auto;
+}
+[data-theme="light"] .dia-box{background:rgba(255,250,240,0.8);color:#e65100;}
+
+.compare-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px;}
+.compare-table th{
+  background:rgba(124,111,205,0.15);color:var(--accent);
+  padding:9px 12px;text-align:left;font-weight:600;
+  border:1px solid var(--border);font-size:12px;letter-spacing:0.5px;
+}
+.compare-table td{
+  padding:8px 12px;border:1px solid var(--border);
+  color:var(--text2);line-height:1.5;vertical-align:top;
+}
+.compare-table tr:nth-child(even) td{background:var(--glass);}
+
+.conclusion-box{
+  background:linear-gradient(135deg,rgba(79,195,247,0.06),rgba(124,111,205,0.06));
+  border-left:3px solid var(--accent2);
+  border-radius:0 10px 10px 0;padding:12px 16px;
+}
+.conclusion-box p{font-size:13px;line-height:1.6;color:var(--text2);}
+
+/* QUICK REVISION MODE */
+body.quick-mode .ans-section:not(.qs-visible){display:none;}
+body.quick-mode .q-card.open .q-body .ans-section.qs-key{display:block;}
+
+/* SCROLL TO TOP */
+#scroll-top{
+  position:fixed;bottom:28px;right:24px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border:none;color:#fff;width:44px;height:44px;border-radius:50%;
+  cursor:pointer;font-size:18px;display:none;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(124,111,205,0.4);transition:all var(--transition);z-index:200;
+}
+#scroll-top:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(124,111,205,0.5);}
+#scroll-top.visible{display:flex;}
+
+/* SEARCH HIGHLIGHT */
+.hl{background:rgba(255,183,77,0.3);color:var(--text);border-radius:3px;padding:0 2px;}
+
+/* BOOKMARK PANEL */
+.bm-panel{
+  position:fixed;top:0;right:-360px;width:340px;height:100vh;
+  background:var(--bg2);border-left:1px solid var(--border);
+  z-index:500;transition:right var(--transition);overflow-y:auto;padding:20px;
+}
+.bm-panel.open{right:0;}
+.bm-panel h2{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;}
+.bm-close{background:none;border:none;cursor:pointer;color:var(--text2);font-size:20px;}
+.bm-item{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:12px;margin-bottom:8px;font-size:13px;cursor:pointer;
+  transition:border-color var(--transition);
+}
+.bm-item:hover{border-color:var(--accent);}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+  background:var(--accent);color:#fff;padding:10px 20px;border-radius:10px;
+  font-size:13px;font-weight:600;z-index:9999;opacity:0;
+  transition:opacity 0.3s;pointer-events:none;white-space:nowrap;
+}
+.toast.show{opacity:1;}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .header-inner{height:auto;padding:10px 0;gap:10px;}
+  .logo span{display:none;}
+  main{padding:20px 16px 80px;}
+  .q-header{padding:14px 16px;gap:8px;}
+  .q-body{padding:16px;}
+  .cs-grid{grid-template-columns:1fr;}
+  .unit-title{font-size:22px;}
+  .bm-panel{width:100%;right:-100%;}
+  .compare-table{font-size:12px;}
+  .search-wrap{min-width:140px;}
+}
+
+/* PRINT */
+@media print{
+  header,#scroll-top,.bm-panel,.unit-nav,.unit-actions,.btn-icon,
+  .q-toggle,.btn-bookmark,.btn-copy-ans{display:none!important;}
+  .unit-section{display:block!important;}
+  .q-body{display:block!important;}
+  body::before{display:none;}
+  .q-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc;}
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<!-- STUDY PORTAL NAVIGATION -->
+<div class="sp-topbar" id="spTopbar">
+  <a href="../index.html" class="sp-home-link"><img src="../assets/images/avanthi_clg logo.webp" alt="Avanthi" style="width:28px;height:28px;border-radius:6px;object-fit:contain;background:#fff;border:1px solid rgba(255,255,255,0.1);padding:1px;"> Study Portal</a>
+  <div class="sp-nav-links">
+    <a href="maths.html" class="sp-nav-link">Maths</a>
+    <a href="dsa.html" class="sp-nav-link">DSA</a>
+    <a href="cloud.html" class="sp-nav-link">Cloud</a>
+    <a href="ml.html" class="sp-nav-link sp-active">ML</a>
+  </div>
+</div>
+<script>
+// Sync topbar theme with page theme
+(function(){
+  var tb = document.getElementById('spTopbar');
+  if (!tb) return;
+  function syncTheme() {
+    var isDark = !document.body.classList.contains('light') && 
+                 document.documentElement.getAttribute('data-theme') !== 'light';
+    tb.classList.toggle('light-bar', !isDark);
+  }
+  syncTheme();
+  new MutationObserver(syncTheme).observe(document.body, {attributes:true,attributeFilter:['class']});
+  new MutationObserver(syncTheme).observe(document.documentElement, {attributes:true,attributeFilter:['data-theme']});
+})();
+</script>
+
+<div id="progress-bar"></div>
+
+<!-- SCROLL TOP -->
+<button id="scroll-top" title="Scroll to Top">▲</button>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- BOOKMARK PANEL -->
+<div class="bm-panel" id="bm-panel">
+  <h2>📌 Bookmarks <button class="bm-close" onclick="toggleBookmarkPanel()">✕</button></h2>
+  <div id="bm-list"><p style="color:var(--text3);font-size:13px;">No bookmarks yet. Click ★ on any question.</p></div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">ML &amp; Techniques<span>MTCS1104 · M.Tech Study App</span></div>
+    <div class="search-wrap">
+      <input type="text" id="search-input" placeholder="Search: SVM, Bayes, NN…" oninput="doSearch(this.value)">
+      <span class="search-icon">⌕</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn-icon" onclick="toggleQuickMode()" id="qm-btn">⚡ Quick Mode</button>
+      <button class="btn-icon" onclick="toggleBookmarkPanel()">📌 Bookmarks</button>
+      <button class="btn-icon" onclick="toggleTheme()" id="theme-btn">☀️ Light</button>
+      <button class="btn-icon" onclick="window.print()">🖨️ Print</button>
+    </div>
+  </div>
+</header>
+
+<!-- UNIT NAV -->
+<nav class="unit-nav">
+  <div class="unit-nav-inner">
+    <button class="unit-btn active" onclick="showUnit(1,this)">Unit I — Foundations</button>
+    <button class="unit-btn" onclick="showUnit(2,this)">Unit II — Bayesian Learning</button>
+    <button class="unit-btn" onclick="showUnit(3,this)">Unit III — Instance &amp; SVM</button>
+    <button class="unit-btn" onclick="showUnit(4,this)">Unit IV — Neural Networks &amp; GA</button>
+    <button class="unit-btn" onclick="showUnit(5,this)">Unit V — Rules, RL &amp; EBL</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ═══════════════════ UNIT I ═══════════════════ -->
+<section class="unit-section active" id="unit-1">
+  <div class="unit-header">
+    <span class="unit-badge" style="background:rgba(124,111,205,0.15);color:var(--accent);">Unit I</span>
+    <h2 class="unit-title">Foundations of Machine Learning</h2>
+    <div class="unit-actions">
+      <button class="btn-icon" onclick="openAll(1)">📂 Open All</button>
+      <button class="btn-icon" onclick="closeAll(1)">📁 Close All</button>
+    </div>
+  </div>
+
+  <div class="cheat-sheet">
+    <h3>📊 Cheat Sheet — Unit I</h3>
+    <div class="cs-grid">
+      <div class="cs-item"><div class="cs-label">Hypothesis Space</div><div class="cs-val">H = set of all possible functions h: X→Y</div></div>
+      <div class="cs-item"><div class="cs-label">Inductive Bias</div><div class="cs-val">Assumptions that help generalize beyond training data</div></div>
+      <div class="cs-item"><div class="cs-label">Information Gain</div><div class="cs-val">IG(S,A) = H(S) − Σ(|Sv|/|S|)·H(Sv)</div></div>
+      <div class="cs-item"><div class="cs-label">Entropy</div><div class="cs-val">H(S) = −Σ pᵢ log₂(pᵢ)</div></div>
+      <div class="cs-item"><div class="cs-label">Gini Index</div><div class="cs-val">Gini = 1 − Σ pᵢ²</div></div>
+      <div class="cs-item"><div class="cs-label">Version Space</div><div class="cs-val">VS = {h∈H : h consistent with D}</div></div>
+    </div>
+  </div>
+
+  <div class="memory-tips">
+    <h3>🧠 Memory Tips — Unit I</h3>
+    <div class="tips-list">
+      <span class="tip-tag">PERK = Perception, Experience, Reason, Knowledge</span>
+      <span class="tip-tag">ID3 picks attribute with Max Info Gain</span>
+      <span class="tip-tag">CEA: S←specific, G←general, eliminate inconsistent</span>
+      <span class="tip-tag">Inductive Bias = "What you assume before you see data"</span>
+      <span class="tip-tag">Heuristic ≠ Optimal, but fast &amp; practical</span>
+    </div>
+  </div>
+
+  <!-- Q1a -->
+  <div class="q-card" id="q-1-1a" data-unit="1">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(124,111,205,0.15);color:var(--accent);">Q1(a)</span>
+      <span class="q-text">Define a learning system in the context of machine learning and explain its components.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-1-1a','Q1(a) Unit I')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-1-1a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Definition</div>
+        <p class="ans-text">A <strong>learning system</strong> is a computational system that improves its performance on a specific task through experience, using data-driven methods to map inputs to outputs without being explicitly programmed for every scenario.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Core Components</div>
+        <ul class="ans-list">
+          <li><strong>Task (T):</strong> The problem being solved (classification, regression, clustering).</li>
+          <li><strong>Performance Measure (P):</strong> Metric to evaluate success — accuracy, MSE, F1-score.</li>
+          <li><strong>Experience (E):</strong> Training data from which the model learns patterns.</li>
+          <li><strong>Learner / Model:</strong> The algorithm mapping input X to output Y (hypothesis h: X→Y).</li>
+          <li><strong>Feedback Mechanism:</strong> Error signal used to update model parameters (loss function).</li>
+          <li><strong>Hypothesis Space (H):</strong> Set of all functions the learner can represent.</li>
+          <li><strong>Generalization:</strong> Ability to perform correctly on unseen data beyond training set.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label dia">📐 Diagram — Learning System Architecture</div>
+        <div class="dia-box">
+  ┌──────────────┐     ┌──────────────────┐     ┌──────────────┐
+  │  Environment │────▶│  Training Data   │────▶│   Learner    │
+  │  (Real World)│     │  (X, Y pairs)    │     │  (Algorithm) │
+  └──────────────┘     └──────────────────┘     └──────┬───────┘
+                                                        │
+                                              ┌─────────▼──────────┐
+                                              │   Hypothesis h(x)   │
+                                              │  (Learned Model)    │
+                                              └─────────┬──────────┘
+                                                        │
+  ┌──────────────┐     ┌──────────────────┐    ┌───────▼────────┐
+  │  New Input   │────▶│  Prediction      │◀───│ Performance    │
+  │  (Test Data) │     │  ŷ = h(x)        │    │ Evaluation (P) │
+  └──────────────┘     └──────────────────┘    └────────────────┘</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>A machine learning system is defined by the triplet (T, P, E). Its components work in tandem: experience drives learning, the hypothesis space constrains what is learnable, and the performance measure guides optimization toward a better generalizing model.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1b -->
+  <div class="q-card" id="q-1-1b" data-unit="1">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(124,111,205,0.15);color:var(--accent);">Q1(b)</span>
+      <span class="q-text">Discuss the various goals of machine learning and provide examples of real-world applications in different domains.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-1-1b','Q1(b) Unit I')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-1-1b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label core">🎯 Goals of Machine Learning</div>
+        <ul class="ans-list">
+          <li><strong>Prediction:</strong> Learn a mapping from input to output for future unseen instances.</li>
+          <li><strong>Pattern Discovery:</strong> Identify hidden structure in unlabeled data (clustering).</li>
+          <li><strong>Optimization:</strong> Find optimal decisions/actions via reward-based feedback (RL).</li>
+          <li><strong>Density Estimation:</strong> Model the underlying probability distribution of data.</li>
+          <li><strong>Dimensionality Reduction:</strong> Compress high-dimensional data retaining key variance.</li>
+          <li><strong>Generalization:</strong> Minimize expected loss on unseen data beyond training distribution.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label table-lbl">📋 Real-World Applications by Domain</div>
+        <table class="compare-table">
+          <tr><th>Domain</th><th>Application</th><th>ML Type</th></tr>
+          <tr><td>Healthcare</td><td>Disease diagnosis (cancer detection)</td><td>Supervised (SVM, CNN)</td></tr>
+          <tr><td>Finance</td><td>Fraud detection, stock prediction</td><td>Supervised + Anomaly Detection</td></tr>
+          <tr><td>NLP</td><td>Machine translation, sentiment analysis</td><td>Deep Learning (LSTM, Transformers)</td></tr>
+          <tr><td>Computer Vision</td><td>Face recognition, object detection</td><td>CNN-based Supervised</td></tr>
+          <tr><td>Robotics</td><td>Autonomous navigation, manipulation</td><td>Reinforcement Learning</td></tr>
+          <tr><td>E-Commerce</td><td>Product recommendation systems</td><td>Collaborative Filtering</td></tr>
+          <tr><td>Agriculture</td><td>Crop disease detection, yield prediction</td><td>Transfer Learning</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>ML goals span from prediction and discovery to optimization. The diversity of domains demonstrates that ML is a universal framework for extracting actionable knowledge from data, with the choice of goal determining the learning paradigm.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2a -->
+  <div class="q-card" id="q-1-2a" data-unit="1">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(124,111,205,0.15);color:var(--accent);">Q2(a)</span>
+      <span class="q-text">Explain the role of training data in the development of a machine learning model. Discuss how the quality and quantity of data impact the model's performance.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-1-2a','Q2(a) Unit I')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-1-2a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Role of Training Data</div>
+        <p class="ans-text">Training data is the labeled or unlabeled dataset D = {(x₁,y₁), …, (xₙ,yₙ)} from which the learner infers a hypothesis h ∈ H. It provides the empirical evidence that drives parameter estimation and model selection.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Key Roles</div>
+        <ul class="ans-list">
+          <li><strong>Parameter Estimation:</strong> Model weights/parameters are optimized to minimize loss over training set.</li>
+          <li><strong>Feature Learning:</strong> Internal representations are discovered from input distributions.</li>
+          <li><strong>Bias-Variance Control:</strong> More data reduces variance; diverse data reduces bias.</li>
+          <li><strong>Hypothesis Selection:</strong> The model selects h* consistent with training examples.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label table-lbl">📋 Quality vs. Quantity Impact</div>
+        <table class="compare-table">
+          <tr><th>Factor</th><th>Low State</th><th>High State</th><th>Effect on Model</th></tr>
+          <tr><td>Quantity</td><td>Few samples (n&lt;&lt;d)</td><td>Large n&gt;&gt;d</td><td>Underfitting → Generalization</td></tr>
+          <tr><td>Quality</td><td>Noisy/mislabeled</td><td>Clean, accurate labels</td><td>High error → Low error</td></tr>
+          <tr><td>Diversity</td><td>Class imbalance</td><td>Balanced distribution</td><td>Biased → Fair model</td></tr>
+          <tr><td>Relevance</td><td>Irrelevant features</td><td>Informative features</td><td>High variance → Compact model</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Quality outweighs quantity — a small clean dataset outperforms a large noisy one. The ideal training set is representative, diverse, sufficient in size, and free from label noise to ensure the model generalizes well.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2b -->
+  <div class="q-card" id="q-1-2b" data-unit="1">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(124,111,205,0.15);color:var(--accent);">Q2(b)</span>
+      <span class="q-text">Illustrate how function approximation is used in machine learning algorithms. Provide examples of algorithms that use function approximation techniques.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-1-2b','Q2(b) Unit I')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-1-2b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Function Approximation</div>
+        <p class="ans-text">Function approximation is the process of learning a function f̂: X→Y that approximates the true unknown target function f*, using a parametric or non-parametric hypothesis selected from hypothesis space H to minimize generalization error.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ Mathematical Basis</div>
+        <div class="formula-box">Target function:  f*: X → Y  (unknown)
+Learned function: f̂(x; θ) ≈ f*(x)
+Loss:             L(θ) = (1/n) Σᵢ ℓ(f̂(xᵢ;θ), yᵢ)
+Optimization:     θ* = argmin L(θ)  [via gradient descent]</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Types &amp; Examples</div>
+        <table class="compare-table">
+          <tr><th>Algorithm</th><th>Approximation Type</th><th>Function Form</th></tr>
+          <tr><td>Linear Regression</td><td>Parametric, linear</td><td>f̂(x) = wᵀx + b</td></tr>
+          <tr><td>Neural Networks</td><td>Parametric, nonlinear</td><td>f̂(x) = σ(Wₙσ(…σ(W₁x)))</td></tr>
+          <tr><td>k-NN</td><td>Non-parametric</td><td>f̂(x) = avg(yᵢ for k nearest xᵢ)</td></tr>
+          <tr><td>Decision Trees</td><td>Piecewise constant</td><td>f̂(x) = partition-based rules</td></tr>
+          <tr><td>SVM</td><td>Kernel-based</td><td>f̂(x) = Σ αᵢyᵢK(xᵢ,x) + b</td></tr>
+          <tr><td>RBF Networks</td><td>Radial basis</td><td>f̂(x) = Σ wᵢ φ(‖x−cᵢ‖)</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Function approximation is the unifying framework of supervised ML. The choice of function class (linear vs nonlinear, parametric vs non-parametric) determines model expressiveness, inductive bias, and computational cost.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3a -->
+  <div class="q-card" id="q-1-3a" data-unit="1">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(124,111,205,0.15);color:var(--accent);">Q3(a)</span>
+      <span class="q-text">Discuss the main learning problems in machine learning and the perspectives that influence their solutions.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-1-3a','Q3(a) Unit I')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-1-3a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label core">⚙️ Main Learning Problems</div>
+        <ul class="ans-list">
+          <li><strong>Supervised Learning:</strong> Learn h: X→Y from labeled pairs (xᵢ, yᵢ). Tasks: classification, regression.</li>
+          <li><strong>Unsupervised Learning:</strong> Discover structure in unlabeled data. Tasks: clustering, dimensionality reduction.</li>
+          <li><strong>Reinforcement Learning:</strong> Learn policy π: S→A to maximize cumulative reward via environment interaction.</li>
+          <li><strong>Semi-Supervised Learning:</strong> Few labeled + many unlabeled samples; leverages both.</li>
+          <li><strong>Self-Supervised Learning:</strong> Generate pseudo-labels from data itself (e.g., GPT pre-training).</li>
+          <li><strong>Online Learning:</strong> Update model incrementally as data arrives sequentially.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label table-lbl">📋 Influencing Perspectives</div>
+        <table class="compare-table">
+          <tr><th>Perspective</th><th>Influence on Solution</th></tr>
+          <tr><td>Statistical</td><td>PAC learning, VC dimension, bias-variance tradeoff</td></tr>
+          <tr><td>Computational</td><td>Time/space complexity, tractability, NP-hardness</td></tr>
+          <tr><td>Cognitive</td><td>Analogy to human learning; inductive reasoning</td></tr>
+          <tr><td>Bayesian</td><td>Prior beliefs + likelihood → posterior hypothesis</td></tr>
+          <tr><td>Optimization</td><td>Loss minimization via gradient methods, evolutionary</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>ML problems vary by feedback type (labeled/unlabeled/reward). Each perspective (statistical, computational, Bayesian) provides complementary tools — a complete ML practitioner integrates all perspectives for robust solutions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3b -->
+  <div class="q-card" id="q-1-3b" data-unit="1">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(124,111,205,0.15);color:var(--accent);">Q3(b)</span>
+      <span class="q-text">Explain the concept of version spaces in machine learning and how they are used in problem-solving.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-1-3b','Q3(b) Unit I')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-1-3b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Definition</div>
+        <p class="ans-text">The <strong>Version Space</strong> VS(H,D) is the subset of hypothesis space H consistent with all training examples in D — i.e., every h in VS correctly classifies all training instances.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ Formal Definition</div>
+        <div class="formula-box">VS(H,D) = { h ∈ H | ∀(x,c) ∈ D : h(x) = c }
+
+Represented by two boundary sets:
+  S = { maximally specific hypotheses }  ← most specific
+  G = { maximally general hypotheses }   ← most general
+  VS = { h | ∃s∈S, ∃g∈G : g ≤ h ≤ s }</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label dia">📐 Diagram — Version Space</div>
+        <div class="dia-box">  Hypothesis Space H
+  ┌──────────────────────────────────────────────┐
+  │  G (Most General)                            │
+  │   ┌──────────────────────────────────────┐  │
+  │   │        Version Space VS              │  │
+  │   │   (all consistent hypotheses)        │  │
+  │   │      ┌──────────────────────┐        │  │
+  │   │      │  S (Most Specific)   │        │  │
+  │   │      └──────────────────────┘        │  │
+  │   └──────────────────────────────────────┘  │
+  │  (inconsistent hypotheses)                   │
+  └──────────────────────────────────────────────┘
+
+  On + example: S specializes (narrows)
+  On - example: G specializes (narrows)
+  VS ← ∅  →  no consistent hypothesis exists</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Use in Problem Solving</div>
+        <ul class="ans-list">
+          <li>Provides a compact representation of all hypotheses consistent with data.</li>
+          <li>Used in Candidate Elimination Algorithm for concept learning.</li>
+          <li>VS collapse to single h → perfect learner on that data.</li>
+          <li>Guides which new examples are most informative (active learning).</li>
+          <li>Detects inconsistency: if S=∅ or G=∅, no consistent concept exists.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Version space provides a principled framework for concept learning by tracking all consistent hypotheses. The S-G boundary representation enables efficient search without enumerating all hypotheses in H.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4a -->
+  <div class="q-card" id="q-1-4a" data-unit="1">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(124,111,205,0.15);color:var(--accent);">Q4(a)</span>
+      <span class="q-text">Describe the candidate elimination algorithm and explain how it can be used in concept learning.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-1-4a','Q4(a) Unit I')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-1-4a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Definition</div>
+        <p class="ans-text">The <strong>Candidate Elimination Algorithm</strong> (Mitchell, 1982) searches the version space by maintaining the most general (G) and most specific (S) boundaries, updating them with each training example to eliminate inconsistent hypotheses.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label algo">🔧 Algorithm</div>
+        <div class="algo-box">Initialize:
+  G ← { ? ? ? … ? }   // maximally general
+  S ← { ∅ ∅ ∅ … ∅ }  // maximally specific
+
+For each training example d = (x, c(x)):
+
+  IF c(x) = + (positive example):
+    Remove from G all hypotheses inconsistent with x
+    For each s in S inconsistent with x:
+      Replace s with all minimal generalizations h s.t.:
+        h is consistent with x, AND ∃g∈G: h ≤ g
+      Remove from S any h less general than another in S
+
+  IF c(x) = − (negative example):
+    Remove from S all hypotheses inconsistent with x
+    For each g in G inconsistent with x:
+      Replace g with all minimal specializations h s.t.:
+        h is consistent with x, AND ∃s∈S: s ≤ h
+      Remove from G any h more general than another in G
+
+Output: S and G representing Version Space</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>CEA converges to the correct concept if the target is in H and data is noise-free. It is an exhaustive version space search — suitable for small H but computationally intractable for large attribute spaces.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4b -->
+  <div class="q-card" id="q-1-4b" data-unit="1">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(124,111,205,0.15);color:var(--accent);">Q4(b)</span>
+      <span class="q-text">Define inductive bias and explain its importance in machine learning. Discuss how it affects the learning process and model selection.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-1-4b','Q4(b) Unit I')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-1-4b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Definition</div>
+        <p class="ans-text"><strong>Inductive Bias</strong> is the set of assumptions a learner uses to predict outputs for inputs not yet encountered in training — it is the prior knowledge that enables generalization beyond the observed data.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Types of Inductive Bias</div>
+        <ul class="ans-list">
+          <li><strong>Restriction Bias:</strong> Limits hypothesis space (e.g., linear classifiers only consider hyperplanes).</li>
+          <li><strong>Preference Bias:</strong> Prefers simpler hypotheses among those consistent with data (Occam's Razor).</li>
+          <li><strong>No-Free-Lunch Theorem:</strong> Without bias, no learner outperforms another over all possible problems.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label table-lbl">📋 Inductive Bias per Algorithm</div>
+        <table class="compare-table">
+          <tr><th>Algorithm</th><th>Inductive Bias</th></tr>
+          <tr><td>ID3 / Decision Tree</td><td>Prefer shorter trees; high info-gain splits first</td></tr>
+          <tr><td>k-NN</td><td>Similar inputs have similar outputs (local smoothness)</td></tr>
+          <tr><td>Linear Regression</td><td>Target is linear combination of features</td></tr>
+          <tr><td>Naive Bayes</td><td>Features are conditionally independent given class</td></tr>
+          <tr><td>SVM</td><td>Maximum margin separating hyperplane</td></tr>
+          <tr><td>Neural Networks</td><td>Distributed hierarchical feature representations</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Inductive bias is essential — without it, no generalization is possible (No-Free-Lunch). Matching the learner's bias to the true data distribution is the art of model selection and governs whether the model underfits, overfits, or generalizes well.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5a -->
+  <div class="q-card" id="q-1-5a" data-unit="1">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(124,111,205,0.15);color:var(--accent);">Q5(a)</span>
+      <span class="q-text">Describe the decision tree algorithm and explain the steps involved in constructing a decision tree for classification tasks.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-1-5a','Q5(a) Unit I')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-1-5a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Definition</div>
+        <p class="ans-text">A <strong>Decision Tree</strong> is a hierarchical, tree-structured model where each internal node tests a feature, each branch represents a feature value, and each leaf node holds a class label — classification is done by traversing root to leaf.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ Key Formulas (ID3)</div>
+        <div class="formula-box">Entropy:       H(S) = −Σ pᵢ log₂(pᵢ)
+Info Gain:     IG(S,A) = H(S) − Σ_{v∈Values(A)} (|Sᵥ|/|S|)·H(Sᵥ)
+Best Attribute: A* = argmax_A IG(S,A)</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label algo">🔧 ID3 Algorithm</div>
+        <div class="algo-box">ID3(Examples, Target, Attributes):
+  IF all examples are +ve → Return leaf(+)
+  IF all examples are -ve → Return leaf(-)
+  IF Attributes = ∅     → Return leaf(majority class)
+  
+  A* ← argmax Information_Gain(Examples, A)
+  Create root node with test A*
+  
+  For each value vᵢ of A*:
+    Sᵢ ← examples where A* = vᵢ
+    IF Sᵢ = ∅:
+      Add leaf(majority class of Examples)
+    ELSE:
+      Add subtree ← ID3(Sᵢ, Target, Attributes − {A*})
+  
+  Return root</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label dia">📐 Example Tree Structure</div>
+        <div class="dia-box">             [Outlook?]
+            /    |     \
+      Sunny   Overcast   Rainy
+        /         |          \
+  [Humidity?]  [YES]      [Wind?]
+   /      \               /     \
+ High    Normal        Strong  Weak
+  |         |             |       |
+[NO]      [YES]          [NO]   [YES]</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Decision trees are interpretable, non-parametric classifiers. ID3 greedily maximizes information gain. Pruning prevents overfitting. Extensions like C4.5 (gain ratio) and CART (Gini) address ID3's bias toward multi-valued attributes.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5b -->
+  <div class="q-card" id="q-1-5b" data-unit="1">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(124,111,205,0.15);color:var(--accent);">Q5(b)</span>
+      <span class="q-text">Define heuristic search and discuss its role in solving machine learning problems. How does it help in the process of model training and evaluation?</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-1-5b','Q5(b) Unit I')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-1-5b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Definition</div>
+        <p class="ans-text"><strong>Heuristic Search</strong> is a problem-solving technique that uses domain-specific knowledge (heuristic function h(n)) to guide search toward the goal efficiently, sacrificing optimality guarantees for computational tractability.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Types of Heuristic Search</div>
+        <ul class="ans-list">
+          <li><strong>Greedy Best-First:</strong> Expand node with minimum h(n). Fast but non-optimal.</li>
+          <li><strong>A* Search:</strong> f(n) = g(n) + h(n); optimal if h is admissible.</li>
+          <li><strong>Hill Climbing:</strong> Iterative local improvement; susceptible to local optima.</li>
+          <li><strong>Beam Search:</strong> Keep top-k nodes at each level; balances memory and quality.</li>
+          <li><strong>Simulated Annealing:</strong> Probabilistic escape from local optima via temperature schedule.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label table-lbl">📋 Role in Machine Learning</div>
+        <table class="compare-table">
+          <tr><th>ML Context</th><th>Heuristic Used</th><th>Purpose</th></tr>
+          <tr><td>Feature Selection</td><td>Mutual Information</td><td>Select informative features efficiently</td></tr>
+          <tr><td>Hyperparameter Tuning</td><td>Bayesian Optimization</td><td>Navigate large hyperparameter spaces</td></tr>
+          <tr><td>Neural Architecture Search</td><td>Evolutionary / RL-based</td><td>Discover optimal architectures</td></tr>
+          <tr><td>ID3 Attribute Selection</td><td>Information Gain</td><td>Greedy tree construction</td></tr>
+          <tr><td>Clustering (k-means)</td><td>Centroid proximity</td><td>Iterative cluster refinement</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Heuristic search makes ML tractable by guiding optimization through high-dimensional spaces without exhaustive enumeration. The quality of the heuristic function determines search efficiency — good heuristics dramatically reduce computation while maintaining solution quality.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ UNIT II ═══════════════════ -->
+<section class="unit-section" id="unit-2">
+  <div class="unit-header">
+    <span class="unit-badge" style="background:rgba(79,195,247,0.15);color:var(--accent2);">Unit II</span>
+    <h2 class="unit-title">Bayesian Learning</h2>
+    <div class="unit-actions">
+      <button class="btn-icon" onclick="openAll(2)">📂 Open All</button>
+      <button class="btn-icon" onclick="closeAll(2)">📁 Close All</button>
+    </div>
+  </div>
+
+  <div class="cheat-sheet">
+    <h3>📊 Cheat Sheet — Unit II</h3>
+    <div class="cs-grid">
+      <div class="cs-item"><div class="cs-label">Bayes' Theorem</div><div class="cs-val">P(h|D) = P(D|h)·P(h) / P(D)</div></div>
+      <div class="cs-item"><div class="cs-label">MLE</div><div class="cs-val">θ_MLE = argmax P(D|θ) = argmax Σ log P(xᵢ|θ)</div></div>
+      <div class="cs-item"><div class="cs-label">MAP</div><div class="cs-val">h_MAP = argmax P(D|h)·P(h)</div></div>
+      <div class="cs-item"><div class="cs-label">Naive Bayes</div><div class="cs-val">P(C|x) ∝ P(C)·Π P(xᵢ|C)</div></div>
+      <div class="cs-item"><div class="cs-label">MDL</div><div class="cs-val">h_MDL = argmin [L(h) + L(D|h)]</div></div>
+      <div class="cs-item"><div class="cs-label">EM Steps</div><div class="cs-val">E-step: Q(θ|θᵗ) = E[log P(X,Z|θ)]  M-step: θᵗ⁺¹ = argmax Q</div></div>
+    </div>
+  </div>
+
+  <div class="memory-tips">
+    <h3>🧠 Memory Tips — Unit II</h3>
+    <div class="tips-list">
+      <span class="tip-tag">Bayes: Prior × Likelihood / Evidence = Posterior</span>
+      <span class="tip-tag">Naive = "conditionally independent features"</span>
+      <span class="tip-tag">EM never decreases likelihood (monotone convergence)</span>
+      <span class="tip-tag">MDL = Occam's Razor in information theory</span>
+      <span class="tip-tag">Gibbs = sample one variable at a time</span>
+    </div>
+  </div>
+
+  <!-- Q1a Unit II -->
+  <div class="q-card" id="q-2-1a" data-unit="2">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(79,195,247,0.15);color:var(--accent2);">Q1(a)</span>
+      <span class="q-text">Apply Bayes' Theorem to update beliefs in a medical diagnosis scenario.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-2-1a','Q1(a) Unit II')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-2-1a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Bayes' Theorem</div>
+        <p class="ans-text">Bayes' Theorem provides a principled way to update the probability of a hypothesis h given observed data D: <strong>P(h|D) = P(D|h)·P(h) / P(D)</strong></p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ Medical Diagnosis Example</div>
+        <div class="formula-box">Problem: A disease D affects 1% of population.
+  Test has: Sensitivity P(+|D) = 0.99, Specificity P(−|D̄) = 0.95
+
+Given:
+  P(D)    = 0.01       → Prior (prevalence)
+  P(D̄)   = 0.99
+  P(+|D)  = 0.99       → Likelihood (sensitivity)
+  P(+|D̄) = 1 − 0.95 = 0.05  → False positive rate
+
+Step 1 — P(+) [Total Probability]:
+  P(+) = P(+|D)·P(D) + P(+|D̄)·P(D̄)
+       = 0.99×0.01 + 0.05×0.99
+       = 0.0099 + 0.0495 = 0.0594
+
+Step 2 — Posterior P(D|+):
+  P(D|+) = P(+|D)·P(D) / P(+)
+          = (0.99 × 0.01) / 0.0594
+          ≈ 0.167  (only ~16.7% likely to have disease!)
+
+Insight: Low prevalence → high false positives despite good test.</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Key Terms</div>
+        <ul class="ans-list">
+          <li><strong>Prior P(h):</strong> Belief before observing data (disease prevalence).</li>
+          <li><strong>Likelihood P(D|h):</strong> Probability of test result given hypothesis (sensitivity/specificity).</li>
+          <li><strong>Posterior P(h|D):</strong> Updated belief after observing data.</li>
+          <li><strong>Evidence P(D):</strong> Normalizing constant ensuring probabilities sum to 1.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Bayes' Theorem shows that a positive test result with low disease prevalence leads to a low posterior probability — highlighting the critical role of prior beliefs. This principle underpins all Bayesian classifiers and spam filters.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1b Unit II -->
+  <div class="q-card" id="q-2-1b" data-unit="2">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(79,195,247,0.15);color:var(--accent2);">Q1(b)</span>
+      <span class="q-text">Analyze how the version space is used in concept learning to represent all possible hypotheses.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-2-1b','Q1(b) Unit II')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-2-1b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Version Space in Concept Learning</div>
+        <p class="ans-text">In concept learning, the version space VS(H,D) represents all hypotheses h ∈ H that correctly classify all training examples. It is the intersection of all consistent hypotheses — the solution space for concept learning.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Representation of All Hypotheses</div>
+        <ul class="ans-list">
+          <li><strong>S boundary:</strong> Most specific consistent hypotheses — tightest coverage of positive examples.</li>
+          <li><strong>G boundary:</strong> Most general consistent hypotheses — broadest possible classification.</li>
+          <li><strong>Between S and G:</strong> All intermediate hypotheses — entire version space compactly encoded.</li>
+          <li><strong>New instance x classification:</strong> If all h ∈ VS agree → confident; else → uncertain.</li>
+          <li><strong>Convergence:</strong> As more training data arrives, VS narrows until S = G = unique h*.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label dia">📐 VS Narrowing with Data</div>
+        <div class="dia-box">  Initially:         After d₁(+):        After d₂(−):
+  G = {? ? ?}        G = {? ? ?}         G = narrowed
+  |               |                   |
+  VS = all H      VS = smaller        VS = even smaller
+  |               |                   |
+  S = {∅ ∅ ∅}    S = {d₁ features}   S = consistent+
+  
+  → VS shrinks monotonically with each new example</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Version space is a powerful concept-learning framework. It represents all possible consistent hypotheses via S-G boundaries without explicit enumeration. Its limitation is sensitivity to noise — a single mislabeled example can make VS empty.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2a Unit II -->
+  <div class="q-card" id="q-2-2a" data-unit="2">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(79,195,247,0.15);color:var(--accent2);">Q2(a)</span>
+      <span class="q-text">Explain the concept of maximum likelihood estimation (MLE). How is it used to estimate parameters of a probability distribution?</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-2-2a','Q2(a) Unit II')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-2-2a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Definition</div>
+        <p class="ans-text"><strong>Maximum Likelihood Estimation (MLE)</strong> finds the parameter vector θ that maximizes the probability (likelihood) of observing the given training data D, without assuming any prior distribution over θ.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ MLE Formulation</div>
+        <div class="formula-box">Likelihood:       L(θ) = P(D|θ) = Π P(xᵢ|θ)  [for i.i.d. data]
+Log-Likelihood:   ℓ(θ) = log L(θ) = Σ log P(xᵢ|θ)
+MLE Estimator:    θ_MLE = argmax_θ ℓ(θ)
+
+Example — Gaussian MLE:
+  P(x|μ,σ²) = (1/√2πσ²) exp[−(x−μ)²/2σ²]
+  μ_MLE = (1/n) Σ xᵢ        [sample mean]
+  σ²_MLE = (1/n) Σ (xᵢ−μ)²  [biased variance]</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Properties of MLE</div>
+        <ul class="ans-list">
+          <li><strong>Consistency:</strong> θ_MLE → θ* as n → ∞.</li>
+          <li><strong>Asymptotic Normality:</strong> √n(θ_MLE − θ*) → N(0, I⁻¹(θ*)).</li>
+          <li><strong>Efficiency:</strong> Achieves Cramér-Rao lower bound asymptotically.</li>
+          <li><strong>No Prior:</strong> Unlike MAP, MLE ignores prior knowledge — can overfit with small data.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>MLE is the most widely used parameter estimation method. It is statistically principled, computationally tractable, and serves as the foundation for logistic regression, Naive Bayes, and Gaussian mixture models.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2b Unit II -->
+  <div class="q-card" id="q-2-2b" data-unit="2">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(79,195,247,0.15);color:var(--accent2);">Q2(b)</span>
+      <span class="q-text">Discuss how MDL helps in balancing model complexity and data fit in statistical learning.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-2-2b','Q2(b) Unit II')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-2-2b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 MDL Principle</div>
+        <p class="ans-text"><strong>Minimum Description Length (MDL)</strong> states that the best hypothesis h is the one that minimizes the total description length: the bits needed to encode h plus the bits needed to encode data D given h.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ MDL Formula</div>
+        <div class="formula-box">h_MDL = argmin_{h∈H} [ L(h) + L(D|h) ]
+
+Where:
+  L(h)    = bits to encode hypothesis (model complexity)
+  L(D|h)  = bits to encode data given hypothesis (data fit)
+
+Connection to MAP:
+  L(h)   ≡ −log₂ P(h)        [prior = complexity penalty]
+  L(D|h) ≡ −log₂ P(D|h)      [likelihood = data fit]
+  → MDL ≡ MAP estimation</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Balancing Complexity vs Fit</div>
+        <ul class="ans-list">
+          <li><strong>Underfitting:</strong> L(h) small but L(D|h) large → poor data description.</li>
+          <li><strong>Overfitting:</strong> L(D|h) ≈ 0 but L(h) very large → memorizes noise.</li>
+          <li><strong>Optimal:</strong> MDL finds the sweet spot minimizing total description length.</li>
+          <li><strong>Occam's Razor:</strong> MDL formally justifies preferring simpler models.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>MDL provides an information-theoretic foundation for model selection, directly embodying Occam's Razor. It is equivalent to Bayesian MAP estimation and provides a rigorous way to prevent overfitting without cross-validation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3a Unit II -->
+  <div class="q-card" id="q-2-3a" data-unit="2">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(79,195,247,0.15);color:var(--accent2);">Q3(a)</span>
+      <span class="q-text">Evaluate the performance of the Bayes Optimal Classifier with respect to the practical limitations of real-world data.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-2-3a','Q3(a) Unit II')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-2-3a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Bayes Optimal Classifier</div>
+        <p class="ans-text">The <strong>Bayes Optimal Classifier</strong> achieves the lowest possible error rate by selecting the class with maximum posterior probability given the observed instance: ŷ = argmax_c P(c|x).</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ Formulation</div>
+        <div class="formula-box">Bayes Optimal Decision:
+  ŷ = argmax_{c ∈ C} P(c|x) = argmax_c P(x|c)·P(c)
+  
+Combining hypotheses:
+  ŷ = argmax_{c} Σ_{h∈H} P(c|h,x)·P(h|D)
+
+Bayes Error Rate (irreducible):
+  ε* = 1 − max_c P(c|x)   [minimum achievable error]</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Practical Limitations</div>
+        <ul class="ans-list">
+          <li><strong>Unknown True Distribution:</strong> P(x|c) and P(c) must be estimated from finite data → estimation errors.</li>
+          <li><strong>Curse of Dimensionality:</strong> Estimating P(x|c) in high dimensions requires exponentially more data.</li>
+          <li><strong>Computational Cost:</strong> Summing over all hypotheses in H is intractable for large H.</li>
+          <li><strong>Model Misspecification:</strong> Assumed distribution family may not match true distribution.</li>
+          <li><strong>Noisy Labels:</strong> Training labels may be incorrect, corrupting likelihood estimates.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>The Bayes Optimal Classifier is the theoretical gold standard but is impractical — it requires exact knowledge of the true distribution. Practical classifiers approximate it via parametric assumptions (Naive Bayes) or discriminative approaches (SVM, neural networks).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3b Unit II -->
+  <div class="q-card" id="q-2-3b" data-unit="2">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(79,195,247,0.15);color:var(--accent2);">Q3(b)</span>
+      <span class="q-text">Describe the Gibbs sampling algorithm and its use in probabilistic inference.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-2-3b','Q3(b) Unit II')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-2-3b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Definition</div>
+        <p class="ans-text"><strong>Gibbs Sampling</strong> is a Markov Chain Monte Carlo (MCMC) method for approximating joint distributions P(x₁,…,xₙ) that are difficult to sample directly, by iteratively sampling each variable conditioned on all others.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label algo">🔧 Gibbs Sampling Algorithm</div>
+        <div class="algo-box">Initialize: x⁽⁰⁾ = (x₁⁽⁰⁾, x₂⁽⁰⁾, …, xₙ⁽⁰⁾)  [random init]
+
+For t = 1, 2, …, T:          [burn-in + sampling]
+  x₁⁽ᵗ⁾ ~ P(x₁ | x₂⁽ᵗ⁻¹⁾, x₃⁽ᵗ⁻¹⁾, …, xₙ⁽ᵗ⁻¹⁾)
+  x₂⁽ᵗ⁾ ~ P(x₂ | x₁⁽ᵗ⁾,   x₃⁽ᵗ⁻¹⁾, …, xₙ⁽ᵗ⁻¹⁾)
+  …
+  xₙ⁽ᵗ⁾ ~ P(xₙ | x₁⁽ᵗ⁾,   x₂⁽ᵗ⁾,   …, xₙ₋₁⁽ᵗ⁾)
+  
+  [Update each variable using latest values of others]
+
+Discard burn-in samples.
+Use {x⁽ᵗ⁾}ₜ₌ᵦᵤᵣₙ₋ᵢₙ^T to estimate E[f(x)] ≈ (1/T)Σ f(x⁽ᵗ⁾)</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Applications in Probabilistic Inference</div>
+        <ul class="ans-list">
+          <li>Bayesian posterior inference when direct computation is intractable.</li>
+          <li>Training of Bayesian networks and Hidden Markov Models.</li>
+          <li>Latent Dirichlet Allocation (LDA) for topic modeling.</li>
+          <li>Missing data imputation in probabilistic graphical models.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Gibbs sampling leverages the fact that conditional distributions are often easy to sample even when the joint is intractable. By the ergodic theorem, the Markov chain converges to the true joint distribution, making it a cornerstone of Bayesian computation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4a Unit II -->
+  <div class="q-card" id="q-2-4a" data-unit="2">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(79,195,247,0.15);color:var(--accent2);">Q4(a)</span>
+      <span class="q-text">Compare the performance of the Naive Bayes classifier with other classification algorithms in terms of simplicity and accuracy.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-2-4a','Q4(a) Unit II')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-2-4a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Naive Bayes</div>
+        <p class="ans-text">Naive Bayes assumes <strong>conditional independence</strong> of features given class: P(x₁,…,xₙ|C) = Π P(xᵢ|C). Classification: ŷ = argmax_c P(c)·Π P(xᵢ|c).</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label table-lbl">📋 Comparative Analysis</div>
+        <table class="compare-table">
+          <tr><th>Criterion</th><th>Naive Bayes</th><th>Decision Tree</th><th>SVM</th><th>k-NN</th></tr>
+          <tr><td>Training Speed</td><td>O(n·d) — Very fast</td><td>O(n·d·log n)</td><td>O(n²·d) or O(n³)</td><td>O(1) — lazy</td></tr>
+          <tr><td>Prediction Speed</td><td>O(d·C)</td><td>O(depth)</td><td>O(SVs·d)</td><td>O(n·d)</td></tr>
+          <tr><td>Handles Text</td><td>Excellent</td><td>Moderate</td><td>Good (TF-IDF)</td><td>Poor</td></tr>
+          <tr><td>Missing Data</td><td>Handles easily</td><td>Requires impute</td><td>Requires impute</td><td>Sensitive</td></tr>
+          <tr><td>Independence Assumption</td><td>Required (strong)</td><td>None</td><td>None</td><td>None</td></tr>
+          <tr><td>Small Data</td><td>Excellent</td><td>Moderate</td><td>Good</td><td>Poor</td></tr>
+          <tr><td>Accuracy (general)</td><td>Moderate</td><td>Moderate-High</td><td>High</td><td>Moderate</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Despite its strong independence assumption, Naive Bayes achieves competitive accuracy especially in text classification (spam detection). It excels in speed and simplicity, making it a strong baseline — particularly when data is limited or features are genuinely near-independent.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4b Unit II -->
+  <div class="q-card" id="q-2-4b" data-unit="2">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(79,195,247,0.15);color:var(--accent2);">Q4(b)</span>
+      <span class="q-text">Illustrate the construction of a Bayesian Belief Network for a simple problem, and explain how inference is performed.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-2-4b','Q4(b) Unit II')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-2-4b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Bayesian Belief Network (BBN)</div>
+        <p class="ans-text">A <strong>Bayesian Belief Network</strong> is a Directed Acyclic Graph (DAG) where nodes represent random variables and edges represent conditional dependencies. Each node has a Conditional Probability Table (CPT) given its parents.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label dia">📐 Example: Rain → Sprinkler → Wet Grass</div>
+        <div class="dia-box">  [Cloudy]
+   /        \
+[Rain]    [Sprinkler]
+   \        /
+  [Wet Grass]
+
+CPT — P(Rain|Cloudy):
+  Cloudy=T: P(Rain=T)=0.8   P(Rain=F)=0.2
+  Cloudy=F: P(Rain=T)=0.2   P(Rain=F)=0.8
+
+CPT — P(WetGrass|Rain,Sprinkler):
+  Rain=T, Spr=T: P(WG=T)=0.99
+  Rain=T, Spr=F: P(WG=T)=0.90
+  Rain=F, Spr=T: P(WG=T)=0.90
+  Rain=F, Spr=F: P(WG=T)=0.00</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Inference Methods</div>
+        <ul class="ans-list">
+          <li><strong>Exact Inference:</strong> Variable elimination — sum-out irrelevant variables using marginalization.</li>
+          <li><strong>Belief Propagation:</strong> Message passing on tree-structured BBNs (exact for trees).</li>
+          <li><strong>Approximate Inference:</strong> MCMC (Gibbs sampling), Variational Bayes for complex networks.</li>
+          <li><strong>Joint Probability:</strong> P(C,R,S,W) = P(C)·P(R|C)·P(S|C)·P(W|R,S)</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>BBNs compactly encode joint distributions via conditional independence, reducing exponential parameters to polynomial. They support both causal reasoning (predictive) and diagnostic reasoning (abductive), making them powerful for medical, fault-diagnosis, and NLP systems.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5a Unit II -->
+  <div class="q-card" id="q-2-5a" data-unit="2">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(79,195,247,0.15);color:var(--accent2);">Q5(a)</span>
+      <span class="q-text">Explain the Expectation-Maximization (EM) algorithm and its use in parameter estimation for latent variable models.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-2-5a','Q5(a) Unit II')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-2-5a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 EM Algorithm</div>
+        <p class="ans-text">The <strong>Expectation-Maximization (EM)</strong> algorithm is an iterative method to find MLE parameters in models with latent (hidden) variables Z, alternating between computing expected complete-data log-likelihood (E-step) and maximizing it (M-step).</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label algo">🔧 EM Algorithm</div>
+        <div class="algo-box">Initialize: θ⁰ (random or k-means init)
+
+Repeat until convergence:
+
+  E-STEP (Expectation):
+    Compute Q(θ|θᵗ) = E_{Z|X,θᵗ}[log P(X,Z|θ)]
+    i.e., compute responsibility r(zᵢ) = P(zᵢ|xᵢ,θᵗ)
+
+  M-STEP (Maximization):
+    θᵗ⁺¹ = argmax_θ Q(θ|θᵗ)
+    Update parameters using soft assignments from E-step
+
+Until: |L(θᵗ⁺¹) − L(θᵗ)| &lt; ε  [convergence criterion]
+
+Property: L(θᵗ⁺¹) ≥ L(θᵗ)  [monotone improvement]</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Applications</div>
+        <ul class="ans-list">
+          <li><strong>Gaussian Mixture Models (GMM):</strong> E-step computes soft cluster assignments; M-step updates μ, Σ, π.</li>
+          <li><strong>Hidden Markov Models (HMM):</strong> Baum-Welch algorithm is a special case of EM.</li>
+          <li><strong>Missing Data Imputation:</strong> Treat missing values as latent variables.</li>
+          <li><strong>Latent Dirichlet Allocation:</strong> Topic modeling via variational EM.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>EM guarantees monotone increase in log-likelihood and converges to a local maximum. Its weakness is sensitivity to initialization and convergence to local optima. Multiple restarts are used to mitigate this.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5b Unit II -->
+  <div class="q-card" id="q-2-5b" data-unit="2">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(79,195,247,0.15);color:var(--accent2);">Q5(b)</span>
+      <span class="q-text">Evaluate the challenges of learning in infinite hypothesis spaces and propose methods to mitigate them.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-2-5b','Q5(b) Unit II')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-2-5b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label core">⚙️ Challenges of Infinite H</div>
+        <ul class="ans-list">
+          <li><strong>No Finite Version Space:</strong> Candidate Elimination fails — cannot enumerate consistent hypotheses.</li>
+          <li><strong>Overfitting:</strong> In large H, a hypothesis perfectly fitting training data may generalize poorly.</li>
+          <li><strong>Sample Complexity:</strong> Infinite H may require infinite data for PAC-learning (if VC-dim = ∞).</li>
+          <li><strong>Computational Intractability:</strong> Optimization over infinite H often NP-hard or requires approximation.</li>
+          <li><strong>Identifiability Issues:</strong> Multiple h with identical likelihood — parameters not uniquely determined.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label table-lbl">📋 Mitigation Methods</div>
+        <table class="compare-table">
+          <tr><th>Challenge</th><th>Mitigation Method</th><th>Key Idea</th></tr>
+          <tr><td>Overfitting</td><td>Regularization (L1/L2)</td><td>Penalize model complexity</td></tr>
+          <tr><td>Large H</td><td>MDL / Bayesian priors</td><td>Prefer simpler hypotheses</td></tr>
+          <tr><td>Computation</td><td>Gradient descent, EM</td><td>Local search in parameter space</td></tr>
+          <tr><td>Sample complexity</td><td>Bound VC dimension</td><td>Restrict effective model complexity</td></tr>
+          <tr><td>Identifiability</td><td>Constraints + priors</td><td>Inject domain knowledge</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Infinite hypothesis spaces are the norm in deep learning. Regularization, PAC-Bayes bounds, and inductive biases (architecture choices) collectively manage this challenge — allowing powerful models to generalize despite massive hypothesis spaces.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ UNIT III ═══════════════════ -->
+<section class="unit-section" id="unit-3">
+  <div class="unit-header">
+    <span class="unit-badge" style="background:rgba(240,98,146,0.15);color:var(--accent3);">Unit III</span>
+    <h2 class="unit-title">Instance-Based &amp; Support Vector Machines</h2>
+    <div class="unit-actions">
+      <button class="btn-icon" onclick="openAll(3)">📂 Open All</button>
+      <button class="btn-icon" onclick="closeAll(3)">📁 Close All</button>
+    </div>
+  </div>
+
+  <div class="cheat-sheet">
+    <h3>📊 Cheat Sheet — Unit III</h3>
+    <div class="cs-grid">
+      <div class="cs-item"><div class="cs-label">Euclidean Distance (k-NN)</div><div class="cs-val">d(x,xᵢ) = √Σ(xⱼ − xᵢⱼ)²</div></div>
+      <div class="cs-item"><div class="cs-label">SVM Margin</div><div class="cs-val">margin = 2/‖w‖  →  maximize by min ‖w‖²/2</div></div>
+      <div class="cs-item"><div class="cs-label">SVM Decision</div><div class="cs-val">f(x) = wᵀx + b,  class = sign(f(x))</div></div>
+      <div class="cs-item"><div class="cs-label">RBF Kernel</div><div class="cs-val">K(x,xᵢ) = exp(−γ‖x−xᵢ‖²)</div></div>
+      <div class="cs-item"><div class="cs-label">Kernel Trick</div><div class="cs-val">K(x,z) = φ(x)·φ(z) [implicit high-dim map]</div></div>
+      <div class="cs-item"><div class="cs-label">SVR ε-tube</div><div class="cs-val">min ½‖w‖² s.t. |yᵢ−(wᵀxᵢ+b)| ≤ ε</div></div>
+    </div>
+  </div>
+
+  <div class="memory-tips">
+    <h3>🧠 Memory Tips — Unit III</h3>
+    <div class="tips-list">
+      <span class="tip-tag">k-NN: "You are who your neighbors are"</span>
+      <span class="tip-tag">SVM: Max margin = Max confidence</span>
+      <span class="tip-tag">Kernel trick: Map without computing φ(x)</span>
+      <span class="tip-tag">Support Vectors = only data points that matter</span>
+      <span class="tip-tag">RBF bandwidth σ: small=overfit, large=underfit</span>
+    </div>
+  </div>
+
+  <!-- Q1a Unit III -->
+  <div class="q-card" id="q-3-1a" data-unit="3">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(240,98,146,0.15);color:var(--accent3);">Q1(a)</span>
+      <span class="q-text">Explain the k-Nearest Neighbor (k-NN) algorithm and how it is used for classification.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-3-1a','Q1(a) Unit III')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-3-1a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Definition</div>
+        <p class="ans-text"><strong>k-Nearest Neighbor (k-NN)</strong> is a non-parametric, lazy learning algorithm that classifies a query point by majority vote among its k closest training instances in the feature space, using a distance metric.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label algo">🔧 k-NN Classification Algorithm</div>
+        <div class="algo-box">Training:  Store all (xᵢ, yᵢ) pairs — no model fitting!
+
+Prediction for query point x_q:
+  1. Compute d(x_q, xᵢ) ∀ training points
+     [Euclidean: d = √Σ(x_q,j − x_i,j)²]
+  2. Sort distances; select k nearest neighbors N_k(x_q)
+  3. Classify by majority vote:
+       ŷ = argmax_c |{xᵢ ∈ N_k : yᵢ = c}|
+  4. For regression: ŷ = (1/k) Σ_{xᵢ∈N_k} yᵢ</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label dia">📐 k-NN Decision Boundary</div>
+        <div class="dia-box">  Feature Space:
+
+  ○ ○  ● ●
+  ○  ●●  ●
+  ○ ○ x? ●●
+  ○   ●   ●
+
+  For k=3: x? → 2 neighbors are ●, 1 is ○
+           → Classify as ● (majority)
+
+  Decision boundary = Voronoi-based region boundary
+  (Non-linear, adapts to local data structure)</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label prop">⚡ Properties</div>
+        <ul class="ans-list">
+          <li><strong>Time Complexity:</strong> Training O(1), Prediction O(n·d) — expensive for large n.</li>
+          <li><strong>k selection:</strong> Odd k avoids ties; optimal k via cross-validation.</li>
+          <li><strong>Curse of Dimensionality:</strong> Distance loses meaning in high dimensions.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>k-NN is simple yet powerful for low-dimensional problems. Its non-parametric nature means it makes no distributional assumptions. The choice of k controls the bias-variance tradeoff: small k → low bias/high variance; large k → high bias/low variance.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1b Unit III -->
+  <div class="q-card" id="q-3-1b" data-unit="3">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(240,98,146,0.15);color:var(--accent3);">Q1(b)</span>
+      <span class="q-text">Analyze the impact of bandwidth on the performance of locally weighted regression.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-3-1b','Q1(b) Unit III')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-3-1b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Locally Weighted Regression (LWR)</div>
+        <p class="ans-text"><strong>LWR</strong> fits a separate local model for each query point by weighting training examples by their proximity to the query — closer points receive higher weight determined by a kernel function with bandwidth parameter h.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ LWR Formulation</div>
+        <div class="formula-box">Kernel Weight:   w(xᵢ) = exp(−‖x_q − xᵢ‖² / 2h²)
+
+Weighted Loss:   J(θ) = Σᵢ w(xᵢ)·(yᵢ − θᵀxᵢ)²
+
+Optimal θ:      θ* = (XᵀWX)⁻¹XᵀWy
+                 [W = diag(w(x₁), …, w(xₙ))]
+
+Where h = bandwidth controls the kernel width.</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label table-lbl">📋 Bandwidth Impact Analysis</div>
+        <table class="compare-table">
+          <tr><th>Bandwidth h</th><th>Effect on Weights</th><th>Model Behavior</th><th>Error Type</th></tr>
+          <tr><td>Small h → 0</td><td>Only nearest points matter</td><td>Overfitting, noisy</td><td>High Variance</td></tr>
+          <tr><td>Optimal h</td><td>Balanced neighborhood</td><td>Good generalization</td><td>Balanced</td></tr>
+          <tr><td>Large h → ∞</td><td>All points equally weighted</td><td>Global regression</td><td>High Bias</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Bandwidth Selection Methods</div>
+        <ul class="ans-list">
+          <li><strong>Cross-Validation:</strong> Choose h minimizing CV prediction error.</li>
+          <li><strong>Silverman's Rule:</strong> h = 1.06·σ·n⁻¹/⁵ for Gaussian kernels.</li>
+          <li><strong>LOOCV:</strong> Leave-one-out cross-validation for small datasets.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Bandwidth is the critical hyperparameter in LWR — it directly controls the bias-variance tradeoff. Cross-validation is the gold standard for selection. LWR's ability to fit complex non-linear functions locally makes it powerful for non-stationary regression tasks.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2a Unit III -->
+  <div class="q-card" id="q-3-2a" data-unit="3">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(240,98,146,0.15);color:var(--accent3);">Q2(a)</span>
+      <span class="q-text">Discuss the role of the RBF kernel in transforming the input space for machine learning tasks.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-3-2a','Q2(a) Unit III')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-3-2a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 RBF Kernel</div>
+        <p class="ans-text">The <strong>Radial Basis Function (RBF) kernel</strong> maps input vectors to an infinite-dimensional feature space implicitly, computing similarity as a function of Euclidean distance between points — enabling nonlinear classification without explicit transformation.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ RBF Kernel Formula</div>
+        <div class="formula-box">K(x, xᵢ) = exp(−γ‖x − xᵢ‖²)   where γ = 1/(2σ²)
+
+Properties:
+  K(x,x)  = 1          [self-similarity = 1]
+  K(x,xᵢ) ∈ (0,1]     [always positive]
+  K(x,xᵢ) → 0 as ‖x−xᵢ‖ → ∞  [far points = dissimilar]
+
+Kernel Matrix (Gram): Kᵢⱼ = K(xᵢ,xⱼ)  [PSD matrix]</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Role in ML Tasks</div>
+        <ul class="ans-list">
+          <li><strong>SVM:</strong> Enables nonlinear classification by implicitly mapping to infinite-dimensional RKHS.</li>
+          <li><strong>RBF Networks:</strong> Activation functions centered at training points — universal approximation.</li>
+          <li><strong>Gaussian Processes:</strong> Defines covariance between function outputs.</li>
+          <li><strong>Bandwidth γ:</strong> Large γ → sharp, localized influence (overfit); small γ → broad influence (underfit).</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>RBF kernel is the most widely used kernel in SVMs due to its universal approximation capability and guaranteed positive semi-definiteness. The hyperparameter γ controls the decision boundary complexity and must be tuned via cross-validation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2b Unit III -->
+  <div class="q-card" id="q-3-2b" data-unit="3">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(240,98,146,0.15);color:var(--accent3);">Q2(b)</span>
+      <span class="q-text">Compare case-based learning with k-NN learning, highlighting the similarities and differences.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-3-2b','Q2(b) Unit III')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-3-2b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label table-lbl">📋 Comparative Analysis</div>
+        <table class="compare-table">
+          <tr><th>Criterion</th><th>Case-Based Learning (CBL)</th><th>k-NN Learning</th></tr>
+          <tr><td>Paradigm</td><td>Reasoning by analogy (complex case retrieval)</td><td>Statistical nearest-neighbor classification</td></tr>
+          <tr><td>Knowledge</td><td>Rich cases with context, solutions, outcomes</td><td>Feature vectors + class labels only</td></tr>
+          <tr><td>Retrieval</td><td>Semantic similarity (domain-specific)</td><td>Geometric distance (Euclidean, Manhattan)</td></tr>
+          <tr><td>Adaptation</td><td>Modifies retrieved solution for new case</td><td>Direct vote — no solution adaptation</td></tr>
+          <tr><td>Learning</td><td>Retains cases; may forget old ones</td><td>Stores all training instances</td></tr>
+          <tr><td>Applications</td><td>Legal reasoning, medical diagnosis, planning</td><td>General classification, regression</td></tr>
+          <tr><td>Explanation</td><td>Provides case-based justification</td><td>No explanation — black box vote</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Key Similarities</div>
+        <ul class="ans-list">
+          <li>Both are <strong>instance-based / lazy learners</strong> — no explicit model training.</li>
+          <li>Both retrieve similar past examples to handle new queries.</li>
+          <li>Both store the training set as the "model".</li>
+          <li>Both are non-parametric — no distributional assumptions.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>CBL is a richer, more expressive framework than k-NN — it incorporates domain knowledge, solution adaptation, and explanation. k-NN is simpler and more computationally tractable. CBL is preferred when problem context and solution adaptation are crucial.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3a Unit III -->
+  <div class="q-card" id="q-3-3a" data-unit="3">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(240,98,146,0.15);color:var(--accent3);">Q3(a)</span>
+      <span class="q-text">Explain the concept of Support Vector Machines (SVMs) and their importance in machine learning.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-3-3a','Q3(a) Unit III')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-3-3a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 SVM Definition</div>
+        <p class="ans-text">A <strong>Support Vector Machine (SVM)</strong> is a discriminative classifier that finds the optimal hyperplane maximizing the margin (geometric separation) between classes, using only the support vectors — the critical boundary data points.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ SVM Optimization Problem</div>
+        <div class="formula-box">Primal (Hard Margin):
+  Minimize:  ½‖w‖²
+  Subject to: yᵢ(wᵀxᵢ + b) ≥ 1  ∀i
+
+Margin = 2/‖w‖   [maximize by minimizing ‖w‖²]
+
+Dual Formulation (QP):
+  Maximize:  Σ αᵢ − ½ Σᵢ Σⱼ αᵢαⱼyᵢyⱼ xᵢᵀxⱼ
+  Subject to: Σ αᵢyᵢ = 0,  αᵢ ≥ 0
+
+Decision: f(x) = sign(Σ αᵢyᵢ xᵢᵀx + b)</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label dia">📐 SVM Diagram</div>
+        <div class="dia-box">  ● = Class +1   ○ = Class -1
+
+  ○  ○  |  ● ●     ← decision boundary w·x+b=0
+    ○   |  ●  ●
+  ○  ○  |    ●
+  ←margin→←margin→
+  w·x+b=-1      w·x+b=+1
+  (support vectors on dashed lines)
+  Total margin = 2/‖w‖</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Importance in ML</div>
+        <ul class="ans-list">
+          <li>Maximizing margin → better generalization via structural risk minimization.</li>
+          <li>Kernel trick enables nonlinear classification without explicit feature mapping.</li>
+          <li>Sparsity: only support vectors determine the boundary — robust to outliers.</li>
+          <li>Strong theoretical foundation via VC dimension and PAC learning.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>SVM achieves maximum margin separation, directly minimizing generalization error via structural risk minimization. It dominated pre-deep-learning benchmarks and remains relevant for small/medium datasets and high-dimensional problems.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3b Unit III -->
+  <div class="q-card" id="q-3-3b" data-unit="3">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(240,98,146,0.15);color:var(--accent3);">Q3(b)</span>
+      <span class="q-text">Illustrate how the optimal hyperplane is determined in a linearly separable SVM.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-3-3b','Q3(b) Unit III')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-3-3b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Optimal Hyperplane</div>
+        <p class="ans-text">The <strong>optimal hyperplane</strong> in a linearly separable SVM is the unique hyperplane w·x + b = 0 that maximally separates the two classes — it lies equidistant from the closest points (support vectors) of each class.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label algo">🔧 Derivation Steps</div>
+        <div class="algo-box">Step 1: Define canonical hyperplanes:
+  w·x + b = +1  (positive class boundary)
+  w·x + b = −1  (negative class boundary)
+  Constraints: yᵢ(w·xᵢ + b) ≥ 1
+
+Step 2: Compute margin:
+  Distance from w·x+b=+1 to w·x+b=−1:
+  margin = 2/‖w‖
+
+Step 3: Formulate QP:
+  min ½‖w‖²  s.t. yᵢ(w·xᵢ + b) ≥ 1
+
+Step 4: Lagrangian:
+  L = ½‖w‖² − Σ αᵢ[yᵢ(w·xᵢ+b) − 1]
+  ∂L/∂w = 0 → w = Σ αᵢyᵢxᵢ
+  ∂L/∂b = 0 → Σ αᵢyᵢ = 0
+
+Step 5: KKT conditions:
+  αᵢ ≥ 0;  αᵢ[yᵢ(w·xᵢ+b) − 1] = 0
+  Support vectors: αᵢ > 0 ↔ yᵢ(w·xᵢ+b) = 1</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>The optimal hyperplane is uniquely determined by the support vectors alone. The dual QP formulation, solved via SMO or interior-point methods, identifies these support vectors. The solution is globally optimal (convex QP), guaranteeing the maximum margin classifier.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4a Unit III -->
+  <div class="q-card" id="q-3-4a" data-unit="3">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(240,98,146,0.15);color:var(--accent3);">Q4(a)</span>
+      <span class="q-text">Analyze the trade-off between the margin size and the classification error in a soft margin SVM.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-3-4a','Q4(a) Unit III')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-3-4a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Soft Margin SVM</div>
+        <p class="ans-text"><strong>Soft Margin SVM</strong> (C-SVM) relaxes the hard-margin constraint by introducing slack variables ξᵢ ≥ 0, allowing some misclassification. The parameter C controls the tradeoff between maximizing margin and minimizing training errors.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ Soft Margin Formulation</div>
+        <div class="formula-box">Primal:
+  Minimize:   ½‖w‖² + C·Σ ξᵢ
+  Subject to: yᵢ(w·xᵢ + b) ≥ 1 − ξᵢ,  ξᵢ ≥ 0
+
+Interpretation:
+  ξᵢ = 0:        xᵢ correctly classified, outside margin
+  0 &lt; ξᵢ &lt; 1:   correctly classified, inside margin
+  ξᵢ = 1:        xᵢ on decision boundary
+  ξᵢ &gt; 1:        xᵢ misclassified</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label table-lbl">📋 C Parameter Tradeoff</div>
+        <table class="compare-table">
+          <tr><th>C value</th><th>Margin</th><th>Training Error</th><th>Generalization</th></tr>
+          <tr><td>C → 0</td><td>Large (wide)</td><td>High (many errors allowed)</td><td>Underfit (high bias)</td></tr>
+          <tr><td>C → ∞</td><td>Small (narrow)</td><td>Low (hard margin)</td><td>Overfit (high variance)</td></tr>
+          <tr><td>C optimal</td><td>Balanced</td><td>Moderate</td><td>Best generalization</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>The C parameter is the fundamental regularization constant in SVMs. Optimal C is found via cross-validation. The soft margin SVM extends applicability to real-world non-separable datasets while retaining the convex QP formulation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4b Unit III -->
+  <div class="q-card" id="q-3-4b" data-unit="3">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(240,98,146,0.15);color:var(--accent3);">Q4(b)</span>
+      <span class="q-text">Apply a nonlinear SVM using the radial basis function (RBF) kernel to a simple dataset.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-3-4b','Q4(b) Unit III')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-3-4b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Nonlinear SVM with RBF Kernel</div>
+        <p class="ans-text">For nonlinearly separable data, the <strong>kernel trick</strong> implicitly maps inputs to a higher-dimensional RKHS where linear separation exists. The RBF kernel K(xᵢ,xⱼ) = exp(−γ‖xᵢ−xⱼ‖²) is the most common choice.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label algo">🔧 Application Steps</div>
+        <div class="algo-box">Dataset: XOR problem (linearly inseparable)
+  (+): (0,0), (1,1)    (−): (0,1), (1,0)
+
+Step 1: Choose RBF kernel K(x,z) = exp(−γ‖x−z‖²)
+        Choose γ = 1, C = 1
+
+Step 2: Compute Kernel Matrix K:
+  K((0,0),(0,0)) = 1
+  K((0,0),(1,1)) = exp(−2) ≈ 0.135
+  K((0,0),(0,1)) = exp(−1) ≈ 0.368  [+/- pair]
+  (Full 4×4 Gram matrix computed similarly)
+
+Step 3: Solve dual QP (kernel SVM):
+  Maximize: Σ αᵢ − ½ Σᵢⱼ αᵢαⱼyᵢyⱼK(xᵢ,xⱼ)
+  s.t. Σ αᵢyᵢ = 0,  0 ≤ αᵢ ≤ C
+
+Step 4: Decision function:
+  f(x) = sign(Σᵢ αᵢyᵢK(xᵢ,x) + b)
+  → Correctly separates XOR with nonlinear boundary</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>RBF-kernel SVM solves problems that are linearly inseparable by implicitly projecting data into infinite-dimensional feature spaces. The kernel trick avoids computing φ(x) explicitly, keeping computation in O(n²) rather than infinite dimensions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5a Unit III -->
+  <div class="q-card" id="q-3-5a" data-unit="3">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(240,98,146,0.15);color:var(--accent3);">Q5(a)</span>
+      <span class="q-text">Describe how SVM can be adapted to handle nonlinear classification problems. Discuss the kernel trick.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-3-5a','Q5(a) Unit III')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-3-5a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Kernel Trick</div>
+        <p class="ans-text">The <strong>kernel trick</strong> replaces every inner product xᵢᵀxⱼ in the SVM dual formulation with K(xᵢ,xⱼ) = φ(xᵢ)·φ(xⱼ), implicitly computing the inner product in a high-dimensional RKHS without explicitly computing the transformation φ.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ Kernel SVM Dual</div>
+        <div class="formula-box">Replace: xᵢᵀxⱼ → K(xᵢ,xⱼ)  in all SVM equations
+
+Common Kernels:
+  Linear:      K(x,z) = xᵀz
+  Polynomial:  K(x,z) = (xᵀz + c)^d
+  RBF/Gauss:   K(x,z) = exp(−γ‖x−z‖²)
+  Sigmoid:     K(x,z) = tanh(κxᵀz + θ)
+
+Mercer's Condition: K valid iff its Gram matrix is PSD</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Nonlinear SVM Steps</div>
+        <ul class="ans-list">
+          <li>Choose appropriate kernel K based on data geometry.</li>
+          <li>Construct kernel matrix Kᵢⱼ = K(xᵢ,xⱼ) — n×n Gram matrix.</li>
+          <li>Solve kernel dual QP to find support vectors and αᵢ.</li>
+          <li>Predict: f(x) = sign(Σ αᵢyᵢK(xᵢ,x) + b) — nonlinear boundary in input space.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>The kernel trick is one of ML's most elegant ideas — it enables nonlinear classification at the cost of computing only pairwise similarities. The computational complexity is O(n²) in kernel evaluations, independent of the dimensionality of the feature space φ(x).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5b Unit III -->
+  <div class="q-card" id="q-3-5b" data-unit="3">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(240,98,146,0.15);color:var(--accent3);">Q5(b)</span>
+      <span class="q-text">Compare SVM for regression and SVM for classification, focusing on the difference in objectives and algorithms.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-3-5b','Q5(b) Unit III')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-3-5b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label table-lbl">📋 SVC vs SVR Comparison</div>
+        <table class="compare-table">
+          <tr><th>Criterion</th><th>SVM Classification (SVC)</th><th>SVM Regression (SVR)</th></tr>
+          <tr><td>Goal</td><td>Maximize separation margin between classes</td><td>Fit function within ε-tube (ε-insensitive loss)</td></tr>
+          <tr><td>Output</td><td>Discrete class label (±1)</td><td>Continuous real value ŷ</td></tr>
+          <tr><td>Loss Function</td><td>Hinge loss: max(0, 1−yf(x))</td><td>ε-insensitive: max(0, |y−f(x)|−ε)</td></tr>
+          <tr><td>Slack Variables</td><td>ξᵢ for misclassification</td><td>ξᵢ, ξᵢ* for tube violations (upper/lower)</td></tr>
+          <tr><td>Optimization</td><td>min ½‖w‖² + C·Σξᵢ</td><td>min ½‖w‖² + C·Σ(ξᵢ+ξᵢ*)</td></tr>
+          <tr><td>Constraint</td><td>yᵢf(xᵢ) ≥ 1−ξᵢ</td><td>|yᵢ−f(xᵢ)| ≤ ε+ξᵢ</td></tr>
+          <tr><td>Kernel</td><td>Same kernels applicable</td><td>Same kernels applicable</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>SVC and SVR share the same mathematical framework (QP + kernel trick) but differ in objective: SVC maximizes margin between classes while SVR fits a regression tube. The ε-insensitive loss in SVR is analogous to the margin in SVC — both promote sparse solutions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ UNIT IV ═══════════════════ -->
+<section class="unit-section" id="unit-4">
+  <div class="unit-header">
+    <span class="unit-badge" style="background:rgba(102,187,106,0.15);color:var(--accent4);">Unit IV</span>
+    <h2 class="unit-title">Neural Networks &amp; Genetic Algorithms</h2>
+    <div class="unit-actions">
+      <button class="btn-icon" onclick="openAll(4)">📂 Open All</button>
+      <button class="btn-icon" onclick="closeAll(4)">📁 Close All</button>
+    </div>
+  </div>
+
+  <div class="cheat-sheet">
+    <h3>📊 Cheat Sheet — Unit IV</h3>
+    <div class="cs-grid">
+      <div class="cs-item"><div class="cs-label">Neuron Output</div><div class="cs-val">y = σ(wᵀx + b),  σ(z) = 1/(1+e⁻ᶻ)</div></div>
+      <div class="cs-item"><div class="cs-label">Backprop δ (output)</div><div class="cs-val">δₒ = (ŷ−y)·σ'(z)</div></div>
+      <div class="cs-item"><div class="cs-label">Weight Update</div><div class="cs-val">Δwᵢⱼ = −η·∂L/∂wᵢⱼ = η·δⱼ·aᵢ</div></div>
+      <div class="cs-item"><div class="cs-label">GA Fitness</div><div class="cs-val">P(sᵢ) = f(sᵢ)/Σf(sⱼ) [roulette wheel]</div></div>
+      <div class="cs-item"><div class="cs-label">Dropout</div><div class="cs-val">Each neuron active w.p. p; scale by 1/p at test</div></div>
+      <div class="cs-item"><div class="cs-label">BatchNorm</div><div class="cs-val">x̂ = (x−μ_B)/√(σ²_B+ε);  y = γx̂ + β</div></div>
+    </div>
+  </div>
+
+  <div class="memory-tips">
+    <h3>🧠 Memory Tips — Unit IV</h3>
+    <div class="tips-list">
+      <span class="tip-tag">Backprop = Chain Rule applied backwards</span>
+      <span class="tip-tag">GA = Selection → Crossover → Mutation → Repeat</span>
+      <span class="tip-tag">CNN = local features; RNN = sequential memory</span>
+      <span class="tip-tag">Vanishing gradient → use ReLU or LSTM</span>
+      <span class="tip-tag">Dropout = random regularization by forgetting</span>
+    </div>
+  </div>
+
+  <!-- Q1a Unit IV -->
+  <div class="q-card" id="q-4-1a" data-unit="4">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(102,187,106,0.15);color:var(--accent4);">Q1(a)</span>
+      <span class="q-text">Discuss how neural network representation influences the capacity to learn complex functions.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-4-1a','Q1(a) Unit IV')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-4-1a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Neural Network Representation</div>
+        <p class="ans-text">A neural network with layers of neurons connected by weighted edges represents a parameterized function f(x;θ): ℝᵈ → ℝᵒ. Its representational capacity — the set of functions it can express — is determined by depth, width, and activation functions.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Factors Influencing Capacity</div>
+        <ul class="ans-list">
+          <li><strong>Depth (layers):</strong> Deep networks represent exponentially more functions than shallow — each layer composes transformations. Universal approximation: 1 hidden layer suffices but may require exponential width.</li>
+          <li><strong>Width (neurons/layer):</strong> More neurons → richer hypothesis space, higher VC dimension.</li>
+          <li><strong>Activation Functions:</strong> Nonlinear activations (ReLU, sigmoid, tanh) enable composition of nonlinear features. Linear activations collapse to linear models.</li>
+          <li><strong>Architecture:</strong> CNN inductive bias for spatial locality; RNN for sequences; Transformers for global attention.</li>
+          <li><strong>Parameter Count:</strong> More parameters → higher capacity but risk of overfitting.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label dia">📐 Representational Power by Depth</div>
+        <div class="dia-box">  Shallow (1 hidden layer):        Deep (L hidden layers):
+  Can approximate any f(x)          Hierarchically composes features
+  but may need ≫ neurons              Layer 1: edges/curves
+                                      Layer 2: shapes
+  Input → [W W W W W W W] → Output   Layer 3: objects
+           (very wide)                Layer L: semantic concepts
+  
+  Deep = exponential efficiency in neuron count</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Neural network capacity scales with depth, width, and nonlinearity. Deep networks gain exponential representational efficiency over shallow ones. Universal approximation theorem guarantees 1-layer sufficiency, but depth enables practical efficiency and hierarchical feature learning.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1b Unit IV -->
+  <div class="q-card" id="q-4-1b" data-unit="4">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(102,187,106,0.15);color:var(--accent4);">Q1(b)</span>
+      <span class="q-text">Describe common challenges in training neural networks, such as overfitting, vanishing gradients, and computational complexity.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-4-1b','Q1(b) Unit IV')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-4-1b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label table-lbl">📋 Challenges &amp; Solutions</div>
+        <table class="compare-table">
+          <tr><th>Challenge</th><th>Cause</th><th>Effect</th><th>Solution</th></tr>
+          <tr><td>Overfitting</td><td>Model too complex for data</td><td>Low train err, high test err</td><td>Dropout, L2 reg, early stopping</td></tr>
+          <tr><td>Vanishing Gradient</td><td>σ'(z) → 0 for deep networks</td><td>Early layers learn very slowly</td><td>ReLU, ResNet skip connections, LSTM</td></tr>
+          <tr><td>Exploding Gradient</td><td>Large weight updates cascade</td><td>NaN loss, divergence</td><td>Gradient clipping, weight init</td></tr>
+          <tr><td>Local Minima</td><td>Non-convex loss surface</td><td>Suboptimal parameters</td><td>SGD with momentum, Adam, restarts</td></tr>
+          <tr><td>Computational Cost</td><td>Large n, d, layers</td><td>Slow training</td><td>GPU, mini-batch SGD, mixed precision</td></tr>
+          <tr><td>Covariate Shift</td><td>Changing activation distributions</td><td>Slow convergence</td><td>Batch Normalization</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ Vanishing Gradient — Mathematically</div>
+        <div class="formula-box">Backprop chain: ∂L/∂w₁ = ∂L/∂aₗ · Π_{k=2}^{L} (∂aₖ/∂aₖ₋₁)
+For sigmoid: ∂aₖ/∂aₖ₋₁ = σ'(z)·W → max σ'(z) = 0.25
+After L layers: gradient ≤ (0.25·‖W‖)^L → 0 exponentially</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Training deep networks is a battle against vanishing gradients, overfitting, and optimization landscapes. Modern solutions — ReLU activations, batch normalization, residual connections, and Adam optimizer — collectively enable training of networks hundreds of layers deep.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2a Unit IV -->
+  <div class="q-card" id="q-4-2a" data-unit="4">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(102,187,106,0.15);color:var(--accent4);">Q2(a)</span>
+      <span class="q-text">Evaluate the limitations of a perceptron and how they are addressed in multilayer networks.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-4-2a','Q2(a) Unit IV')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-4-2a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Perceptron</div>
+        <p class="ans-text">A <strong>perceptron</strong> is a single-layer linear classifier: ŷ = sign(wᵀx + b). It learns via the perceptron update rule and converges only if data is linearly separable (Perceptron Convergence Theorem).</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label table-lbl">📋 Limitations &amp; MLP Solutions</div>
+        <table class="compare-table">
+          <tr><th>Limitation</th><th>Example</th><th>MLP Solution</th></tr>
+          <tr><td>Cannot solve XOR</td><td>XOR is not linearly separable</td><td>Hidden layers create nonlinear boundaries</td></tr>
+          <tr><td>Linear hypothesis only</td><td>Only hyperplane boundaries</td><td>Nonlinear activations compose complex functions</td></tr>
+          <tr><td>No hidden representation</td><td>No feature learning</td><td>Hidden layers learn abstract representations</td></tr>
+          <tr><td>Binary output only</td><td>Cannot output probabilities</td><td>Softmax/sigmoid output layers</td></tr>
+          <tr><td>Not differentiable</td><td>Step function → no gradient</td><td>Sigmoid/tanh/ReLU → differentiable</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label dia">📐 XOR — Perceptron vs MLP</div>
+        <div class="dia-box">  XOR input space:      MLP hidden space (after transformation):
+  ×  ○               ○        ●
+  ○  ×               ●  ○
+  (not separable)    (linearly separable in hidden space!)
+
+  Hidden layer h₁, h₂:
+  h₁ = σ(x₁ + x₂ − 0.5)   [OR-like]
+  h₂ = σ(−x₁ − x₂ + 1.5)  [NAND-like]
+  Output = σ(h₁ + h₂ − 1.5) → XOR!</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>The perceptron's linear nature makes it fundamentally limited. MLPs with nonlinear activations are universal function approximators (Cybenko, 1989). The key insight: hidden layers learn intermediate representations that make complex problems linearly separable.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2b Unit IV -->
+  <div class="q-card" id="q-4-2b" data-unit="4">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(102,187,106,0.15);color:var(--accent4);">Q2(b)</span>
+      <span class="q-text">Illustrate the structure of a multilayer network and its advantages over single-layer networks.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-4-2b','Q2(b) Unit IV')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-4-2b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label dia">📐 MLP Architecture</div>
+        <div class="dia-box">Input Layer   Hidden Layer 1   Hidden Layer 2   Output Layer
+   x₁ ───────→ h₁¹ ────────→ h₁² ──────────→ ŷ₁
+   x₂ ──┬──→ h₂¹ ─┬──────→ h₂² ─┬──────→ ŷ₂
+   x₃ ──┤──→ h₃¹ ─┤──────→ h₃² ─┤
+   x₄ ──┘  → h₄¹  └───────→ h₄² ┘
+   
+   Each connection has weight wᵢⱼ
+   Each neuron: aⱼ = σ(Σ wᵢⱼ·aᵢ + bⱼ)
+   Forward pass: Input → Hidden₁ → Hidden₂ → Output</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label table-lbl">📋 MLP vs Single-Layer Advantages</div>
+        <table class="compare-table">
+          <tr><th>Criterion</th><th>Single-Layer (Perceptron)</th><th>Multilayer Network (MLP)</th></tr>
+          <tr><td>Representational Power</td><td>Linear functions only</td><td>Universal function approximation</td></tr>
+          <tr><td>Feature Learning</td><td>None — raw features used</td><td>Hierarchical feature extraction</td></tr>
+          <tr><td>Problem Types</td><td>Linearly separable only</td><td>Any continuous function</td></tr>
+          <tr><td>Depth Benefit</td><td>N/A</td><td>Exponential expressiveness with depth</td></tr>
+          <tr><td>Training</td><td>Perceptron rule</td><td>Backpropagation + gradient descent</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>MLPs overcome perceptron limitations through depth and nonlinearity. The hidden layers act as feature extractors, progressively transforming raw inputs into class-discriminative representations. This hierarchical learning is the foundation of all modern deep learning architectures.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3a Unit IV -->
+  <div class="q-card" id="q-4-3a" data-unit="4">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(102,187,106,0.15);color:var(--accent4);">Q3(a)</span>
+      <span class="q-text">Explain the back propagation algorithm with an example and discuss its significance in training multilayer networks.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-4-3a','Q3(a) Unit IV')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-4-3a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Backpropagation</div>
+        <p class="ans-text"><strong>Backpropagation</strong> is the algorithm for computing gradients of the loss function with respect to all network parameters by applying the chain rule of calculus from output to input layer, enabling gradient descent optimization.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label algo">🔧 Backpropagation Algorithm</div>
+        <div class="algo-box">FORWARD PASS:
+  For each layer l = 1 to L:
+    z^l = W^l · a^(l-1) + b^l   [linear combination]
+    a^l = σ(z^l)                  [activation]
+
+COMPUTE LOSS:
+  L = loss(a^L, y)   [e.g., MSE or cross-entropy]
+
+BACKWARD PASS:
+  Output layer δ^L:
+    δ^L = ∇_a L ⊙ σ'(z^L)
+    
+  For l = L-1, L-2, …, 1:
+    δ^l = (W^(l+1))ᵀ δ^(l+1) ⊙ σ'(z^l)   [chain rule]
+    
+  Gradients:
+    ∂L/∂W^l = δ^l · (a^(l-1))ᵀ
+    ∂L/∂b^l = δ^l
+
+WEIGHT UPDATE (SGD):
+  W^l ← W^l − η · ∂L/∂W^l
+  b^l ← b^l − η · ∂L/∂b^l</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Significance</div>
+        <ul class="ans-list">
+          <li>Makes training deep networks computationally tractable — O(|weights|) per step.</li>
+          <li>Enables automatic differentiation across any differentiable computation graph.</li>
+          <li>Foundation of all modern deep learning (PyTorch, TensorFlow use autograd).</li>
+          <li>Time complexity per epoch: O(n·W) where W = number of weights.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Backpropagation is the cornerstone of deep learning — it efficiently computes all gradients in O(|W|) time using the chain rule. Its rediscovery by Rumelhart et al. (1986) enabled the modern neural network revolution.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3b Unit IV -->
+  <div class="q-card" id="q-4-3b" data-unit="4">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(102,187,106,0.15);color:var(--accent4);">Q3(b)</span>
+      <span class="q-text">Summarize the advancements in neural networks, including convolutional and recurrent neural networks.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-4-3b','Q3(b) Unit IV')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-4-3b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label table-lbl">📋 NN Architecture Advancements</div>
+        <table class="compare-table">
+          <tr><th>Architecture</th><th>Key Innovation</th><th>Application</th><th>Key Operation</th></tr>
+          <tr><td>MLP (1986)</td><td>Backpropagation</td><td>General classification</td><td>Fully connected layers</td></tr>
+          <tr><td>CNN (LeCun 1989)</td><td>Local receptive fields, weight sharing</td><td>Image classification</td><td>Convolution + pooling</td></tr>
+          <tr><td>RNN (1990s)</td><td>Recurrent hidden state (memory)</td><td>NLP, time series</td><td>hₜ = tanh(Whₜ₋₁ + Wxₜ)</td></tr>
+          <tr><td>LSTM (1997)</td><td>Gating mechanisms (forget/input/output)</td><td>Long sequences</td><td>Cell state + gates</td></tr>
+          <tr><td>ResNet (2015)</td><td>Skip connections, residual learning</td><td>Deep image models</td><td>y = F(x) + x</td></tr>
+          <tr><td>Transformer (2017)</td><td>Self-attention, no recurrence</td><td>NLP, vision (ViT)</td><td>Attention(Q,K,V)</td></tr>
+          <tr><td>GAN (2014)</td><td>Generator vs Discriminator adversarial</td><td>Image generation</td><td>minimax game</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label dia">📐 CNN Architecture</div>
+        <div class="dia-box">Input Image → [Conv+ReLU] → [Pool] → [Conv+ReLU] → [Pool] → [FC] → Softmax
+ (32×32×3)    (feature maps)   (down)   (deeper maps)   (down)   (flatten)   (class)
+ 
+ Convolution: (I * K)(i,j) = ΣΣ I(i+m,j+n)·K(m,n)</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>NN advancements are driven by domain-specific inductive biases: CNNs exploit spatial locality, RNNs/LSTMs exploit temporal sequences, and Transformers exploit global dependencies via attention. Each architecture represents a refined inductive bias matching its target domain.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4a Unit IV -->
+  <div class="q-card" id="q-4-4a" data-unit="4">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(102,187,106,0.15);color:var(--accent4);">Q4(a)</span>
+      <span class="q-text">Compare regularization techniques such as dropout and batch normalization in improving model performance.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-4-4a','Q4(a) Unit IV')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-4-4a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label table-lbl">📋 Dropout vs Batch Normalization</div>
+        <table class="compare-table">
+          <tr><th>Criterion</th><th>Dropout</th><th>Batch Normalization</th></tr>
+          <tr><td>Mechanism</td><td>Randomly zero neurons with prob 1−p</td><td>Normalize mini-batch activations μ=0, σ=1</td></tr>
+          <tr><td>Goal</td><td>Reduce overfitting (regularization)</td><td>Reduce internal covariate shift</td></tr>
+          <tr><td>Effect</td><td>Ensemble of 2ⁿ sub-networks</td><td>Faster convergence, higher LR tolerance</td></tr>
+          <tr><td>Train vs Test</td><td>Active during train; scale at test</td><td>Uses running stats at test time</td></tr>
+          <tr><td>Position</td><td>After fully connected / conv layers</td><td>Before activation (or after)</td></tr>
+          <tr><td>Hyperparameters</td><td>Dropout rate p ∈ (0,1)</td><td>ε, learnable γ, β per feature</td></tr>
+          <tr><td>Best For</td><td>Fully connected layers (large)</td><td>Deep CNNs, transformers</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ BatchNorm Formula</div>
+        <div class="formula-box">μ_B = (1/m) Σ xᵢ         [batch mean]
+σ²_B = (1/m) Σ (xᵢ−μ_B)²  [batch variance]
+x̂ᵢ = (xᵢ−μ_B)/√(σ²_B+ε)  [normalize]
+yᵢ = γ·x̂ᵢ + β             [scale+shift with learnable γ,β]</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Dropout and BatchNorm are complementary: Dropout prevents overfitting by adding noise; BatchNorm accelerates training by stabilizing gradient flow. Modern deep networks (ResNet, BERT) use BatchNorm predominantly, while dropout remains standard in Transformer attention layers.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4b Unit IV -->
+  <div class="q-card" id="q-4-4b" data-unit="4">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(102,187,106,0.15);color:var(--accent4);">Q4(b)</span>
+      <span class="q-text">Discuss the steps involved in a Genetic Algorithm, including selection, crossover, and mutation.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-4-4b','Q4(b) Unit IV')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-4-4b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Genetic Algorithm</div>
+        <p class="ans-text">A <strong>Genetic Algorithm (GA)</strong> is an evolutionary optimization method inspired by Darwinian natural selection that evolves a population of candidate solutions (chromosomes) through selection, crossover, and mutation operators toward high-fitness solutions.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label algo">🔧 GA Steps</div>
+        <div class="algo-box">Step 1 — INITIALIZATION:
+  Generate population P = {s₁, s₂, …, sₙ}  [random bit strings]
+  Evaluate fitness f(sᵢ) for each chromosome
+
+Step 2 — SELECTION (Survival of fittest):
+  Options:
+  a) Roulette Wheel: P(sᵢ) = f(sᵢ)/Σf(sⱼ)
+  b) Tournament:     Select best of k random candidates
+  c) Rank Selection: Rank by fitness, sample by rank
+
+Step 3 — CROSSOVER (Reproduction):
+  Select parent pairs (p₁, p₂)
+  Single-point: cut at position k
+    Child₁ = p₁[1..k] + p₂[k+1..n]
+    Child₂ = p₂[1..k] + p₁[k+1..n]
+  Probability of crossover: Pc ≈ 0.6–0.9
+
+Step 4 — MUTATION (Exploration):
+  Flip each bit with probability Pm ≈ 0.001–0.01
+  Prevents premature convergence
+
+Step 5 — REPLACEMENT:
+  Replace old population with offspring (+ elitism)
+
+Repeat Steps 2–5 until:
+  max_generations reached OR fitness threshold met</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label dia">📐 GA Flow</div>
+        <div class="dia-box">  Initialize Population
+        ↓
+  Evaluate Fitness  ←──────────────────┐
+        ↓                              │
+  Selection (best chromosomes)         │
+        ↓                              │
+  Crossover (combine parents)          │
+        ↓                              │
+  Mutation (random flip)               │
+        ↓                              │
+  New Generation ──────────────────────┘
+        ↓
+  Termination? → Output Best Solution</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>GAs are powerful global optimizers for non-differentiable, multimodal search spaces. The balance between exploitation (selection/crossover) and exploration (mutation) is critical. Elitism (preserving top solutions) prevents regression while maintaining diversity.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5a Unit IV -->
+  <div class="q-card" id="q-4-5a" data-unit="4">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(102,187,106,0.15);color:var(--accent4);">Q5(a)</span>
+      <span class="q-text">Illustrate the process of genetic programming with an example application.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-4-5a','Q5(a) Unit IV')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-4-5a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Genetic Programming (GP)</div>
+        <p class="ans-text"><strong>Genetic Programming</strong> is an extension of GA where chromosomes are program trees (not fixed-length bit strings), and evolution discovers computer programs that solve a given problem by optimizing their tree structure and operations.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label dia">📐 GP Tree Representation</div>
+        <div class="dia-box">  Function set: {+, ×, −, /, sin, cos}
+  Terminal set: {x, y, constants}
+
+  Program tree for f(x,y) = sin(x) + x·y:
+  
+        [+]
+       /    \
+    [sin]   [×]
+      |    /   \
+     [x] [x]   [y]
+
+  Crossover: swap subtrees between parent trees
+  Mutation:  replace subtree with randomly generated one</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ GP Application Example: Symbolic Regression</div>
+        <ul class="ans-list">
+          <li><strong>Task:</strong> Find mathematical expression f(x) fitting dataset {(xᵢ,yᵢ)}.</li>
+          <li><strong>Fitness:</strong> Minimize MSE = (1/n)Σ(f(xᵢ)−yᵢ)² over training data.</li>
+          <li><strong>Population:</strong> 100–1000 random program trees, max depth = 5.</li>
+          <li><strong>Evolution:</strong> Tournament selection, subtree crossover (Pc=0.9), point mutation (Pm=0.01).</li>
+          <li><strong>Output:</strong> Best program tree = discovered formula (e.g., GP rediscovering x² + 2x).</li>
+          <li><strong>Applications:</strong> Feature engineering, robot control, circuit design, game strategy.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>GP evolves programs rather than parameters, making it uniquely suited for symbolic regression and automatic program synthesis. Its open-ended search space allows discovering solutions no human would formulate explicitly.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5b Unit IV -->
+  <div class="q-card" id="q-4-5b" data-unit="4">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(102,187,106,0.15);color:var(--accent4);">Q5(b)</span>
+      <span class="q-text">Evaluate the effectiveness of Genetic Algorithms in solving real-world optimization problems.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-4-5b','Q5(b) Unit IV')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-4-5b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label core">⚙️ GA Strengths for Real-World Problems</div>
+        <ul class="ans-list">
+          <li><strong>Non-convex optimization:</strong> GAs can escape local optima — excel where gradient methods fail.</li>
+          <li><strong>Black-box problems:</strong> No derivative required — only fitness evaluation.</li>
+          <li><strong>Combinatorial problems:</strong> TSP, scheduling, job-shop problems — solved effectively.</li>
+          <li><strong>Multi-objective:</strong> NSGA-II extends GA to Pareto front optimization.</li>
+          <li><strong>Parallelism:</strong> Population evaluation is embarrassingly parallel.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label table-lbl">📋 GA Applications Evaluation</div>
+        <table class="compare-table">
+          <tr><th>Domain</th><th>Problem</th><th>GA Effectiveness</th></tr>
+          <tr><td>Engineering</td><td>Structural design optimization</td><td>High — multi-objective Pareto front</td></tr>
+          <tr><td>Logistics</td><td>Traveling Salesman Problem</td><td>High — near-optimal solutions</td></tr>
+          <tr><td>Finance</td><td>Portfolio optimization</td><td>Moderate — outperforms random search</td></tr>
+          <tr><td>ML/DL</td><td>Neural Architecture Search</td><td>High (NeuroEvolution)</td></tr>
+          <tr><td>Games</td><td>Game-playing strategy evolution</td><td>High (NEAT algorithm)</td></tr>
+          <tr><td>Bioinformatics</td><td>Protein folding, gene expression</td><td>Moderate-High</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Limitations</div>
+        <ul class="ans-list">
+          <li>Computationally expensive — many fitness evaluations required.</li>
+          <li>No convergence guarantee to global optimum.</li>
+          <li>Hyperparameter sensitivity (population size, Pc, Pm).</li>
+          <li>Premature convergence if diversity is not maintained.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>GAs are highly effective for NP-hard combinatorial and multi-objective problems where gradient information is unavailable. Their parallelism, robustness to local optima, and domain-agnostic nature make them a first-choice method for complex engineering and discrete optimization problems.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ UNIT V ═══════════════════ -->
+<section class="unit-section" id="unit-5">
+  <div class="unit-header">
+    <span class="unit-badge" style="background:rgba(255,183,77,0.15);color:var(--accent5);">Unit V</span>
+    <h2 class="unit-title">Rules, EBL, Reinforcement Learning &amp; Files</h2>
+    <div class="unit-actions">
+      <button class="btn-icon" onclick="openAll(5)">📂 Open All</button>
+      <button class="btn-icon" onclick="closeAll(5)">📁 Close All</button>
+    </div>
+  </div>
+
+  <div class="cheat-sheet">
+    <h3>📊 Cheat Sheet — Unit V</h3>
+    <div class="cs-grid">
+      <div class="cs-item"><div class="cs-label">Q-Learning Update</div><div class="cs-val">Q(s,a) ← Q(s,a) + α[r + γ·max Q(s',a') − Q(s,a)]</div></div>
+      <div class="cs-item"><div class="cs-label">Bellman Equation</div><div class="cs-val">V*(s) = max_a [R(s,a) + γΣP(s'|s,a)V*(s')]</div></div>
+      <div class="cs-item"><div class="cs-label">EBL</div><div class="cs-val">Domain theory → Explain example → Generalize</div></div>
+      <div class="cs-item"><div class="cs-label">Sequential Covering</div><div class="cs-val">Learn rule → Remove covered → Repeat</div></div>
+      <div class="cs-item"><div class="cs-label">Resolution (Inverting)</div><div class="cs-val">From C₁∨L and C₂∨¬L → derive C₁∨C₂</div></div>
+      <div class="cs-item"><div class="cs-label">FOCL</div><div class="cs-val">EBL + inductive learning from imperfect theories</div></div>
+    </div>
+  </div>
+
+  <div class="memory-tips">
+    <h3>🧠 Memory Tips — Unit V</h3>
+    <div class="tips-list">
+      <span class="tip-tag">Q-learning: r + γ·maxQ_next − Q_current = TD Error</span>
+      <span class="tip-tag">EBL: Explain before Generalize (top-down)</span>
+      <span class="tip-tag">Sequential = Learn ONE rule at a time</span>
+      <span class="tip-tag">RL: Agent→Action→Env→Reward→State loop</span>
+      <span class="tip-tag">Text file = human readable; Binary = machine bytes</span>
+    </div>
+  </div>
+
+  <!-- Q1a Unit V -->
+  <div class="q-card" id="q-5-1a" data-unit="5">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(255,183,77,0.15);color:var(--accent5);">Q1(a)</span>
+      <span class="q-text">Demonstrate how the Sequential Covering Algorithm works with an example.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-5-1a','Q1(a) Unit V')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-5-1a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Sequential Covering Algorithm</div>
+        <p class="ans-text"><strong>Sequential Covering</strong> is a rule induction algorithm that iteratively learns one rule at a time, removes the positive examples covered by that rule, and repeats on the remaining examples until all positives are covered — producing an ordered rule list (decision list).</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label algo">🔧 Algorithm</div>
+        <div class="algo-box">Sequential_Covering(Target, Attributes, Examples, threshold):
+  rule_set ← ∅
+  
+  While positive examples remain AND performance > threshold:
+    rule ← Learn_One_Rule(Target, Attributes, Examples)
+    // Learn_One_Rule: greedy beam search, adding conditions
+    // that maximize accuracy = (TP/(TP+FP))
+    
+    Remove from Examples all instances covered by rule
+    Add rule to rule_set
+  
+  Return rule_set
+
+Learn_One_Rule (FOIL-style):
+  Start: rule = {}  [covers all examples]
+  Repeat:
+    Add literal L that most increases FOIL gain:
+      FoilGain(L) = t[log(p₁/(p₁+n₁)) − log(p₀/(p₀+n₀))]
+    Until rule covers no negative examples</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Example</div>
+        <ul class="ans-list">
+          <li>Dataset: PlayTennis (Outlook, Temp, Humidity, Wind → Play?)</li>
+          <li>Iteration 1: Best rule learned: IF Outlook=Sunny AND Humidity=Normal THEN Play=Yes. Remove covered (+) examples.</li>
+          <li>Iteration 2: On remaining: IF Outlook=Overcast THEN Play=Yes. Remove covered.</li>
+          <li>Iteration 3: IF Wind=Weak THEN Play=Yes. Continue until all (+) covered.</li>
+          <li>Result: Ordered rule list classifies all positive examples.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Sequential covering produces human-interpretable rule lists. Rules are ordered by specificity — first matching rule fires. It can handle numerical attributes via discretization and is the foundation of CN2 and RIPPER algorithms.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1b Unit V -->
+  <div class="q-card" id="q-5-1b" data-unit="5">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(255,183,77,0.15);color:var(--accent5);">Q1(b)</span>
+      <span class="q-text">Compare propositional rules and first-order rules with examples.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-5-1b','Q1(b) Unit V')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-5-1b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label table-lbl">📋 Propositional vs First-Order Rules</div>
+        <table class="compare-table">
+          <tr><th>Criterion</th><th>Propositional Rules</th><th>First-Order Rules (FOL)</th></tr>
+          <tr><td>Language</td><td>Propositions (true/false)</td><td>Predicates, variables, quantifiers</td></tr>
+          <tr><td>Variables</td><td>None — grounded attributes only</td><td>Variables ranging over objects</td></tr>
+          <tr><td>Expressiveness</td><td>Limited to attribute-value pairs</td><td>Can express relations between objects</td></tr>
+          <tr><td>Generalization</td><td>Specific to fixed feature vector</td><td>Generalizes over object types</td></tr>
+          <tr><td>Example Rule</td><td>IF color=red AND size=big THEN class=A</td><td>∀x: IsRed(x) ∧ IsBig(x) → ClassA(x)</td></tr>
+          <tr><td>Relations</td><td>Cannot express</td><td>Parent(X,Y) → Ancestor(X,Y)</td></tr>
+          <tr><td>Algorithm</td><td>ID3, Naive Bayes, C4.5</td><td>FOIL, PROLOG, ILP systems</td></tr>
+          <tr><td>Complexity</td><td>Linear in attributes</td><td>Much higher — undecidable in general</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Examples</div>
+        <ul class="ans-list">
+          <li><strong>Propositional:</strong> IF (Outlook=Sunny) AND (Wind=Weak) THEN PlayTennis=Yes</li>
+          <li><strong>First-Order:</strong> ∀X: Sunny(X) ∧ Weak_Wind(X) → PlayTennis(X)</li>
+          <li><strong>Relational FOL:</strong> ∀X,Y: Parent(X,Y) ∧ Parent(Y,Z) → GrandParent(X,Z)</li>
+          <li><strong>Key difference:</strong> FOL rules can reference and quantify over multiple objects and their relationships — impossible in propositional logic.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>First-order rules subsume propositional rules — they can express everything propositional logic can, plus relational knowledge. FOL rules are the foundation of Inductive Logic Programming (ILP), enabling learning in structured, relational domains like biological databases and knowledge graphs.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2a Unit V -->
+  <div class="q-card" id="q-5-2a" data-unit="5">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(255,183,77,0.15);color:var(--accent5);">Q2(a)</span>
+      <span class="q-text">Illustrate the concept of inverting resolution with an example.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-5-2a','Q2(a) Unit V')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-5-2a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Inverting Resolution</div>
+        <p class="ans-text"><strong>Inverting Resolution</strong> is the process of reversing the resolution inference rule to induce general hypotheses from specific examples — it forms the basis of ILP (Inductive Logic Programming) for learning first-order Horn clauses.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ Resolution &amp; Inverse Resolution</div>
+        <div class="formula-box">Forward Resolution (deduction):
+  C₁ = P ∨ L       [clause 1]
+  C₂ = Q ∨ ¬L      [clause 2, L resolved]
+  ─────────────────
+  C_resolvent = P ∨ Q   [conclusion]
+
+Inverse Resolution (induction): Given C_resolvent and C₁, infer C₂
+  Known:   P ∨ Q   (training example: positive fact)
+  Known:   P ∨ L   (background knowledge / other clause)
+  Infer:   Q ∨ ¬L  (hypothesized clause — the rule!)</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Example — Family Relations</div>
+        <ul class="ans-list">
+          <li><strong>Background facts:</strong> Parent(Tom, Bob), Parent(Bob, Ann)</li>
+          <li><strong>Positive example:</strong> GrandParent(Tom, Ann)</li>
+          <li><strong>Resolution:</strong> GrandParent(X,Z) :- Parent(X,Y), Parent(Y,Z) [induced rule]</li>
+          <li><strong>Inverse resolution</strong> produces this general rule from specific examples by reversing deduction.</li>
+          <li><strong>Operators:</strong> Absorption (induce body), Identification (induce head), Intra-construction (introduce new predicates).</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Inverse resolution enables learning of logical rules from examples and background knowledge. It is the theoretical foundation of ILP systems like CIGOL and Progol, which learn relational hypotheses in first-order logic.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2b Unit V -->
+  <div class="q-card" id="q-5-2b" data-unit="5">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(255,183,77,0.15);color:var(--accent5);">Q2(b)</span>
+      <span class="q-text">Discuss the significance of perfect domain theories in analytical learning.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-5-2b','Q2(b) Unit V')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-5-2b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Perfect Domain Theory</div>
+        <p class="ans-text">A <strong>perfect domain theory</strong> is a set of logical axioms/rules that is (1) <em>correct</em> — every statement it entails is true, and (2) <em>complete</em> — it can explain every positive example. Analytical learning (EBL) assumes a perfect domain theory.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Significance in Analytical Learning</div>
+        <ul class="ans-list">
+          <li><strong>Enables single-example learning:</strong> With a perfect theory, one training example suffices to generalize — no need for large datasets.</li>
+          <li><strong>Guides explanation construction:</strong> The theory is used to build a proof tree explaining why the example is positive.</li>
+          <li><strong>Guarantees correctness:</strong> Generalizations derived from a perfect theory are guaranteed consistent with the domain.</li>
+          <li><strong>Determines generalization:</strong> The explanation structure — not the example — defines what features are operationally relevant.</li>
+          <li><strong>Operational criteria:</strong> The generalization is restricted to operationally defined concepts (primitive features).</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label table-lbl">📋 Perfect vs Imperfect Domain Theory</div>
+        <table class="compare-table">
+          <tr><th>Property</th><th>Perfect Theory</th><th>Imperfect Theory</th></tr>
+          <tr><td>Correctness</td><td>All entailed facts are true</td><td>May entail false facts</td></tr>
+          <tr><td>Completeness</td><td>Explains all positive examples</td><td>May fail to explain some</td></tr>
+          <tr><td>Learning Algorithm</td><td>EBL (standard)</td><td>FOCL (hybrid EBL+inductive)</td></tr>
+          <tr><td>Examples Needed</td><td>Often 1</td><td>Multiple needed for correction</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Perfect domain theories enable dramatic sample efficiency — EBL can generalize from a single example. However, real-world domains rarely have perfect theories, motivating hybrid approaches like FOCL that combine analytical and inductive learning.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3a Unit V -->
+  <div class="q-card" id="q-5-3a" data-unit="5">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(255,183,77,0.15);color:var(--accent5);">Q3(a)</span>
+      <span class="q-text">Summarize Explanation-Based Learning (EBL) and its applications.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-5-3a','Q3(a) Unit V')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-5-3a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 EBL Definition</div>
+        <p class="ans-text"><strong>Explanation-Based Learning (EBL)</strong> is an analytical learning method that uses domain theory to construct an explanation (proof tree) of a training example, then generalizes that explanation to form an operational concept definition applicable to new instances.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label algo">🔧 EBL Algorithm</div>
+        <div class="algo-box">Input: Training example, Target concept, Domain theory, Operationality criteria
+
+Step 1 — EXPLAIN:
+  Construct proof tree proving:
+    Domain_Theory ⊢ Target_Concept(training_example)
+  [Use backward chaining with domain axioms]
+
+Step 2 — GENERALIZE:
+  Replace specific constants with variables in proof tree
+  Preserve structure of explanation
+  Result: Generalized proof schema = Learned Rule
+
+Step 3 — OPERATIONALIZE:
+  Ensure all leaf nodes of proof tree are operational
+  (Observable, computable predicates)
+  
+Output: New rule — if operational leaves hold → target concept</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ Applications</div>
+        <ul class="ans-list">
+          <li><strong>Game Playing:</strong> Chess — EBL learns macro-operators (e.g., "safe king move") from successful game analysis.</li>
+          <li><strong>Planning:</strong> Robots learn operational plans by explaining successful demonstrations.</li>
+          <li><strong>Medical Diagnosis:</strong> Generalize specific patient case using medical domain theory.</li>
+          <li><strong>Theorem Proving:</strong> Caching useful lemmas derived during proof search.</li>
+          <li><strong>Natural Language:</strong> Generalizing parse structures from example sentences.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>EBL learns efficiently from single examples by leveraging domain knowledge — eliminating the need for large training sets. Its limitation is sensitivity to domain theory quality: imperfect theories lead to incorrect generalizations, motivating hybrid FOCL.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3b Unit V -->
+  <div class="q-card" id="q-5-3b" data-unit="5">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(255,183,77,0.15);color:var(--accent5);">Q3(b)</span>
+      <span class="q-text">Evaluate the improvements offered by the FOCL Algorithm over traditional EBL.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-5-3b','Q3(b) Unit V')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-5-3b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 FOCL — First-Order Combined Learner</div>
+        <p class="ans-text"><strong>FOCL</strong> is a hybrid algorithm that combines Explanation-Based Learning (analytical, theory-driven) with inductive learning (data-driven) to handle imperfect domain theories — it falls back to inductive FOIL when EBL fails.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label table-lbl">📋 FOCL vs Traditional EBL</div>
+        <table class="compare-table">
+          <tr><th>Criterion</th><th>Traditional EBL</th><th>FOCL</th></tr>
+          <tr><td>Domain Theory</td><td>Must be perfect (correct + complete)</td><td>Works with imperfect theories</td></tr>
+          <tr><td>Fallback</td><td>Fails if theory is incomplete</td><td>Uses inductive FOIL as backup</td></tr>
+          <tr><td>Data Needed</td><td>1 example (theory-driven)</td><td>Multiple examples when theory fails</td></tr>
+          <tr><td>Robustness</td><td>Brittle — breaks with wrong axiom</td><td>Robust — corrects via induction</td></tr>
+          <tr><td>Integration</td><td>Pure analytical</td><td>Analytical + inductive hybrid</td></tr>
+          <tr><td>Hypothesis Quality</td><td>Depends entirely on theory quality</td><td>Combines theory guidance + data evidence</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label core">⚙️ FOCL Mechanism</div>
+        <ul class="ans-list">
+          <li>Attempts EBL explanation using available domain theory.</li>
+          <li>If EBL succeeds → uses EBL generalization (highly efficient).</li>
+          <li>If EBL fails (incomplete/incorrect theory) → falls back to FOIL inductive learning.</li>
+          <li>Inductive component fills gaps using training examples where theory is insufficient.</li>
+          <li>Result: Better generalization accuracy across real-world imperfect knowledge bases.</li>
+        </ul>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>FOCL addresses EBL's fundamental limitation — brittleness to imperfect theories. By combining analytical and inductive approaches, FOCL achieves better practical performance, especially in real domains where domain knowledge is partial or slightly incorrect.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4a Unit V -->
+  <div class="q-card" id="q-5-4a" data-unit="5">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(255,183,77,0.15);color:var(--accent5);">Q4(a)</span>
+      <span class="q-text">Compare reinforcement learning with supervised and unsupervised learning.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-5-4a','Q4(a) Unit V')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-5-4a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label table-lbl">📋 Three Paradigms Comparison</div>
+        <table class="compare-table">
+          <tr><th>Criterion</th><th>Supervised</th><th>Unsupervised</th><th>Reinforcement</th></tr>
+          <tr><td>Input</td><td>Labeled (x,y) pairs</td><td>Unlabeled x only</td><td>State, action, reward tuples</td></tr>
+          <tr><td>Feedback</td><td>Immediate labeled output</td><td>None — unsupervised</td><td>Delayed scalar reward</td></tr>
+          <tr><td>Goal</td><td>Learn h: X→Y</td><td>Discover structure in X</td><td>Learn policy π: S→A</td></tr>
+          <tr><td>Learning Signal</td><td>Error = ŷ − y</td><td>Unsupervised objective (e.g., reconstruction)</td><td>Cumulative reward G = Σ γᵗrₜ</td></tr>
+          <tr><td>Examples</td><td>Classification, regression</td><td>Clustering, dim. reduction</td><td>Game playing, robot control</td></tr>
+          <tr><td>Key Challenge</td><td>Generalization</td><td>Ill-defined objective</td><td>Credit assignment, exploration</td></tr>
+          <tr><td>Algorithms</td><td>SVM, NN, Bayes</td><td>k-means, PCA, VAE</td><td>Q-learning, SARSA, PPO</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label dia">📐 RL Agent-Environment Loop</div>
+        <div class="dia-box">  ┌─────────────────────────────────────┐
+  │             Environment             │
+  │  Sₜ₊₁, Rₜ₊₁  ←  Action aₜ         │
+  └─────────────┬───────────┬──────────┘
+                │ State Sₜ  │ Reward Rₜ
+                ▼           │
+  ┌─────────────────────────┐
+  │    Agent (Policy π)      │
+  │  aₜ = π(Sₜ)              │
+  └─────────────────────────┘
+  Goal: max E[Σ γᵗ Rₜ]  (discounted return)</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>RL is uniquely suited for sequential decision problems with delayed rewards — scenarios where supervised learning (requiring immediate correct labels) fails. The key RL challenges — exploration-exploitation tradeoff and temporal credit assignment — have no analogue in supervised/unsupervised paradigms.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4b Unit V -->
+  <div class="q-card" id="q-5-4b" data-unit="5">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(255,183,77,0.15);color:var(--accent5);">Q4(b)</span>
+      <span class="q-text">Describe the Q-Learning algorithm and its role in reinforcement learning.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-5-4b','Q4(b) Unit V')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-5-4b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 Q-Learning</div>
+        <p class="ans-text"><strong>Q-Learning</strong> (Watkins, 1989) is a model-free, off-policy RL algorithm that learns the optimal action-value function Q*(s,a) — the expected cumulative discounted reward from state s taking action a — directly from experience without needing a model of the environment.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ Q-Learning Update Rule</div>
+        <div class="formula-box">Q-value:  Q(s,a) = E[Σ_{t=0}^∞ γᵗ rₜ | s₀=s, a₀=a, π*]
+
+TD Update (after transition s,a,r,s'):
+  Q(s,a) ← Q(s,a) + α [r + γ·max_{a'} Q(s',a') − Q(s,a)]
+                        └────────────────────────────────┘
+                           TD Error (Temporal Difference)
+Where:
+  α ∈ (0,1]:  learning rate
+  γ ∈ [0,1]:  discount factor (0=myopic, 1=far-sighted)
+  r:           immediate reward
+  max_{a'}Q(s',a'): bootstrap from best next state value</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label algo">🔧 Q-Learning Algorithm</div>
+        <div class="algo-box">Initialize Q(s,a) ← 0  for all s,a  [or random]
+
+For each episode:
+  s ← initial state
+  
+  While s is not terminal:
+    a ← ε-greedy: random w.p. ε, else argmax_a Q(s,a)
+    Execute action a in environment
+    Observe reward r and next state s'
+    
+    Q(s,a) ← Q(s,a) + α[r + γ·max_{a'}Q(s',a') − Q(s,a)]
+    
+    s ← s'
+
+Decay ε (exploration rate) over time
+Output: Q-table (optimal policy: π*(s) = argmax_a Q(s,a))</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Q-learning is guaranteed to converge to Q* under mild conditions (visiting all state-action pairs infinitely often). It is off-policy (learns Q* regardless of the behavior policy). DQN (Deep Q-Network) extends Q-learning to large state spaces using neural networks as function approximators.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5a Unit V -->
+  <div class="q-card" id="q-5-5a" data-unit="5">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(255,183,77,0.15);color:var(--accent5);">Q5(a)</span>
+      <span class="q-text">Differentiate between text files and binary files with examples.</span>
+      <span class="q-meta">
+        <span class="mark-badge m7">7M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-5-5a','Q5(a) Unit V')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-5-5a')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label table-lbl">📋 Text File vs Binary File</div>
+        <table class="compare-table">
+          <tr><th>Criterion</th><th>Text File</th><th>Binary File</th></tr>
+          <tr><td>Encoding</td><td>ASCII / UTF-8 characters</td><td>Raw bytes (0s and 1s)</td></tr>
+          <tr><td>Readability</td><td>Human-readable in any editor</td><td>Not directly readable</td></tr>
+          <tr><td>Line Endings</td><td>\n (Unix) or \r\n (Windows)</td><td>No special meaning</td></tr>
+          <tr><td>EOF</td><td>Ctrl+Z (Windows), implementation-defined</td><td>Physical end of file</td></tr>
+          <tr><td>Portability</td><td>System may translate newlines</td><td>No translation — exact bytes</td></tr>
+          <tr><td>Storage</td><td>Larger (e.g., int "12345" = 5 bytes)</td><td>Compact (int 12345 = 4 bytes)</td></tr>
+          <tr><td>Examples</td><td>.txt, .csv, .html, .py</td><td>.jpg, .exe, .mp3, .bin</td></tr>
+          <tr><td>C Modes</td><td>fopen("file","r"/"w")</td><td>fopen("file","rb"/"wb")</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ Code Examples (C)</div>
+        <div class="formula-box">// Text file — writing integer as string
+FILE *f = fopen("data.txt", "w");
+fprintf(f, "%d\n", 12345);  // stores "12345\n" = 6 bytes
+fclose(f);
+
+// Binary file — writing integer as raw bytes
+FILE *b = fopen("data.bin", "wb");
+int val = 12345;
+fwrite(&val, sizeof(int), 1, b);  // stores 4 bytes
+fclose(b);</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>Text files prioritize human readability and interoperability; binary files prioritize storage efficiency and exact byte-level fidelity. Binary files are mandatory for multimedia, executable, and performance-critical data; text files for configuration, logs, and source code.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5b Unit V -->
+  <div class="q-card" id="q-5-5b" data-unit="5">
+    <div class="q-header" onclick="toggleQ(this)">
+      <span class="q-num" style="background:rgba(255,183,77,0.15);color:var(--accent5);">Q5(b)</span>
+      <span class="q-text">Demonstrate the use of file positioning functions in navigating file data.</span>
+      <span class="q-meta">
+        <span class="mark-badge m8">8M</span>
+        <button class="btn-bookmark" onclick="toggleBookmark(event,'q-5-5b','Q5(b) Unit V')">☆</button>
+        <button class="btn-copy-ans" onclick="copyAnswer(event,'q-5-5b')">Copy</button>
+        <span class="q-toggle">▼</span>
+      </span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section qs-key">
+        <div class="ans-label def">📖 File Positioning Functions</div>
+        <p class="ans-text">File positioning functions allow random access to file data by manipulating the <strong>file position indicator</strong> — a pointer maintained by the OS indicating the current read/write position within the file.</p>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label table-lbl">📋 Key Functions</div>
+        <table class="compare-table">
+          <tr><th>Function</th><th>Syntax</th><th>Purpose</th></tr>
+          <tr><td>fseek()</td><td>fseek(fp, offset, origin)</td><td>Move file pointer to offset from origin</td></tr>
+          <tr><td>ftell()</td><td>long pos = ftell(fp)</td><td>Return current file position</td></tr>
+          <tr><td>rewind()</td><td>rewind(fp)</td><td>Reset pointer to beginning (= fseek(fp,0,SEEK_SET))</td></tr>
+          <tr><td>fgetpos()</td><td>fgetpos(fp, &pos)</td><td>Store position in fpos_t struct</td></tr>
+          <tr><td>fsetpos()</td><td>fsetpos(fp, &pos)</td><td>Restore previously saved position</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label formula">∑ fseek Origins</div>
+        <div class="formula-box">SEEK_SET = 0  → from beginning of file
+SEEK_CUR = 1  → from current position
+SEEK_END = 2  → from end of file
+
+Example: fseek(fp, -sizeof(int), SEEK_END)  → last int in file</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label algo">🔧 Demonstration</div>
+        <div class="algo-box">FILE *fp = fopen("records.bin", "rb");
+
+// Read 3rd record (each record = 50 bytes):
+int record_num = 3;
+fseek(fp, (record_num-1) * 50, SEEK_SET);
+fread(&record, sizeof(record), 1, fp);
+
+// Find file size:
+fseek(fp, 0, SEEK_END);
+long size = ftell(fp);
+
+// Go back to beginning:
+rewind(fp);  // equivalent to fseek(fp, 0, SEEK_SET)
+
+// Save and restore position:
+fpos_t saved_pos;
+fgetpos(fp, &saved_pos);
+// ... navigate elsewhere ...
+fsetpos(fp, &saved_pos);  // restore
+
+fclose(fp);</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label conc">✅ Conclusion</div>
+        <div class="conclusion-box">
+          <p>File positioning functions enable O(1) random access to any record in a binary file — critical for database implementations, media streaming, and large data processing. Unlike sequential access, random access avoids reading unnecessary data, dramatically improving performance.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+// ─── STATE ───
+const bookmarks = JSON.parse(localStorage.getItem('ml-bookmarks') || '{}');
+let quickMode = false;
+
+// ─── UNIT NAVIGATION ───
+function showUnit(n, btn) {
+  document.querySelectorAll('.unit-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('unit-' + n).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// ─── ACCORDION ───
+function toggleQ(header) {
+  const card = header.closest('.q-card');
+  const isOpen = card.classList.contains('open');
+  card.classList.toggle('open', !isOpen);
+}
+
+function openAll(unit) {
+  document.querySelectorAll(`[data-unit="${unit}"]`).forEach(c => c.classList.add('open'));
+}
+
+function closeAll(unit) {
+  document.querySelectorAll(`[data-unit="${unit}"]`).forEach(c => c.classList.remove('open'));
+}
+
+// ─── THEME ───
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-btn').textContent = isDark ? '🌙 Dark' : '☀️ Light';
+  localStorage.setItem('ml-theme', isDark ? 'light' : 'dark');
+}
+
+// Load saved theme
+const savedTheme = localStorage.getItem('ml-theme');
+if (savedTheme) {
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  document.getElementById('theme-btn').textContent = savedTheme === 'light' ? '🌙 Dark' : '☀️ Light';
+}
+
+// ─── QUICK MODE ───
+function toggleQuickMode() {
+  quickMode = !quickMode;
+  document.body.classList.toggle('quick-mode', quickMode);
+  document.getElementById('qm-btn').style.background = quickMode ? 'var(--accent)' : '';
+  document.getElementById('qm-btn').style.color = quickMode ? '#fff' : '';
+  showToast(quickMode ? '⚡ Quick Mode ON — Key points only' : '⚡ Quick Mode OFF');
+}
+
+// ─── BOOKMARKS ───
+function toggleBookmark(e, id, label) {
+  e.stopPropagation();
+  const btn = e.currentTarget;
+  const card = document.getElementById(id);
+  if (bookmarks[id]) {
+    delete bookmarks[id];
+    btn.textContent = '☆';
+    btn.classList.remove('active');
+    card.classList.remove('bookmarked');
+    showToast('Bookmark removed');
+  } else {
+    bookmarks[id] = label;
+    btn.textContent = '★';
+    btn.classList.add('active');
+    card.classList.add('bookmarked');
+    showToast('📌 Bookmarked: ' + label);
+  }
+  localStorage.setItem('ml-bookmarks', JSON.stringify(bookmarks));
+  renderBookmarks();
+}
+
+function renderBookmarks() {
+  const list = document.getElementById('bm-list');
+  const keys = Object.keys(bookmarks);
+  if (keys.length === 0) {
+    list.innerHTML = '<p style="color:var(--text3);font-size:13px;">No bookmarks yet. Click ★ on any question.</p>';
+    return;
+  }
+  list.innerHTML = keys.map(id => `
+    <div class="bm-item" onclick="goToBookmark('${id}')">
+      <strong style="font-size:12px;color:var(--accent5);">📌</strong>
+      <span>${bookmarks[id]}</span>
+    </div>`).join('');
+}
+
+function goToBookmark(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const unit = el.getAttribute('data-unit');
+  showUnit(parseInt(unit), document.querySelector(`.unit-btn:nth-child(${unit})`));
+  toggleBookmarkPanel();
+  setTimeout(() => {
+    el.scrollIntoView({behavior: 'smooth', block: 'center'});
+    el.classList.add('open');
+  }, 300);
+}
+
+function toggleBookmarkPanel() {
+  document.getElementById('bm-panel').classList.toggle('open');
+  renderBookmarks();
+}
+
+// Restore bookmarks on load
+Object.keys(bookmarks).forEach(id => {
+  const card = document.getElementById(id);
+  if (card) {
+    card.classList.add('bookmarked');
+    const btn = card.querySelector('.btn-bookmark');
+    if (btn) { btn.textContent = '★'; btn.classList.add('active'); }
+  }
+});
+
+// ─── SEARCH ───
+function doSearch(query) {
+  const q = query.toLowerCase().trim();
+  document.querySelectorAll('.q-card').forEach(card => {
+    const text = card.textContent.toLowerCase();
+    if (!q) {
+      card.style.display = '';
+      card.classList.remove('highlighted');
+    } else if (text.includes(q)) {
+      card.style.display = '';
+      card.classList.add('highlighted');
+      if (!card.classList.contains('open')) {
+        card.classList.add('open');
+      }
+    } else {
+      card.style.display = 'none';
+      card.classList.remove('highlighted');
+    }
+  });
+  // Show all units when searching
+  if (q) {
+    document.querySelectorAll('.unit-section').forEach(s => s.style.display = 'block');
+  } else {
+    document.querySelectorAll('.unit-section').forEach((s, i) => {
+      s.style.display = s.classList.contains('active') ? 'block' : 'none';
+    });
+  }
+}
+
+// ─── COPY ANSWER ───
+function copyAnswer(e, id) {
+  e.stopPropagation();
+  const card = document.getElementById(id);
+  const body = card.querySelector('.q-body');
+  const text = body ? body.innerText : '';
+  navigator.clipboard.writeText(text).then(() => showToast('✅ Answer copied to clipboard!'));
+}
+
+// ─── TOAST ───
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ─── PROGRESS BAR ───
+window.addEventListener('scroll', () => {
+  const docH = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docH > 0 ? (window.scrollY / docH) * 100 : 0;
+  document.getElementById('progress-bar').style.width = pct + '%';
+
+  const btn = document.getElementById('scroll-top');
+  btn.classList.toggle('visible', window.scrollY > 400);
+});
+
+document.getElementById('scroll-top').addEventListener('click', () => {
+  window.scrollTo({top: 0, behavior: 'smooth'});
+});
+</script>
+</body>
+</html>

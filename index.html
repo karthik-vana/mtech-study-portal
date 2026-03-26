@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M.Tech CSE (AI/ML) Study Portal — Smart Learning Platform</title>
+<meta name="description" content="Premium study platform for M.Tech CSE (AI/ML) 1st Semester — Mathematical Foundations, Advanced DSA, Cloud Computing, Machine Learning. 188 questions across 20 units.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- ========== ANIMATED BACKGROUND ========== -->
+<div class="bg-mesh" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+</div>
+
+<!-- ========== NAVIGATION ========== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner container">
+    <a href="#" class="nav-brand">
+      <img src="assets/images/avanthi_clg logo.webp" alt="Avanthi Institute" class="nav-logo">
+      <span class="brand-text">Study<span class="brand-accent">Portal</span></span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#hero" class="nav-link active">Home</a>
+      <a href="#subjects" class="nav-link">Subjects</a>
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#about" class="nav-link">About</a>
+    </div>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" title="Toggle Theme" aria-label="Toggle theme">
+        <span class="theme-icon" id="themeIcon">🌙</span>
+      </button>
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== HERO SECTION ========== -->
+<section class="hero" id="hero">
+  <div class="hero-content container">
+    <div class="hero-college">
+      <img src="assets/images/avanthi_clg logo.webp" alt="Avanthi Institute of Engineering & Technology" class="hero-logo">
+    </div>
+    <p class="hero-college-name">Avanthi Institute of Engineering & Technology</p>
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      M.Tech CSE (AI/ML) — 1st Semester
+    </div>
+    <h1 class="hero-title">
+      Smart <span class="gradient-text">Study Portal</span>
+    </h1>
+    <p class="hero-subtitle">All Subjects · Smart Learning · One Platform</p>
+    <p class="hero-desc">
+      A premium, all-in-one study platform with <strong>188 questions</strong> across 
+      <strong>4 subjects</strong> and <strong>20 units</strong>. Search, bookmark, track progress, 
+      and ace your exams.
+    </p>
+    <div class="hero-actions">
+      <a href="#subjects" class="btn btn-primary btn-glow">
+        <span>🚀</span> Start Learning
+      </a>
+      <a href="#features" class="btn btn-outline">
+        <span>✨</span> Explore Features
+      </a>
+    </div>
+    <div class="hero-chips">
+      <span class="chip">📐 Maths</span>
+      <span class="chip">🔗 DSA</span>
+      <span class="chip">☁️ Cloud</span>
+      <span class="chip">🤖 ML</span>
+    </div>
+  </div>
+  <div class="hero-scroll-indicator">
+    <span>Scroll to explore</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ========== STATS SECTION ========== -->
+<section class="stats-section" id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card reveal">
+        <div class="stat-icon">📚</div>
+        <div class="stat-number" data-target="4">0</div>
+        <div class="stat-label">Subjects</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-icon">📖</div>
+        <div class="stat-number" data-target="20">0</div>
+        <div class="stat-label">Units</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-icon">❓</div>
+        <div class="stat-number" data-target="188">0</div>
+        <div class="stat-label">Questions</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-icon">⏱️</div>
+        <div class="stat-number" data-target="100">0</div>
+        <div class="stat-label">Hours of Content</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== RECENTLY OPENED ========== -->
+<section class="recent-section" id="recent" style="display:none;">
+  <div class="container">
+    <div class="recent-banner reveal">
+      <div class="recent-icon">⚡</div>
+      <div class="recent-info">
+        <span class="recent-label">Continue Learning</span>
+        <span class="recent-subject" id="recentSubjectName">—</span>
+      </div>
+      <a href="#" class="btn btn-primary btn-sm" id="recentBtn">Resume →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SUBJECTS SECTION ========== -->
+<section class="subjects-section" id="subjects">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">📚 Core Subjects</span>
+      <h2 class="section-title">Choose Your Subject</h2>
+      <p class="section-desc">Each subject opens in its own dedicated study environment with search, bookmarks, progress tracking, and more.</p>
+    </div>
+
+    <div class="subjects-grid">
+      <!-- MATHS -->
+      <div class="subject-card reveal" data-subject="maths" onclick="openSubject('maths')">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <div class="card-icon" style="background:linear-gradient(135deg,#667eea,#764ba2);">📐</div>
+          <span class="card-code">MTCT1101</span>
+        </div>
+        <h3 class="card-title">Mathematical Foundations</h3>
+        <p class="card-desc">Probability, Random Variables, Correlation, Regression, Hypothesis Testing, Graph Theory & more.</p>
+        <div class="card-meta">
+          <span class="meta-item"><span class="meta-icon">📖</span> 5 Units</span>
+          <span class="meta-item"><span class="meta-icon">❓</span> 39 Questions</span>
+        </div>
+        <div class="card-tags">
+          <span class="tag">Probability</span>
+          <span class="tag">Statistics</span>
+          <span class="tag">Graph Theory</span>
+        </div>
+        <button class="card-btn" aria-label="Open Mathematical Foundations">
+          Open Subject <span class="btn-arrow">→</span>
+        </button>
+      </div>
+
+      <!-- DSA -->
+      <div class="subject-card reveal" data-subject="dsa" onclick="openSubject('dsa')">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <div class="card-icon" style="background:linear-gradient(135deg,#11998e,#38ef7d);">🔗</div>
+          <span class="card-code">MTCS1102</span>
+        </div>
+        <h3 class="card-title">Advanced Data Structures & Algorithms</h3>
+        <p class="card-desc">Linear DS, Trees, Graphs, Hashing, BST, Heaps, AVL Trees, Red-Black Trees & more.</p>
+        <div class="card-meta">
+          <span class="meta-item"><span class="meta-icon">📖</span> 5 Units</span>
+          <span class="meta-item"><span class="meta-icon">❓</span> 47 Questions</span>
+        </div>
+        <div class="card-tags">
+          <span class="tag">Trees</span>
+          <span class="tag">Graphs</span>
+          <span class="tag">Hashing</span>
+        </div>
+        <button class="card-btn" aria-label="Open Advanced DSA">
+          Open Subject <span class="btn-arrow">→</span>
+        </button>
+      </div>
+
+      <!-- CLOUD -->
+      <div class="subject-card reveal" data-subject="cloud" onclick="openSubject('cloud')">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <div class="card-icon" style="background:linear-gradient(135deg,#4facfe,#00f2fe);">☁️</div>
+          <span class="card-code">MTCS1103</span>
+        </div>
+        <h3 class="card-title">Cloud Computing</h3>
+        <p class="card-desc">Distributed Systems, Virtualization, Cloud Architecture, AWS/Azure, MapReduce, Security & more.</p>
+        <div class="card-meta">
+          <span class="meta-item"><span class="meta-icon">📖</span> 5 Units</span>
+          <span class="meta-item"><span class="meta-icon">❓</span> 52 Questions</span>
+        </div>
+        <div class="card-tags">
+          <span class="tag">IaaS/PaaS/SaaS</span>
+          <span class="tag">Virtualization</span>
+          <span class="tag">Security</span>
+        </div>
+        <button class="card-btn" aria-label="Open Cloud Computing">
+          Open Subject <span class="btn-arrow">→</span>
+        </button>
+      </div>
+
+      <!-- ML -->
+      <div class="subject-card reveal" data-subject="ml" onclick="openSubject('ml')">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <div class="card-icon" style="background:linear-gradient(135deg,#a855f7,#ec4899);">🤖</div>
+          <span class="card-code">MTCS1104</span>
+        </div>
+        <h3 class="card-title">Machine Learning & Techniques</h3>
+        <p class="card-desc">Supervised/Unsupervised Learning, SVM, Neural Networks, Bayesian Learning, Decision Trees & more.</p>
+        <div class="card-meta">
+          <span class="meta-item"><span class="meta-icon">📖</span> 5 Units</span>
+          <span class="meta-item"><span class="meta-icon">❓</span> 50 Questions</span>
+        </div>
+        <div class="card-tags">
+          <span class="tag">Neural Networks</span>
+          <span class="tag">SVM</span>
+          <span class="tag">Bayes</span>
+        </div>
+        <button class="card-btn" aria-label="Open Machine Learning">
+          Open Subject <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FEATURES SECTION ========== -->
+<section class="features-section" id="features">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">⚡ Platform Features</span>
+      <h2 class="section-title">Built for Smart Learning</h2>
+      <p class="section-desc">Every subject page is packed with powerful features to supercharge your exam preparation.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔍</div>
+        <h3>Smart Search</h3>
+        <p>Search across all questions & answers instantly with highlighted keywords.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📌</div>
+        <h3>Bookmarks</h3>
+        <p>Save important questions and access them from a dedicated bookmarks panel.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📊</div>
+        <h3>Progress Tracking</h3>
+        <p>Visual progress bars for each unit showing how many questions you've reviewed.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">⚡</div>
+        <h3>Quick Revision</h3>
+        <p>Toggle quick mode to see only key points — perfect for last-minute revision.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🌙</div>
+        <h3>Dark & Light Mode</h3>
+        <p>Switch between dark and light themes for comfortable reading day or night.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📋</div>
+        <h3>Copy Answers</h3>
+        <p>One-click copy for any answer — paste into your notes or documents easily.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📑</div>
+        <h3>Cheat Sheets</h3>
+        <p>Key formulas and concepts at the top of every unit for quick reference.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🧠</div>
+        <h3>Memory Boost</h3>
+        <p>Flashcard-style key concept tags to reinforce memory before exams.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ABOUT SECTION ========== -->
+<section class="about-section" id="about">
+  <div class="container">
+    <div class="about-card reveal">
+      <div class="about-icon">🎯</div>
+      <h2>About This Portal</h2>
+      <p>
+        This study portal is designed for <strong>M.Tech CSE (AI/ML) 1st Semester</strong> students 
+        at Avanthi Institute of Engineering & Technology. It covers all four core subjects with 
+        comprehensive question-answer sets aligned with the university syllabus.
+      </p>
+      <p>
+        Each question is categorized by unit, marks, and type (Theory / Numerical). 
+        The platform supports search, bookmarks, dark mode, quick revision, and progress tracking 
+        — everything you need for smart, efficient exam preparation.
+      </p>
+      <div class="about-badges">
+        <span class="about-badge">📚 4 Subjects</span>
+        <span class="about-badge">📖 20 Units</span>
+        <span class="about-badge">❓ 188 Questions</span>
+        <span class="about-badge">✅ Exam Ready</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <img src="assets/images/avanthi_clg logo.webp" alt="Avanthi Institute" class="footer-logo">
+        <span>Study<span class="brand-accent">Portal</span></span>
+      </div>
+      <p class="footer-text">Avanthi Institute of Engineering & Technology · M.Tech CSE (AI/ML) · 1st Semester</p>
+      <p class="footer-copy">© 2026 Study Portal. Built for academic excellence.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ========== SCROLL TO TOP ========== -->
+<button class="scroll-top" id="scrollTop" title="Scroll to top" aria-label="Scroll to top">↑</button>
+
+<script src="assets/js/script.js"></script>
+</body>
+</html>

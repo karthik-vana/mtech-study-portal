@@ -1,0 +1,24 @@
+# Build scripts (not needed for deployment)
+build_unified.py
+generate.py
+inject-nav.ps1
+MTech_Study_Portal.html
+
+# Original source files (already copied to subjects/)
+MTCT1101_Solutions.html
+Advanced DSA.html
+MTCS1103_CloudComputing_StudyApp_Simplified.html
+MTCS1104_ML_Study_App.html
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Gemini
+.gemini/

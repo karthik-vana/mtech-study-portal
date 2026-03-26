@@ -1,0 +1,2835 @@
+﻿﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTCS1102 – Advanced Data Structures & Algorithms | Question Bank</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=Nunito:wght@400;600;700;800&display=swap');
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1f2937;
+    --border: #30363d;
+    --accent: #58a6ff;
+    --accent2: #3fb950;
+    --accent3: #f78166;
+    --accent4: #d2a8ff;
+    --accent5: #ffa657;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --text-dim: #6e7681;
+    --unit-colors: #58a6ff,#3fb950,#ffa657,#d2a8ff,#f78166;
+    --u1: #58a6ff;
+    --u2: #3fb950;
+    --u3: #ffa657;
+    --u4: #d2a8ff;
+    --u5: #f78166;
+    --card-bg: #161b22;
+    --header-h: 70px;
+  }
+  .light {
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --surface2: #e8edf2;
+    --border: #d1d9e0;
+    --accent: #0969da;
+    --accent2: #1a7f37;
+    --accent3: #cf222e;
+    --accent4: #8250df;
+    --accent5: #bc4c00;
+    --text: #1c2128;
+    --text-muted: #57606a;
+    --text-dim: #8c959f;
+    --u1: #0969da;
+    --u2: #1a7f37;
+    --u3: #bc4c00;
+    --u4: #8250df;
+    --u5: #cf222e;
+    --card-bg: #ffffff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    height: var(--header-h);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.35);
+  }
+  .header-left h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(0.95rem, 2vw, 1.25rem);
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+  .header-left p { font-size: 0.72rem; color: var(--text-muted); margin-top: 1px; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+
+  .search-box {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 5px 10px;
+  }
+  .search-box input {
+    background: none; border: none; outline: none;
+    color: var(--text); font-family: 'Nunito', sans-serif; font-size: 0.82rem;
+    width: clamp(100px, 20vw, 200px);
+  }
+  .search-box input::placeholder { color: var(--text-dim); }
+  .search-icon { color: var(--text-dim); font-size: 0.85rem; }
+
+  .toggle-btn {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); border-radius: 8px; padding: 6px 11px;
+    cursor: pointer; font-size: 0.82rem; transition: all .2s;
+  }
+  .toggle-btn:hover { background: var(--border); }
+
+  /* ── UNIT TABS ── */
+  .tabs-wrap {
+    position: sticky; top: var(--header-h); z-index: 90;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    overflow-x: auto; display: flex; padding: 0 16px;
+    scrollbar-width: none;
+  }
+  .tabs-wrap::-webkit-scrollbar { display: none; }
+  .tab {
+    flex-shrink: 0; padding: 12px 20px; cursor: pointer;
+    font-size: 0.82rem; font-weight: 700; color: var(--text-muted);
+    border-bottom: 3px solid transparent;
+    transition: all .2s; white-space: nowrap; text-transform: uppercase; letter-spacing: .05em;
+  }
+  .tab:nth-child(1).active { color: var(--u1); border-color: var(--u1); }
+  .tab:nth-child(2).active { color: var(--u2); border-color: var(--u2); }
+  .tab:nth-child(3).active { color: var(--u3); border-color: var(--u3); }
+  .tab:nth-child(4).active { color: var(--u4); border-color: var(--u4); }
+  .tab:nth-child(5).active { color: var(--u5); border-color: var(--u5); }
+  .tab:hover { color: var(--text); }
+
+  /* ── MAIN LAYOUT ── */
+  main { max-width: 960px; margin: 0 auto; padding: 24px 16px 60px; }
+
+  .unit-section { display: none; }
+  .unit-section.active { display: block; animation: fadeIn .35s ease; }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: none; } }
+
+  .unit-header {
+    margin-bottom: 20px; padding: 18px 22px;
+    background: var(--surface); border-radius: 12px;
+    border-left: 4px solid var(--u1);
+    display: flex; align-items: center; gap: 14px;
+  }
+  #unit1 .unit-header { border-color: var(--u1); }
+  #unit2 .unit-header { border-color: var(--u2); }
+  #unit3 .unit-header { border-color: var(--u3); }
+  #unit4 .unit-header { border-color: var(--u4); }
+  #unit5 .unit-header { border-color: var(--u5); }
+
+  .unit-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; padding: 3px 9px; border-radius: 20px;
+    font-weight: 600; white-space: nowrap;
+  }
+  #unit1 .unit-badge { background: rgba(88,166,255,.15); color: var(--u1); }
+  #unit2 .unit-badge { background: rgba(63,185,80,.15); color: var(--u2); }
+  #unit3 .unit-badge { background: rgba(255,166,87,.15); color: var(--u3); }
+  #unit4 .unit-badge { background: rgba(210,168,255,.15); color: var(--u4); }
+  #unit5 .unit-badge { background: rgba(247,129,102,.15); color: var(--u5); }
+
+  .unit-header h2 { font-family: 'Playfair Display', serif; font-size: 1.15rem; }
+
+  /* ── QUESTION CARD ── */
+  .q-group { margin-bottom: 10px; }
+  .q-group-label {
+    font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: .1em; color: var(--text-dim);
+    margin: 18px 0 6px 4px;
+  }
+
+  .q-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 10px; overflow: hidden; margin-bottom: 8px;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .q-card:hover { border-color: var(--text-dim); box-shadow: 0 2px 16px rgba(0,0,0,.2); }
+
+  .q-header {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 16px; cursor: pointer; user-select: none;
+  }
+  .q-num {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
+    font-weight: 600; padding: 2px 7px; border-radius: 5px;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  #unit1 .q-num { background: rgba(88,166,255,.15); color: var(--u1); }
+  #unit2 .q-num { background: rgba(63,185,80,.15); color: var(--u2); }
+  #unit3 .q-num { background: rgba(255,166,87,.15); color: var(--u3); }
+  #unit4 .q-num { background: rgba(210,168,255,.15); color: var(--u4); }
+  #unit5 .q-num { background: rgba(247,129,102,.15); color: var(--u5); }
+
+  .q-text { flex: 1; font-size: 0.9rem; font-weight: 700; line-height: 1.5; }
+  .q-meta { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+  .badge {
+    font-size: 0.65rem; padding: 2px 6px; border-radius: 4px;
+    background: var(--surface2); color: var(--text-muted); font-weight: 600;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .q-arrow {
+    color: var(--text-dim); font-size: 0.75rem;
+    transition: transform .25s; flex-shrink: 0; margin-top: 3px;
+  }
+  .q-card.open .q-arrow { transform: rotate(180deg); }
+
+  .q-body {
+    display: none; padding: 0 16px 18px; border-top: 1px solid var(--border);
+  }
+  .q-card.open .q-body { display: block; }
+
+  /* Answer content styles */
+  .ans-section { margin-top: 14px; }
+  .ans-label {
+    font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: .1em; color: var(--text-muted); margin-bottom: 6px;
+  }
+  .ans-text { font-size: 0.88rem; color: var(--text); }
+  .ans-text p { margin-bottom: 8px; }
+  .ans-text ul, .ans-text ol { padding-left: 18px; margin-bottom: 8px; }
+  .ans-text li { margin-bottom: 4px; font-size: 0.87rem; }
+  .ans-text strong { color: var(--accent); }
+
+  .code-block {
+    background: #0d1117; border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 14px; margin: 10px 0;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem;
+    color: #c9d1d9; overflow-x: auto; line-height: 1.6;
+    white-space: pre;
+  }
+  .light .code-block { background: #f6f8fa; color: #1c2128; }
+
+  .table-wrap { overflow-x: auto; margin: 10px 0; }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  th {
+    background: var(--surface2); color: var(--text);
+    padding: 8px 12px; text-align: left;
+    border: 1px solid var(--border); font-weight: 700; font-size: 0.78rem;
+  }
+  td {
+    padding: 7px 12px; border: 1px solid var(--border);
+    color: var(--text); vertical-align: top;
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,.03); }
+  .light tr:nth-child(even) td { background: rgba(0,0,0,.03); }
+
+  .highlight { 
+    background: rgba(88,166,255,.08); border-left: 3px solid var(--accent);
+    padding: 10px 14px; border-radius: 0 6px 6px 0; margin: 8px 0;
+    font-size: 0.86rem;
+  }
+  #unit2 .highlight { background: rgba(63,185,80,.08); border-color: var(--u2); }
+  #unit3 .highlight { background: rgba(255,166,87,.08); border-color: var(--u3); }
+  #unit4 .highlight { background: rgba(210,168,255,.08); border-color: var(--u4); }
+  #unit5 .highlight { background: rgba(247,129,102,.08); border-color: var(--u5); }
+
+  /* Cheat Sheet & Memory Tips */
+  .extra-section {
+    margin-top: 28px; padding: 20px;
+    background: var(--surface); border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .extra-section h3 {
+    font-family: 'Playfair Display', serif; font-size: 1rem;
+    margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+  }
+  .tip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+  .tip-card {
+    background: var(--surface2); border-radius: 8px; padding: 10px 12px;
+    border: 1px solid var(--border); font-size: 0.82rem;
+  }
+  .tip-card .tip-title { font-weight: 800; font-size: 0.75rem; margin-bottom: 4px; }
+  #unit1 .tip-title { color: var(--u1); }
+  #unit2 .tip-title { color: var(--u2); }
+  #unit3 .tip-title { color: var(--u3); }
+  #unit4 .tip-title { color: var(--u4); }
+  #unit5 .tip-title { color: var(--u5); }
+
+  .search-highlight { background: rgba(255,200,0,.35); border-radius: 2px; }
+
+  /* Responsive */
+  @media(max-width:600px) {
+    .q-meta { display: none; }
+    .unit-header h2 { font-size: 1rem; }
+    .header-left h1 { font-size: 0.88rem; }
+    .search-box { display: none; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .no-results {
+    text-align: center; padding: 40px; color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<!-- STUDY PORTAL NAVIGATION -->
+<div class="sp-topbar" id="spTopbar">
+  <a href="../index.html" class="sp-home-link"><img src="../assets/images/avanthi_clg logo.webp" alt="Avanthi" style="width:28px;height:28px;border-radius:6px;object-fit:contain;background:#fff;border:1px solid rgba(255,255,255,0.1);padding:1px;"> Study Portal</a>
+  <div class="sp-nav-links">
+    <a href="maths.html" class="sp-nav-link">Maths</a>
+    <a href="dsa.html" class="sp-nav-link sp-active">DSA</a>
+    <a href="cloud.html" class="sp-nav-link">Cloud</a>
+    <a href="ml.html" class="sp-nav-link">ML</a>
+  </div>
+</div>
+<script>
+// Sync topbar theme with page theme
+(function(){
+  var tb = document.getElementById('spTopbar');
+  if (!tb) return;
+  function syncTheme() {
+    var isDark = !document.body.classList.contains('light') && 
+                 document.documentElement.getAttribute('data-theme') !== 'light';
+    tb.classList.toggle('light-bar', !isDark);
+  }
+  syncTheme();
+  new MutationObserver(syncTheme).observe(document.body, {attributes:true,attributeFilter:['class']});
+  new MutationObserver(syncTheme).observe(document.documentElement, {attributes:true,attributeFilter:['data-theme']});
+})();
+</script>
+
+<header>
+  <div class="header-left">
+    <h1>Advanced Data Structures &amp; Algorithms</h1>
+    <p>MTCS1102 · M.Tech · Avanthi Institute of Engineering &amp; Technology</p>
+  </div>
+  <div class="header-right">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search questions…" oninput="doSearch(this.value)">
+    </div>
+    <button class="toggle-btn" onclick="toggleTheme()">☀️ / 🌙</button>
+  </div>
+</header>
+
+<div class="tabs-wrap" id="tabsWrap">
+  <div class="tab active" onclick="showUnit(1,this)">Unit I — Linear DS</div>
+  <div class="tab" onclick="showUnit(2,this)">Unit II — Trees &amp; Graphs</div>
+  <div class="tab" onclick="showUnit(3,this)">Unit III — Hashing &amp; ADT</div>
+  <div class="tab" onclick="showUnit(4,this)">Unit IV — BST &amp; Heaps</div>
+  <div class="tab" onclick="showUnit(5,this)">Unit V — Self-Balancing Trees</div>
+</div>
+
+<main>
+<div id="searchResults" class="no-results" style="display:none;"></div>
+
+<!-- ════════════════════ UNIT I ════════════════════ -->
+<section class="unit-section active" id="unit1">
+  <div class="unit-header">
+    <span class="unit-badge">CO1 · BT L1–L2</span>
+    <h2>Unit I — Linear Data Structures</h2>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-group-label">Question Set 1</div>
+
+  <div class="q-card" id="q1a1">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">1a</span>
+      <span class="q-text">Explain the difference between a queue and a circular queue. Why is the circular queue more memory-efficient?</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO1</span><span class="badge">L2</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Definition</div>
+        <div class="ans-text">
+          <p><strong>Queue:</strong> A linear data structure following FIFO (First In, First Out) principle where elements are inserted at the rear and deleted from the front.</p>
+          <p><strong>Circular Queue:</strong> An enhanced queue where the last position is connected back to the first position, forming a logical circle.</p>
+        </div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Key Differences</div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Parameter</th><th>Simple Queue</th><th>Circular Queue</th></tr>
+            <tr><td>Structure</td><td>Linear array</td><td>Circular / ring-like</td></tr>
+            <tr><td>Memory Waste</td><td>Front positions are wasted after deletion</td><td>Reuses freed positions</td></tr>
+            <tr><td>Overflow Condition</td><td>rear == MAX-1 (even if front spaces are free)</td><td>rear == (front-1 + MAX) % MAX</td></tr>
+            <tr><td>Efficiency</td><td>Low (memory loss)</td><td>High (full utilization)</td></tr>
+            <tr><td>Implementation</td><td>Simple</td><td>Uses modulo arithmetic</td></tr>
+            <tr><td>Reset Required?</td><td>Yes, needs queue reset</td><td>No reset required</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Why Circular Queue is Memory-Efficient</div>
+        <div class="ans-text">
+          <p>In a simple queue, once front pointer advances, the vacated positions can never be reused, causing <strong>"false overflow"</strong> — the rear pointer reaches the end even though there is free space at the front.</p>
+          <p>Circular queue resolves this by wrapping the rear pointer:</p>
+        </div>
+        <div class="code-block">rear = (rear + 1) % MAX;   // Wraps around
+front = (front + 1) % MAX;
+
+Enqueue: rear = (rear + 1) % MAX; arr[rear] = data;
+Dequeue: front = (front + 1) % MAX; return arr[front];
+
+Full:  (rear + 1) % MAX == front
+Empty: front == rear</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">ASCII Diagram</div>
+        <div class="code-block">Simple Queue (after 2 deletions):
+[_][_][C][D][E]
+ ↑front=2        ↑rear=4   — slots 0,1 WASTED
+
+Circular Queue (same scenario):
+ ┌──────────────────────┐
+ │  [E][_][_][C][D]    │  (all slots reusable)
+ └──────────────────────┘
+     front=3      rear=0</div>
+      </div>
+      <div class="highlight"><strong>Conclusion:</strong> Circular queue eliminates false overflow and achieves 100% utilization of allocated memory, making it significantly more memory-efficient than a linear queue.</div>
+    </div>
+  </div>
+
+  <div class="q-card" id="q1b1">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">1b</span>
+      <span class="q-text">How would you reverse a single linked list? Write the algorithm and explain its working.</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO1</span><span class="badge">L1</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Concept</div>
+        <div class="ans-text"><p>Reversing a single linked list means making each node's next pointer point to its previous node. The original head becomes the tail and the original tail becomes the new head.</p></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Algorithm (Iterative — 3-Pointer Method)</div>
+        <div class="code-block">Algorithm REVERSE_LIST(head):
+  prev ← NULL
+  curr ← head
+  next ← NULL
+
+  WHILE curr ≠ NULL DO:
+    next ← curr.next    // Step 1: Save next node
+    curr.next ← prev    // Step 2: Reverse the link
+    prev ← curr         // Step 3: Move prev forward
+    curr ← next         // Step 4: Move curr forward
+  END WHILE
+
+  head ← prev           // New head is last node
+  RETURN head</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Step-by-Step Trace</div>
+        <div class="code-block">Original: 1 → 2 → 3 → 4 → NULL
+
+Iteration 1: prev=NULL, curr=1, next=2
+  1.next = NULL,   prev=1, curr=2
+
+Iteration 2: prev=1,    curr=2, next=3
+  2.next = 1,      prev=2, curr=3
+
+Iteration 3: prev=2,    curr=3, next=4
+  3.next = 2,      prev=3, curr=4
+
+Iteration 4: prev=3,    curr=4, next=NULL
+  4.next = 3,      prev=4, curr=NULL
+
+Result: 4 → 3 → 2 → 1 → NULL   head = 4</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Recursive Algorithm</div>
+        <div class="code-block">Algorithm REVERSE_RECURSIVE(node):
+  IF node == NULL OR node.next == NULL:
+    RETURN node                   // Base case
+  
+  rest ← REVERSE_RECURSIVE(node.next)
+  node.next.next ← node           // Last node points back
+  node.next ← NULL                // Break original link
+  RETURN rest                     // New head</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Complexity</div>
+        <div class="ans-text">
+          <ul>
+            <li><strong>Time Complexity:</strong> O(n) — visits each node once</li>
+            <li><strong>Space Complexity:</strong> O(1) iterative / O(n) recursive (call stack)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="highlight"><strong>Conclusion:</strong> The iterative 3-pointer method is optimal with O(n) time and O(1) space. It is preferred over recursion to avoid stack overflow for large lists.</div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-group-label">Question Set 2</div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">2a</span>
+      <span class="q-text">Describe the process of traversing a linked list. How would you identify the middle element of a linked list?</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO1</span><span class="badge">L2</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Linked List Traversal</div>
+        <div class="ans-text"><p>Traversal means visiting each node starting from the head node and following the next pointer until NULL is reached.</p></div>
+        <div class="code-block">Algorithm TRAVERSE(head):
+  curr ← head
+  WHILE curr ≠ NULL DO:
+    PRINT curr.data
+    curr ← curr.next
+  END WHILE</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Finding Middle Element — Two-Pointer (Floyd's) Method</div>
+        <div class="ans-text"><p><strong>Slow pointer</strong> moves 1 step; <strong>Fast pointer</strong> moves 2 steps. When fast reaches end, slow is at middle.</p></div>
+        <div class="code-block">Algorithm FIND_MIDDLE(head):
+  slow ← head
+  fast ← head
+
+  WHILE fast ≠ NULL AND fast.next ≠ NULL DO:
+    slow ← slow.next          // 1 step
+    fast ← fast.next.next     // 2 steps
+  END WHILE
+
+  RETURN slow.data            // slow is at middle</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Trace Example</div>
+        <div class="code-block">List: 1 → 2 → 3 → 4 → 5 → NULL
+
+Step  slow  fast
+ 0     1     1
+ 1     2     3
+ 2     3     5
+ 3     3    NULL (stop)
+
+Middle = slow.data = 3  ✓</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Complexity</div>
+        <div class="ans-text"><ul>
+          <li><strong>Time:</strong> O(n) — single pass</li>
+          <li><strong>Space:</strong> O(1) — no extra memory</li>
+        </ul></div>
+      </div>
+      <div class="highlight"><strong>Advantage:</strong> Single-pass O(n) algorithm avoids counting nodes first (no two-pass needed). For even-length list, returns second middle node.</div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">2b</span>
+      <span class="q-text">Explain the advantages and disadvantages of using a double linked list compared to a single linked list.</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO1</span><span class="badge">L2</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Structure Comparison</div>
+        <div class="code-block">Single LL node:  [data | next →]
+Double LL node:  [← prev | data | next →]</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Advantages of Double Linked List</div>
+        <div class="ans-text"><ol>
+          <li><strong>Bidirectional traversal</strong> — can move forward (next) and backward (prev)</li>
+          <li><strong>Easier deletion</strong> — given a pointer to a node, O(1) deletion without needing previous node</li>
+          <li><strong>Reverse traversal</strong> without reversing the list first</li>
+          <li><strong>Efficient insertion before a node</strong> — O(1) using prev pointer</li>
+          <li><strong>Used in browser history</strong>, undo/redo operations, LRU cache</li>
+        </ol></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Disadvantages of Double Linked List</div>
+        <div class="ans-text"><ol>
+          <li><strong>Extra memory</strong> — each node stores an additional prev pointer (extra 4/8 bytes)</li>
+          <li><strong>Complex insertion/deletion</strong> — must update both prev and next pointers</li>
+          <li><strong>More pointer overhead</strong> — higher chance of pointer errors</li>
+          <li><strong>Cache performance</strong> — slightly worse due to larger node size</li>
+        </ol></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Feature</th><th>Single LL</th><th>Double LL</th></tr>
+          <tr><td>Memory per node</td><td>data + 1 ptr</td><td>data + 2 ptrs</td></tr>
+          <tr><td>Traversal</td><td>One-way only</td><td>Bidirectional</td></tr>
+          <tr><td>Deletion (given node ptr)</td><td>O(n)</td><td>O(1)</td></tr>
+          <tr><td>Insertion before node</td><td>O(n)</td><td>O(1)</td></tr>
+          <tr><td>Complexity</td><td>Simple</td><td>Moderate</td></tr>
+          <tr><td>Use cases</td><td>Stack, simple lists</td><td>Browser history, LRU cache</td></tr>
+        </table>
+      </div>
+      <div class="highlight"><strong>Conclusion:</strong> Use DLL when bidirectional traversal or efficient deletion is needed. Use SLL when memory is constrained and forward-only traversal suffices.</div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-group-label">Question Set 3</div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">3a</span>
+      <span class="q-text">List the use cases where a stack is preferred over other data structures. Provide examples of stack operations in practical applications.</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO1</span><span class="badge">L1</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">When Stack is Preferred</div>
+        <div class="ans-text"><ol>
+          <li><strong>Expression Evaluation/Conversion</strong> — Infix → Postfix → Prefix conversion; postfix evaluation</li>
+          <li><strong>Function Call Management</strong> — The call stack tracks function calls and local variables</li>
+          <li><strong>Undo/Redo Functionality</strong> — Each action is pushed; undo pops the last action</li>
+          <li><strong>Balanced Parenthesis Checking</strong> — Every opening bracket is pushed; closing bracket triggers a pop</li>
+          <li><strong>Backtracking Algorithms</strong> — Maze solving, N-Queens (stores state at each decision point)</li>
+          <li><strong>Browser Back Button</strong> — URLs are pushed; back button pops</li>
+          <li><strong>DFS (Depth First Search)</strong> — Uses an explicit stack or recursion (implicit stack)</li>
+          <li><strong>Memory Management</strong> — Stack segment in memory for local variable storage</li>
+        </ol></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Stack Operations with Examples</div>
+        <div class="code-block">PUSH(5): Stack = [5]          // Insert
+PUSH(3): Stack = [5,3]       // Insert
+PUSH(7): Stack = [5,3,7]     // Insert
+POP():   Stack = [5,3], returns 7   // Delete top
+PEEK():  returns 3 (top)            // View top
+isEmpty(): false
+isFull(): false
+
+Balanced Parenthesis Example:
+  Input: "{[()]}"
+  Push: {, [, (, )→ pop (, ] → pop [, } → pop {
+  Stack empty → BALANCED ✓
+
+Postfix Evaluation: 5 3 + 2 *
+  Push 5 → [5]
+  Push 3 → [5,3]
+  + → pop 3,5 → push 8 → [8]
+  Push 2 → [8,2]
+  * → pop 2,8 → push 16 → [16]
+  Result = 16</div>
+      </div>
+      <div class="highlight"><strong>Conclusion:</strong> Stack is ideal when you need LIFO (Last In, First Out) access — especially for reversal, backtracking, and tracking the most recent context.</div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">3b</span>
+      <span class="q-text">How would you detect a loop in a circular linked list? Provide the algorithm with a clear explanation.</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO1</span><span class="badge">L1</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Floyd's Cycle Detection Algorithm (Tortoise and Hare)</div>
+        <div class="ans-text"><p>Uses two pointers: <strong>slow</strong> (moves 1 step) and <strong>fast</strong> (moves 2 steps). If a cycle exists, they will eventually meet inside the cycle.</p></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Algorithm</div>
+        <div class="code-block">Algorithm DETECT_LOOP(head):
+  slow ← head
+  fast ← head
+
+  WHILE fast ≠ NULL AND fast.next ≠ NULL DO:
+    slow ← slow.next
+    fast ← fast.next.next
+
+    IF slow == fast THEN:
+      RETURN "Loop Detected"
+    END IF
+  END WHILE
+
+  RETURN "No Loop"
+
+// Finding Loop Start:
+  slow ← head
+  WHILE slow ≠ fast DO:
+    slow ← slow.next
+    fast ← fast.next
+  Loop start = slow.data</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Trace Example</div>
+        <div class="code-block">List: 1 → 2 → 3 → 4 → 5 → (back to 3)
+         ↑__________________________|
+
+Step  slow  fast
+ 0     1     1
+ 1     2     3
+ 2     3     5
+ 3     4     4  ← MEET! Loop detected at node 4</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Why It Works</div>
+        <div class="ans-text"><p>In the cycle of length C, if slow enters cycle when fast is k steps ahead, fast reduces the gap by 1 every step (fast gains +1 on slow each iteration). They must meet within C steps.</p></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Complexity</div>
+        <div class="ans-text"><ul>
+          <li><strong>Time:</strong> O(n)</li>
+          <li><strong>Space:</strong> O(1) — only two pointers</li>
+        </ul></div>
+      </div>
+      <div class="highlight"><strong>Conclusion:</strong> Floyd's algorithm is the most optimal cycle detection method — O(n) time, O(1) space — avoiding hash set approaches that need O(n) extra space.</div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-group-label">Question Set 4</div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">4a</span>
+      <span class="q-text">Define a stack and explain its LIFO property with a real-life analogy. What operations are typically performed on a stack?</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO1</span><span class="badge">L1</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Definition</div>
+        <div class="ans-text"><p>A <strong>Stack</strong> is a linear data structure that follows the <strong>LIFO (Last In, First Out)</strong> principle — the last element inserted is the first one to be removed. Elements are inserted and deleted from only one end called the <strong>TOP</strong>.</p></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">LIFO Property with Real-Life Analogy</div>
+        <div class="ans-text">
+          <p><strong>Analogy: Stack of Plates</strong></p>
+          <ul>
+            <li>You add plates on top (PUSH)</li>
+            <li>You always take the top plate first (POP)</li>
+            <li>You cannot remove a middle plate without removing all plates above it</li>
+            <li>The last plate placed is the first plate used → <strong>LIFO</strong></li>
+          </ul>
+          <p>Other analogies: Pile of books, undo history in MS Word, browser back navigation.</p>
+        </div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Stack Operations</div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Operation</th><th>Description</th><th>Complexity</th></tr>
+            <tr><td>PUSH(x)</td><td>Insert element x at top</td><td>O(1)</td></tr>
+            <tr><td>POP()</td><td>Remove and return top element</td><td>O(1)</td></tr>
+            <tr><td>PEEK() / TOP()</td><td>View top element without removing</td><td>O(1)</td></tr>
+            <tr><td>isEmpty()</td><td>Returns true if stack is empty</td><td>O(1)</td></tr>
+            <tr><td>isFull()</td><td>Returns true if stack is full (array)</td><td>O(1)</td></tr>
+            <tr><td>SIZE()</td><td>Returns number of elements</td><td>O(1)</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Array Implementation</div>
+        <div class="code-block">int stack[MAX]; int top = -1;
+
+PUSH(x):  if top == MAX-1 → OVERFLOW
+          else stack[++top] = x;
+
+POP():    if top == -1 → UNDERFLOW
+          else return stack[top--];
+
+PEEK():   return stack[top];</div>
+      </div>
+      <div class="highlight"><strong>Conclusion:</strong> Stack is a fundamental ADT where all operations execute in O(1) time. Its LIFO property makes it ideal for expression parsing, recursion management, and backtracking.</div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">4b</span>
+      <span class="q-text">How would you implement a stack or queue using two queues or two stacks? Discuss with examples.</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO1</span><span class="badge">L1</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Stack using Two Queues</div>
+        <div class="ans-text"><p>Use Q1 (main) and Q2 (auxiliary). PUSH: enqueue all of Q1 to Q2, enqueue new element to Q1, then move all from Q2 back to Q1 → Q1 front is always the top of stack.</p></div>
+        <div class="code-block">Q1=[], Q2=[]
+
+PUSH(1): Q1=[1]
+PUSH(2): Q2=[], enqueue 2 to Q2=[2],
+         move Q1[1] → Q2=[2,1], swap: Q1=[2,1], Q2=[]
+PUSH(3): Q2=[], enqueue 3 to Q2=[3],
+         move Q1[2,1] → Q2=[3,2,1], swap: Q1=[3,2,1]
+
+POP(): dequeue Q1 → returns 3 ✓ (LIFO!)
+
+Time: PUSH O(n), POP O(1)</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Queue using Two Stacks</div>
+        <div class="ans-text"><p>Use S1 (inbox) and S2 (outbox). ENQUEUE: push to S1. DEQUEUE: if S2 empty, pop all from S1 to S2, then pop from S2.</p></div>
+        <div class="code-block">S1=[], S2=[]
+
+ENQUEUE(1): S1=[1]
+ENQUEUE(2): S1=[1,2]
+ENQUEUE(3): S1=[1,2,3]
+
+DEQUEUE(): S2 empty → move S1 to S2
+  S2=[3,2,1] → pop S2 = 1 ✓ (FIFO!)
+
+DEQUEUE(): S2=[3,2] → pop S2 = 2 ✓
+
+ENQUEUE(4): S1=[4] (S2 still has [3])
+DEQUEUE():  S2 not empty → pop S2 = 3 ✓
+
+Amortized Time: ENQUEUE O(1), DEQUEUE O(1) amortized</div>
+      </div>
+      <div class="highlight"><strong>Conclusion:</strong> Queue with two stacks is highly efficient (amortized O(1)) because each element is moved at most twice. This pattern is used in asynchronous I/O systems.</div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-group-label">Question Set 5</div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">5a</span>
+      <span class="q-text">List the differences between a queue and a stack. In what scenarios would you use a queue instead of a stack?</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO1</span><span class="badge">L1</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="table-wrap">
+        <table>
+          <tr><th>Parameter</th><th>Stack</th><th>Queue</th></tr>
+          <tr><td>Principle</td><td>LIFO (Last In, First Out)</td><td>FIFO (First In, First Out)</td></tr>
+          <tr><td>Insertion End</td><td>Top</td><td>Rear</td></tr>
+          <tr><td>Deletion End</td><td>Top</td><td>Front</td></tr>
+          <tr><td>Operations</td><td>PUSH, POP, PEEK</td><td>ENQUEUE, DEQUEUE</td></tr>
+          <tr><td>Pointer(s)</td><td>Single (top)</td><td>Two (front, rear)</td></tr>
+          <tr><td>Real-life analogy</td><td>Stack of plates</td><td>Line at ticket counter</td></tr>
+          <tr><td>Applications</td><td>DFS, recursion, undo</td><td>BFS, scheduling, printing</td></tr>
+          <tr><td>Reversal</td><td>Natural (reverses input)</td><td>Does not reverse</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">When to Use Queue instead of Stack</div>
+        <div class="ans-text"><ul>
+          <li><strong>Job Scheduling</strong> — OS process scheduling (Round Robin) — first process entered gets CPU first</li>
+          <li><strong>BFS Traversal</strong> — Level-by-level graph exploration requires FIFO order</li>
+          <li><strong>Printer Spooling</strong> — First print job submitted prints first</li>
+          <li><strong>Keyboard Buffer</strong> — Keystrokes processed in order of entry</li>
+          <li><strong>Network Packet Routing</strong> — Packets forwarded in order of arrival</li>
+          <li><strong>Customer Service Systems</strong> — First customer to call gets served first</li>
+        </ul></div>
+      </div>
+      <div class="highlight"><strong>Rule of Thumb:</strong> Use Queue when ordering/fairness matters (oldest first). Use Stack when most-recent-first access is needed.</div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">5b</span>
+      <span class="q-text">Describe how linked lists can be used to represent polynomial expressions. Write an algorithm to add two polynomials using linked lists.</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO1</span><span class="badge">L1</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Polynomial Representation</div>
+        <div class="ans-text"><p>Each node in the linked list represents one <strong>term</strong> of the polynomial, storing its coefficient and exponent.</p></div>
+        <div class="code-block">Node Structure:
+  | coeff | exp | next |
+
+Example: 3x³ + 5x² + 2x + 7
+  [3|3] → [5|2] → [2|1] → [7|0] → NULL</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Algorithm to Add Two Polynomials</div>
+        <div class="code-block">Algorithm ADD_POLYNOMIALS(P1, P2):
+  result ← empty list
+  p ← P1.head
+  q ← P2.head
+
+  WHILE p ≠ NULL AND q ≠ NULL DO:
+    IF p.exp == q.exp THEN:
+      sum_coeff ← p.coeff + q.coeff
+      IF sum_coeff ≠ 0:
+        INSERT(result, sum_coeff, p.exp)
+      p ← p.next
+      q ← q.next
+
+    ELSE IF p.exp > q.exp THEN:
+      INSERT(result, p.coeff, p.exp)
+      p ← p.next
+
+    ELSE:
+      INSERT(result, q.coeff, q.exp)
+      q ← q.next
+  END WHILE
+
+  // Copy remaining terms
+  WHILE p ≠ NULL: INSERT(result, p.coeff, p.exp); p ← p.next
+  WHILE q ≠ NULL: INSERT(result, q.coeff, q.exp); q ← q.next
+
+  RETURN result</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Example</div>
+        <div class="code-block">P1: 4x³ + 3x² + 2x
+    [4|3] → [3|2] → [2|1] → NULL
+
+P2: 5x² + 4x + 1
+    [5|2] → [4|1] → [1|0] → NULL
+
+Addition Step-by-Step:
+  p.exp=3 > q.exp=2 → copy [4|3]
+  p.exp=2 = q.exp=2 → 3+5=8, insert [8|2]
+  p.exp=1 = q.exp=1 → 2+4=6, insert [6|1]
+  p=NULL → copy remaining [1|0]
+
+Result: 4x³ + 8x² + 6x + 1
+  [4|3] → [8|2] → [6|1] → [1|0] → NULL</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Complexity</div>
+        <div class="ans-text"><ul>
+          <li><strong>Time:</strong> O(m + n) where m, n are the number of terms</li>
+          <li><strong>Space:</strong> O(m + n) for result list</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cheat Sheet Unit I -->
+  <div class="extra-section">
+    <h3>🧠 Unit I — Memory Tips</h3>
+    <div class="tip-grid">
+      <div class="tip-card"><div class="tip-title">STACK = LIFO</div>"Last In, First Out" — Think: Stack of plates, always pick the TOP plate first.</div>
+      <div class="tip-card"><div class="tip-title">QUEUE = FIFO</div>"First In, First Out" — Think: Queue at a ticket counter.</div>
+      <div class="tip-card"><div class="tip-title">Circular Queue Magic</div>rear = (rear+1)%MAX — The modulo makes it circular!</div>
+      <div class="tip-card"><div class="tip-title">Reverse LL = 3 Pointers</div>prev, curr, next — "Save, Reverse, Move Forward"</div>
+      <div class="tip-card"><div class="tip-title">Middle = Slow-Fast</div>Fast moves 2x speed → when fast ends, slow is at middle</div>
+      <div class="tip-card"><div class="tip-title">Floyd's Cycle</div>Tortoise and Hare — if they meet, there's a loop!</div>
+      <div class="tip-card"><div class="tip-title">Polynomial Node</div>[coeff | exp | next] — sorted by decreasing exponent</div>
+      <div class="tip-card"><div class="tip-title">DLL vs SLL</div>DLL: +1 pointer, O(1) delete. SLL: less memory, O(n) delete.</div>
+    </div>
+  </div>
+  <div class="extra-section">
+    <h3>📋 Unit I — Cheat Sheet</h3>
+    <div class="tip-grid">
+      <div class="tip-card"><div class="tip-title">Stack Complexity</div>All ops: O(1) — PUSH, POP, PEEK, isEmpty</div>
+      <div class="tip-card"><div class="tip-title">Queue Overflow</div>Simple: rear==MAX-1 | Circular: (rear+1)%MAX==front</div>
+      <div class="tip-card"><div class="tip-title">Reverse LL Time</div>O(n) time, O(1) space (iterative)</div>
+      <div class="tip-card"><div class="tip-title">Middle Element</div>O(n) time, O(1) space (two pointers)</div>
+      <div class="tip-card"><div class="tip-title">Loop Detection</div>O(n) time, O(1) space (Floyd's)</div>
+      <div class="tip-card"><div class="tip-title">Poly Addition</div>O(m+n) time, O(m+n) space</div>
+      <div class="tip-card"><div class="tip-title">Queue via 2 Stacks</div>ENQUEUE O(1), DEQUEUE O(1) amortized</div>
+      <div class="tip-card"><div class="tip-title">Stack via 2 Queues</div>PUSH O(n), POP O(1)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ UNIT II ════════════════════ -->
+<section class="unit-section" id="unit2">
+  <div class="unit-header">
+    <span class="unit-badge">CO2 · BT L1–L3</span>
+    <h2>Unit II — Trees, Graphs &amp; Sorting</h2>
+  </div>
+
+  <div class="q-group-label">Question Set 1</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">1a</span>
+      <span class="q-text">Implement a function to insert a node into a binary search tree and explain the steps involved.</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO2</span><span class="badge">L2</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">BST Property</div>
+        <div class="ans-text"><p>For every node N: all nodes in <strong>left subtree &lt; N</strong> and all nodes in <strong>right subtree &gt; N</strong>.</p></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Insertion Algorithm (Recursive)</div>
+        <div class="code-block">Algorithm INSERT_BST(root, key):
+  IF root == NULL THEN:
+    RETURN new Node(key)       // Create and return new node
+
+  IF key < root.data THEN:
+    root.left ← INSERT_BST(root.left, key)   // Go left
+
+  ELSE IF key > root.data THEN:
+    root.right ← INSERT_BST(root.right, key) // Go right
+
+  ELSE:
+    // Duplicate key — ignore or update
+    RETURN root
+
+  RETURN root
+
+Iterative Version:
+  curr ← root; parent ← NULL
+  WHILE curr ≠ NULL:
+    parent ← curr
+    IF key < curr.data: curr ← curr.left
+    ELSE IF key > curr.data: curr ← curr.right
+    ELSE: return (duplicate)
+  
+  IF parent == NULL: root ← newNode
+  ELSE IF key < parent.data: parent.left ← newNode
+  ELSE: parent.right ← newNode</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Example Trace</div>
+        <div class="code-block">Insert: 50, 30, 70, 20, 40
+
+         50
+        /  \
+       30   70
+      /  \
+     20   40
+
+Insert 35: 35 < 50 → left → 35 > 30 → right → 35 < 40 → left
+  40.left = 35</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Complexity</div>
+        <div class="ans-text"><ul>
+          <li><strong>Best/Average:</strong> O(log n) — balanced tree</li>
+          <li><strong>Worst:</strong> O(n) — skewed tree (sorted input)</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">1b</span>
+      <span class="q-text">How can binary search be implemented using recursion? Provide the algorithm.</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO2</span><span class="badge">L1</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Binary Search — Concept</div>
+        <div class="ans-text"><p>Binary Search works on a <strong>sorted array</strong>. It compares the target with the middle element and eliminates half the remaining search space at each step.</p></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Recursive Algorithm</div>
+        <div class="code-block">Algorithm BINARY_SEARCH(arr, low, high, target):
+  // Base Case: Element not found
+  IF low > high THEN:
+    RETURN -1
+
+  mid ← (low + high) / 2
+
+  IF arr[mid] == target THEN:
+    RETURN mid                   // Found at index mid
+
+  ELSE IF target < arr[mid] THEN:
+    RETURN BINARY_SEARCH(arr, low, mid-1, target)   // Search left half
+
+  ELSE:
+    RETURN BINARY_SEARCH(arr, mid+1, high, target)  // Search right half</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Trace Example</div>
+        <div class="code-block">arr = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91]
+target = 23   (indices 0–9)
+
+Call 1: low=0, high=9, mid=4, arr[4]=16 → 23>16 → right
+Call 2: low=5, high=9, mid=7, arr[7]=56 → 23<56 → left
+Call 3: low=5, high=6, mid=5, arr[5]=23 → FOUND! Return 5</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Complexity Analysis</div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Case</th><th>Time</th><th>Space (Recursive)</th></tr>
+            <tr><td>Best</td><td>O(1)</td><td>O(1)</td></tr>
+            <tr><td>Average</td><td>O(log n)</td><td>O(log n)</td></tr>
+            <tr><td>Worst</td><td>O(log n)</td><td>O(log n)</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="highlight"><strong>Note:</strong> Recursive binary search uses O(log n) stack space. Iterative version uses O(1) space and is preferred in practice.</div>
+    </div>
+  </div>
+
+  <div class="q-group-label">Question Set 2</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">2a</span>
+      <span class="q-text">Explain the time complexity of merge sort and why it is more efficient than bubble and selection sort.</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO2</span><span class="badge">L2</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Merge Sort — Overview</div>
+        <div class="ans-text"><p>Merge Sort uses <strong>Divide and Conquer</strong>: split array into halves, sort each half recursively, then merge the sorted halves.</p></div>
+        <div class="code-block">Algorithm MERGE_SORT(arr, l, r):
+  IF l < r:
+    mid ← (l + r) / 2
+    MERGE_SORT(arr, l, mid)
+    MERGE_SORT(arr, mid+1, r)
+    MERGE(arr, l, mid, r)
+
+Recurrence: T(n) = 2T(n/2) + O(n)
+Solution (Master Theorem): T(n) = O(n log n)</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Complexity Comparison</div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Algorithm</th><th>Best</th><th>Average</th><th>Worst</th><th>Space</th><th>Stable?</th></tr>
+            <tr><td>Merge Sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>Yes</td></tr>
+            <tr><td>Bubble Sort</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>Yes</td></tr>
+            <tr><td>Selection Sort</td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>No</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Why Merge Sort is More Efficient</div>
+        <div class="ans-text"><ol>
+          <li><strong>Guaranteed O(n log n)</strong> in ALL cases — bubble/selection degrade to O(n²) in average/worst case</li>
+          <li><strong>Efficient for large datasets</strong> — O(n log n) grows much slower than O(n²)</li>
+          <li><strong>For n=10,000:</strong> Merge Sort ≈ 133,000 ops vs Bubble Sort ≈ 100,000,000 ops</li>
+          <li><strong>External sorting</strong> — works well for data that doesn't fit in RAM (stable merge)</li>
+          <li><strong>Parallelizable</strong> — both halves can be sorted simultaneously</li>
+        </ol></div>
+      </div>
+      <div class="highlight"><strong>Limitation:</strong> Merge Sort requires O(n) extra space. For in-place sorting, consider Quick Sort or Heap Sort (though Quick Sort has O(n²) worst case).</div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">2b</span>
+      <span class="q-text">Interpret the significance of pre-order, in-order, and post-order tree traversals. When would each be most useful?</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO2</span><span class="badge">L2</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Traversal Algorithms</div>
+        <div class="code-block">Tree:        1
+           /   \
+          2     3
+         / \   / \
+        4   5 6   7
+
+Pre-order  (Root→Left→Right): 1 2 4 5 3 6 7
+In-order   (Left→Root→Right): 4 2 5 1 6 3 7
+Post-order (Left→Right→Root): 4 5 2 6 7 3 1</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Traversal</th><th>Order</th><th>Algorithm</th><th>Use Case</th></tr>
+          <tr><td>Pre-order</td><td>Root → Left → Right</td><td>Visit, recurse left, recurse right</td><td>Copy/serialize a tree; prefix expression evaluation</td></tr>
+          <tr><td>In-order</td><td>Left → Root → Right</td><td>Recurse left, visit, recurse right</td><td>BST sorted output; expression evaluation (infix)</td></tr>
+          <tr><td>Post-order</td><td>Left → Right → Root</td><td>Recurse left, recurse right, visit</td><td>Delete a tree; postfix expression; evaluating folder sizes</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">When Each is Most Useful</div>
+        <div class="ans-text"><ul>
+          <li><strong>Pre-order:</strong> Used to create a copy of the tree. Also used to generate prefix (Polish) notation. In file system backup — parent directory before children.</li>
+          <li><strong>In-order:</strong> Produces sorted output for BST. Used in BST validation and finding kth smallest element.</li>
+          <li><strong>Post-order:</strong> Used when children must be processed before parent — e.g., deleting tree nodes (delete children first), calculating disk usage of folders, evaluating postfix expressions.</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-group-label">Question Set 3</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">3a</span>
+      <span class="q-text">What are the advantages of using expression trees for evaluating mathematical expressions?</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO2</span><span class="badge">L1</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Expression Tree — Definition</div>
+        <div class="ans-text"><p>An expression tree is a binary tree where <strong>leaf nodes = operands</strong> (numbers/variables) and <strong>internal nodes = operators</strong> (+, -, *, /).</p></div>
+        <div class="code-block">Expression: (3 + 5) * (2 - 1)
+
+       *
+      / \
+     +   -
+    / \ / \
+   3  5 2  1
+
+In-order traversal → 3 + 5 * 2 - 1 (infix)
+Pre-order  → * + 3 5 - 2 1 (prefix)
+Post-order → 3 5 + 2 1 - * (postfix)</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Advantages</div>
+        <div class="ans-text"><ol>
+          <li><strong>Expression Conversion:</strong> Easy conversion between infix, prefix, and postfix just by changing traversal order</li>
+          <li><strong>Evaluation:</strong> Post-order traversal naturally evaluates the expression — bottom-up computation</li>
+          <li><strong>Operator Precedence:</strong> Tree structure inherently captures precedence — deeper nodes compute first</li>
+          <li><strong>Parentheses Elimination:</strong> No need to track parentheses — tree structure encodes precedence</li>
+          <li><strong>Compiler Design:</strong> Used in compilers as Abstract Syntax Trees (AST) for code generation</li>
+          <li><strong>Symbolic Differentiation:</strong> Mathematical software (like Mathematica) uses expression trees for symbolic calculus</li>
+          <li><strong>Sub-expression Sharing:</strong> Common sub-expressions can be identified using tree DAG representation (optimization)</li>
+        </ol></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">3b</span>
+      <span class="q-text">Compare and contrast the adjacency list and adjacency matrix representations of graphs. In what scenarios is one better than the other?</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO2</span><span class="badge">L2</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Graph: G = (V, E) with 4 vertices: A-B-C-D</div>
+        <div class="code-block">Adjacency Matrix (A→B, A→C, B→D, C→D):
+  A B C D
+A[0,1,1,0]
+B[0,0,0,1]
+C[0,0,0,1]
+D[0,0,0,0]
+
+Adjacency List:
+A → [B, C]
+B → [D]
+C → [D]
+D → []</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Parameter</th><th>Adjacency Matrix</th><th>Adjacency List</th></tr>
+          <tr><td>Space</td><td>O(V²)</td><td>O(V + E)</td></tr>
+          <tr><td>Edge Check (u,v)</td><td>O(1)</td><td>O(degree)</td></tr>
+          <tr><td>All Neighbors</td><td>O(V)</td><td>O(degree)</td></tr>
+          <tr><td>Add Edge</td><td>O(1)</td><td>O(1)</td></tr>
+          <tr><td>Add Vertex</td><td>O(V²) resize</td><td>O(1)</td></tr>
+          <tr><td>Remove Edge</td><td>O(1)</td><td>O(E)</td></tr>
+          <tr><td>Dense Graph?</td><td>Better (E ≈ V²)</td><td>Wasteful</td></tr>
+          <tr><td>Sparse Graph?</td><td>Wasteful</td><td>Better (E &lt;&lt; V²)</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">When to Use Each</div>
+        <div class="ans-text">
+          <p><strong>Adjacency Matrix:</strong> When graph is dense (many edges), when quick edge-existence check is critical, for Floyd-Warshall algorithm (all-pairs shortest path).</p>
+          <p><strong>Adjacency List:</strong> When graph is sparse (social networks, road maps), when memory efficiency matters, for BFS/DFS where iterating neighbors is key.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-group-label">Question Set 4</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">4a</span>
+      <span class="q-text">How would you detect a cycle in a graph using DFS or BFS? Provide the algorithms.</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO2</span><span class="badge">L1</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Cycle Detection using DFS (Directed Graph)</div>
+        <div class="ans-text"><p>Use <strong>visited[]</strong> and <strong>recStack[]</strong> (recursion stack). If a neighbor is already in the recursion stack → cycle exists.</p></div>
+        <div class="code-block">Algorithm DFS_CYCLE(graph, V):
+  visited[1..V] ← FALSE
+  recStack[1..V] ← FALSE
+
+  FOR each vertex u in V:
+    IF NOT visited[u]:
+      IF DFS_UTIL(u, visited, recStack):
+        RETURN TRUE  // Cycle found
+  RETURN FALSE
+
+Algorithm DFS_UTIL(u, visited, recStack):
+  visited[u] ← TRUE
+  recStack[u] ← TRUE
+
+  FOR each neighbor v of u:
+    IF NOT visited[v]:
+      IF DFS_UTIL(v, visited, recStack): RETURN TRUE
+    ELSE IF recStack[v]:
+      RETURN TRUE  // Back edge → CYCLE!
+
+  recStack[u] ← FALSE
+  RETURN FALSE</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Cycle Detection using BFS — Kahn's Algorithm (DAG)</div>
+        <div class="code-block">Algorithm KAHN_CYCLE(graph, V):
+  inDegree[1..V] ← 0
+  FOR each edge (u,v): inDegree[v]++
+
+  Queue Q ← all vertices with inDegree = 0
+  count ← 0
+
+  WHILE Q not empty:
+    u ← DEQUEUE(Q); count++
+    FOR each neighbor v of u:
+      inDegree[v]--
+      IF inDegree[v] == 0: ENQUEUE(Q, v)
+
+  IF count == V: RETURN "No Cycle"
+  ELSE: RETURN "Cycle Exists"</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Complexity</div>
+        <div class="ans-text"><ul>
+          <li><strong>DFS method:</strong> O(V + E) time, O(V) space</li>
+          <li><strong>BFS/Kahn's:</strong> O(V + E) time, O(V) space</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">4b</span>
+      <span class="q-text">Evaluate the use of binary search trees versus hash tables for implementing a dictionary application. Which is better for frequent insertions and lookups?</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO2</span><span class="badge">L3</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="table-wrap">
+        <table>
+          <tr><th>Feature</th><th>BST (Balanced)</th><th>Hash Table</th></tr>
+          <tr><td>Search</td><td>O(log n)</td><td>O(1) average</td></tr>
+          <tr><td>Insert</td><td>O(log n)</td><td>O(1) average</td></tr>
+          <tr><td>Delete</td><td>O(log n)</td><td>O(1) average</td></tr>
+          <tr><td>Worst case</td><td>O(n) unbalanced</td><td>O(n) collisions</td></tr>
+          <tr><td>Ordered output</td><td>Yes (in-order)</td><td>No</td></tr>
+          <tr><td>Range queries</td><td>Efficient O(k+log n)</td><td>Not supported</td></tr>
+          <tr><td>Min/Max</td><td>O(log n)</td><td>O(n)</td></tr>
+          <tr><td>Memory</td><td>O(n) — predictable</td><td>O(n) — load factor overhead</td></tr>
+          <tr><td>Prefix search</td><td>Possible</td><td>Not possible</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Analysis</div>
+        <div class="ans-text">
+          <p><strong>Hash Table wins</strong> for frequent insertions and lookups with O(1) average case. Ideal for basic dictionary lookup (word → definition).</p>
+          <p><strong>BST (especially AVL/Red-Black) wins</strong> when:</p>
+          <ul>
+            <li>Sorted output is needed (spell checker, autocomplete)</li>
+            <li>Range queries are required ("find all words between 'apple' and 'mango'")</li>
+            <li>Prefix searches needed</li>
+            <li>Memory is constrained (no hash table overhead)</li>
+          </ul>
+          <p><strong>Recommendation:</strong> For a dictionary with frequent lookups → Hash Table. For a dictionary with autocomplete/sorting → Balanced BST.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-group-label">Question Set 5</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">5a</span>
+      <span class="q-text">Analyse the differences between recursive and iterative implementations of tree traversals. Which is more memory efficient and why?</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO2</span><span class="badge">L3</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="table-wrap">
+        <table>
+          <tr><th>Parameter</th><th>Recursive</th><th>Iterative (Explicit Stack)</th></tr>
+          <tr><td>Code Simplicity</td><td>Simple, concise</td><td>More verbose</td></tr>
+          <tr><td>Memory (Space)</td><td>O(h) — call stack frames</td><td>O(h) — explicit stack</td></tr>
+          <tr><td>Stack Overflow Risk</td><td>Yes (for very deep trees)</td><td>No (heap memory)</td></tr>
+          <tr><td>Control</td><td>Implicit (OS manages)</td><td>Explicit (programmer controls)</td></tr>
+          <tr><td>Performance</td><td>Function call overhead</td><td>Slightly faster (no overhead)</td></tr>
+          <tr><td>Debugging</td><td>Harder to trace</td><td>Easier to trace state</td></tr>
+          <tr><td>h (height) balanced</td><td>O(log n)</td><td>O(log n)</td></tr>
+          <tr><td>h (height) skewed</td><td>O(n) — risk of overflow!</td><td>O(n) — safe</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Which is More Memory Efficient?</div>
+        <div class="ans-text">
+          <p>Both use O(h) space theoretically. However, <strong>iterative is practically more memory-efficient</strong> because:</p>
+          <ol>
+            <li>Recursive uses system call stack — each frame stores multiple variables (return address, local vars)</li>
+            <li>Iterative stack stores only node pointers</li>
+            <li>System stack is limited (typically 1-8 MB); iterative uses heap memory (virtually unlimited)</li>
+            <li>For skewed trees of height n, recursive risks <strong>stack overflow</strong></li>
+          </ol>
+        </div>
+      </div>
+      <div class="highlight"><strong>Conclusion:</strong> Iterative is preferred for production code on large/deep trees. Recursive is preferred for readability in academic/competitive contexts.</div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">5b</span>
+      <span class="q-text">Describe the characteristics of a binary search tree. How does it differ from a regular binary tree?</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO2</span><span class="badge">L3</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">BST Characteristics</div>
+        <div class="ans-text"><ol>
+          <li><strong>Ordering Property:</strong> left subtree values &lt; root &lt; right subtree values</li>
+          <li><strong>Unique Keys:</strong> No duplicate values (typically)</li>
+          <li><strong>In-order traversal gives sorted output</strong></li>
+          <li><strong>Search:</strong> At each node, comparison eliminates one subtree → O(log n) average</li>
+          <li><strong>Dynamic structure:</strong> Supports insert and delete while maintaining order</li>
+        </ol></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">BST vs Regular Binary Tree</div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Property</th><th>Binary Tree</th><th>Binary Search Tree</th></tr>
+            <tr><td>Node placement</td><td>Any order</td><td>Ordered (left&lt;root&lt;right)</td></tr>
+            <tr><td>Search</td><td>O(n) — must check all</td><td>O(log n) average</td></tr>
+            <tr><td>Sorted output</td><td>No</td><td>Yes (in-order)</td></tr>
+            <tr><td>Duplicate values</td><td>Allowed</td><td>Not allowed typically</td></tr>
+            <tr><td>Structure constraint</td><td>At most 2 children</td><td>At most 2 children + ordering</td></tr>
+            <tr><td>Use case</td><td>Heaps, expression trees</td><td>Dictionaries, databases</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cheat Sheet Unit II -->
+  <div class="extra-section">
+    <h3>🧠 Unit II — Memory Tips</h3>
+    <div class="tip-grid">
+      <div class="tip-card"><div class="tip-title">BST Property</div>"Left &lt; Root &lt; Right" — always! In-order → sorted!</div>
+      <div class="tip-card"><div class="tip-title">Tree Traversals</div>Pre=Root first, In=Root middle, Post=Root last</div>
+      <div class="tip-card"><div class="tip-title">Merge Sort</div>T(n) = 2T(n/2) + O(n) → O(n log n) by Master Theorem</div>
+      <div class="tip-card"><div class="tip-title">Cycle Detection</div>DFS: use visited[] + recStack[]. BFS: use Kahn's in-degree</div>
+      <div class="tip-card"><div class="tip-title">Matrix vs List</div>Dense graph → Matrix. Sparse graph → List.</div>
+      <div class="tip-card"><div class="tip-title">BST vs Hash</div>Lookup: Hash O(1). Sorted/Range: BST wins.</div>
+    </div>
+  </div>
+  <div class="extra-section">
+    <h3>📋 Unit II — Cheat Sheet</h3>
+    <div class="tip-grid">
+      <div class="tip-card"><div class="tip-title">Binary Search</div>O(log n) — requires sorted array. Mid=(lo+hi)/2</div>
+      <div class="tip-card"><div class="tip-title">BST Insert/Search</div>O(log n) avg, O(n) worst (skewed)</div>
+      <div class="tip-card"><div class="tip-title">Graph Space</div>Matrix: O(V²). List: O(V+E)</div>
+      <div class="tip-card"><div class="tip-title">DFS Cycle</div>Back edge in DFS = cycle in directed graph</div>
+      <div class="tip-card"><div class="tip-title">Expression Tree</div>Postfix = Post-order. Prefix = Pre-order. Infix = In-order.</div>
+      <div class="tip-card"><div class="tip-title">Sort Comparison</div>Merge O(n log n) stable. Bubble O(n²). Selection O(n²).</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ UNIT III ════════════════════ -->
+<section class="unit-section" id="unit3">
+  <div class="unit-header">
+    <span class="unit-badge">CO3 · BT L3–L4</span>
+    <h2>Unit III — Hashing, ADTs &amp; Priority Queues</h2>
+  </div>
+
+  <div class="q-group-label">Question Set 1</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">1a</span>
+      <span class="q-text">Discuss the benefits and challenges of implementing ADTs in real-world applications.</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO3</span><span class="badge">L3</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">ADT — Definition</div>
+        <div class="ans-text"><p>An <strong>Abstract Data Type (ADT)</strong> is a mathematical model that defines a data type by its <strong>behavior (operations)</strong> from the user's point of view, without specifying implementation details. Examples: Stack ADT, Queue ADT, List ADT, Set ADT.</p></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Benefits of ADTs</div>
+        <div class="ans-text"><ol>
+          <li><strong>Abstraction/Encapsulation</strong> — User works with interface, not implementation. Changes to internal structure don't affect users.</li>
+          <li><strong>Code Reusability</strong> — Once implemented (e.g., Stack ADT), it can be reused across multiple projects</li>
+          <li><strong>Modularity</strong> — System can be designed as loosely coupled modules</li>
+          <li><strong>Maintainability</strong> — Easier to update/optimize internal implementation without breaking API</li>
+          <li><strong>Correctness</strong> — Formal specification ensures well-defined behavior; easier to prove correctness</li>
+          <li><strong>Portability</strong> — Same ADT interface works across different underlying implementations (array vs linked list)</li>
+        </ol></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Challenges</div>
+        <div class="ans-text"><ol>
+          <li><strong>Performance Trade-offs</strong> — Abstract interface may hide inefficient implementation choices</li>
+          <li><strong>Memory Overhead</strong> — Generic implementations may use more memory than specialized code</li>
+          <li><strong>Implementation Complexity</strong> — Designing a correct, efficient implementation takes significant effort</li>
+          <li><strong>Debugging Difficulty</strong> — Abstraction layers make debugging harder (error may be deep inside implementation)</li>
+          <li><strong>Not Always Optimal</strong> — A general-purpose ADT may not be optimal for a specific use case</li>
+        </ol></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">1b</span>
+      <span class="q-text">Explain the concept of a priority queue. How is it implemented using a heap?</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO3</span><span class="badge">L2</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Priority Queue — Definition</div>
+        <div class="ans-text"><p>A Priority Queue is an ADT where each element has an associated <strong>priority</strong>. Elements are served based on priority, not insertion order. Highest priority element is always served first.</p></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Heap Implementation</div>
+        <div class="ans-text">
+          <p><strong>Max-Heap:</strong> Parent ≥ children (highest priority = highest value)</p>
+          <p><strong>Min-Heap:</strong> Parent ≤ children (highest priority = lowest value)</p>
+        </div>
+        <div class="code-block">Array Representation of Max-Heap:
+  Index:  0  1  2  3  4  5  6
+  Value: [90,80,70,40,60,50,30]
+
+  Parent(i) = (i-1)/2
+  Left(i)   = 2*i + 1
+  Right(i)  = 2*i + 2
+
+Heap Structure:
+        90
+       /  \
+      80   70
+     / \ / \
+    40 60 50 30</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Operations</div>
+        <div class="code-block">INSERT(key):
+  1. Add key at end of array
+  2. HEAPIFY-UP (bubble up):
+     WHILE key > parent: swap(key, parent); move up
+
+EXTRACT-MAX():
+  1. Save root (max element)
+  2. Replace root with last element
+  3. Remove last element
+  4. HEAPIFY-DOWN (sift down):
+     WHILE node < largest child: swap(node, child); move down
+
+BUILD-HEAP: O(n)
+INSERT: O(log n)
+EXTRACT-MAX: O(log n)
+PEEK-MAX: O(1)</div>
+      </div>
+      <div class="highlight"><strong>Applications:</strong> CPU scheduling (shortest job first), Dijkstra's algorithm, Huffman coding, event-driven simulation.</div>
+    </div>
+  </div>
+
+  <div class="q-group-label">Question Set 2</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">2a</span>
+      <span class="q-text">Define a hash function. What are the properties of a good hash function? Explain the advantages and limitations of hash tables compared to arrays and linked lists.</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO3</span><span class="badge">L3</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Hash Function</div>
+        <div class="ans-text"><p>A <strong>hash function</strong> h(k) maps a key k from a large universe U to a smaller range [0, m-1] where m is the size of the hash table.</p><p>h: U → {0, 1, 2, ..., m-1}</p></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Properties of a Good Hash Function</div>
+        <div class="ans-text"><ol>
+          <li><strong>Deterministic:</strong> Same key always produces same hash value</li>
+          <li><strong>Uniform Distribution:</strong> Keys should be spread uniformly across all buckets</li>
+          <li><strong>Efficient:</strong> Computed in O(1) time</li>
+          <li><strong>Minimizes Collisions:</strong> Different keys should ideally produce different hash values</li>
+          <li><strong>Avalanche Effect:</strong> Small change in key → large change in hash (for security)</li>
+          <li><strong>Full utilization:</strong> All hash table slots should be usable</li>
+        </ol></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Feature</th><th>Hash Table</th><th>Array</th><th>Linked List</th></tr>
+          <tr><td>Search</td><td>O(1) avg</td><td>O(n) unsorted / O(log n) sorted</td><td>O(n)</td></tr>
+          <tr><td>Insert</td><td>O(1) avg</td><td>O(n) shift</td><td>O(1) at head</td></tr>
+          <tr><td>Delete</td><td>O(1) avg</td><td>O(n) shift</td><td>O(n) find</td></tr>
+          <tr><td>Sorted Output</td><td>No</td><td>Yes (if sorted)</td><td>No</td></tr>
+          <tr><td>Memory</td><td>Extra (load factor)</td><td>Compact</td><td>Pointer overhead</td></tr>
+          <tr><td>Worst Case</td><td>O(n) collisions</td><td>O(1) access</td><td>O(n)</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">2b</span>
+      <span class="q-text">Design a hashing function for a dictionary application where the keys are English words. How would you handle potential collisions?</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO3</span><span class="badge">L3</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Polynomial Rolling Hash Function</div>
+        <div class="code-block">// For string keys (English words):
+h(key) = (key[0]*p⁰ + key[1]*p¹ + key[2]*p² + ... ) mod m
+
+Where:
+  p = 31 (prime, for lowercase English letters)
+  m = 10007 (prime, table size)
+  key[i] = ASCII value of character
+
+Example: h("cat")
+  = (99*1 + 97*31 + 116*961) mod 10007
+  = (99 + 3007 + 111476) mod 10007
+  = 114582 mod 10007 = 4553
+
+Simplified version (djb2 algorithm):
+  hash = 5381
+  FOR each character c in key:
+    hash = hash * 33 + ASCII(c)
+  RETURN hash mod m</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Collision Handling Strategy</div>
+        <div class="ans-text">
+          <p><strong>1. Separate Chaining:</strong> Each slot holds a linked list. Collision → append to list at that index.</p>
+          <p><strong>2. Load Factor Monitoring:</strong> If α = n/m &gt; 0.7, rehash — double table size and reinsert all keys.</p>
+          <p><strong>3. Choice of m:</strong> Use prime number for table size to reduce clustering.</p>
+        </div>
+        <div class="code-block">Hash Table for Dictionary:
+  Index  |  Chain
+  -------|-----------------------
+  4553   | "cat"→"feline animal"
+  7821   | "dog"→"canine animal"
+  4553   | "act"→"a deed" ← COLLISION! append to chain
+         | → [cat, act] at index 4553</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-group-label">Question Set 3</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">3a</span>
+      <span class="q-text">Explain collision in a hash table. Explain how separate chaining resolves collisions.</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO3</span><span class="badge">L3</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Collision — Definition</div>
+        <div class="ans-text"><p>A <strong>collision</strong> occurs when two or more different keys produce the same hash value: h(k1) = h(k2) even though k1 ≠ k2. This is unavoidable by the Pigeonhole Principle (when |U| &gt; m).</p></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Separate Chaining</div>
+        <div class="ans-text"><p>Each hash table slot maintains a <strong>linked list (chain)</strong> of all key-value pairs that hash to that index.</p></div>
+        <div class="code-block">Algorithm INSERT_CHAINING(T, key, value):
+  idx ← h(key)
+  Prepend (key, value) to T[idx].list
+
+Algorithm SEARCH_CHAINING(T, key):
+  idx ← h(key)
+  Traverse list at T[idx]
+  RETURN value where node.key == key
+
+Algorithm DELETE_CHAINING(T, key):
+  idx ← h(key)
+  Remove node with node.key == key from T[idx].list</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Example</div>
+        <div class="code-block">m=7, h(k) = k mod 7
+Insert: 10, 17, 24, 3, 31
+
+h(10)=3, h(17)=3, h(24)=3, h(3)=3, h(31)=3
+
+Index | Chain
+  0   | []
+  1   | []
+  2   | []
+  3   | [10 → 17 → 24 → 3 → 31]
+  4   | []  ...
+
+Load Factor α = n/m = 5/7 ≈ 0.71</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Performance</div>
+        <div class="ans-text"><ul>
+          <li>Average Search: O(1 + α) where α = load factor</li>
+          <li>Worst case: O(n) — all keys in one chain</li>
+          <li>Space: O(n + m)</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">3b</span>
+      <span class="q-text">Analyze the effectiveness of open addressing versus separate chaining for collision resolution. Which performs better for large datasets with high load factors?</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO3</span><span class="badge">L4</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="table-wrap">
+        <table>
+          <tr><th>Parameter</th><th>Separate Chaining</th><th>Open Addressing</th></tr>
+          <tr><td>Collision Storage</td><td>External linked list</td><td>Inside the table itself</td></tr>
+          <tr><td>Load factor limit</td><td>Can exceed 1 (α &gt; 1 okay)</td><td>Must keep α &lt; 1 (α &lt; 0.7 ideal)</td></tr>
+          <tr><td>Memory usage</td><td>Extra pointer overhead</td><td>No extra memory (in-place)</td></tr>
+          <tr><td>Cache performance</td><td>Poor (pointer chasing)</td><td>Good (contiguous memory)</td></tr>
+          <tr><td>Deletion</td><td>Simple — remove from list</td><td>Complex — needs tombstone markers</td></tr>
+          <tr><td>High load factor</td><td>Degrades gracefully (longer chains)</td><td>Severe clustering, very poor performance</td></tr>
+          <tr><td>Implementation</td><td>Simpler</td><td>More complex</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Analysis for High Load Factors</div>
+        <div class="ans-text">
+          <p>At high load factor (α &gt; 0.7):</p>
+          <ul>
+            <li><strong>Open Addressing</strong> suffers severely — primary clustering (linear probing) causes long probe sequences. Performance degrades to O(n).</li>
+            <li><strong>Separate Chaining</strong> degrades gracefully — chains grow longer but the structure is still valid. Average search time = O(1 + α).</li>
+          </ul>
+          <p><strong>Winner for high load factors: Separate Chaining</strong></p>
+          <p>Open addressing is preferred for low load factors (α &lt; 0.5) due to better cache performance and no pointer overhead.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-group-label">Question Set 4 &amp; 5</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">4a / 5a</span>
+      <span class="q-text">Describe linear probing as a collision resolution method. Write algorithms for insertion and searching. Also explain Open Addressing Linear Probing.</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO3</span><span class="badge">L3</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Linear Probing — Concept</div>
+        <div class="ans-text"><p>In linear probing, when a collision occurs at index h(k), probe the next index sequentially until an empty slot is found.</p><p><strong>Probe sequence:</strong> h(k), h(k)+1, h(k)+2, ... (mod m)</p></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Algorithms</div>
+        <div class="code-block">Algorithm LINEAR_PROBE_INSERT(T, key, m):
+  idx ← h(key) mod m
+  i ← 0
+  WHILE T[(idx + i) mod m] ≠ EMPTY AND i < m:
+    i ← i + 1
+  IF i == m: RETURN "Table Full"
+  T[(idx + i) mod m] ← key
+
+Algorithm LINEAR_PROBE_SEARCH(T, key, m):
+  idx ← h(key) mod m
+  i ← 0
+  WHILE T[(idx + i) mod m] ≠ EMPTY AND i < m:
+    IF T[(idx + i) mod m] == key: RETURN FOUND
+    i ← i + 1
+  RETURN NOT FOUND</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Example</div>
+        <div class="code-block">m=10, h(k) = k mod 10
+Insert: 72, 27, 36, 24, 63
+
+h(72)=2 → T[2]=72
+h(27)=7 → T[7]=27
+h(36)=6 → T[6]=36
+h(24)=4 → T[4]=24
+h(63)=3 → T[3]=63
+
+T = [_,_,72,63,24,_,36,27,_,_]
+
+Problem: Primary Clustering
+h(73)=3 → T[3]=63(occupied)→T[4]=24(occupied)→T[5]=FREE
+Cluster: indices 3,4 → grows with each collision</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Disadvantage</div>
+        <div class="ans-text"><p><strong>Primary Clustering:</strong> Consecutive occupied slots form clusters, increasing probe lengths. Solved by <strong>quadratic probing</strong> or <strong>double hashing</strong>.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">5b</span>
+      <span class="q-text">Define Double Hashing in detail.</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO3</span><span class="badge">L3</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Definition</div>
+        <div class="ans-text"><p><strong>Double Hashing</strong> uses two hash functions h1 and h2 to compute probe sequence. The step size for probing depends on the key, making probe sequences unique per key.</p></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Probe Sequence</div>
+        <div class="code-block">h(k, i) = (h1(k) + i * h2(k)) mod m
+
+Where:
+  h1(k) = k mod m               (first hash)
+  h2(k) = 1 + (k mod (m-1))    (second hash — must never be 0)
+  i = probe number (0, 1, 2, ...)
+  m = prime number (table size)
+
+Example: m=11
+  h1(k) = k mod 11
+  h2(k) = 1 + (k mod 10)
+
+Insert: 18, 29, 40, 51
+
+h(18): h1=7, h2=9 → probe: 7,16%11=5, 14%11=3...
+h(29): h1=7 (collision!)
+  i=1: (7 + 1*8) mod 11 = 15 mod 11 = 4 → T[4]=29
+
+No clustering since each key has unique step size!</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Comparison</div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Method</th><th>Probe Function</th><th>Clustering</th></tr>
+            <tr><td>Linear Probing</td><td>h(k)+i</td><td>Primary clustering</td></tr>
+            <tr><td>Quadratic Probing</td><td>h(k)+i²</td><td>Secondary clustering</td></tr>
+            <tr><td>Double Hashing</td><td>h1(k)+i*h2(k)</td><td>Nearly none</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="highlight"><strong>Conclusion:</strong> Double Hashing is the best open addressing method — eliminates both primary and secondary clustering. m must be prime to ensure all slots are probed.</div>
+    </div>
+  </div>
+
+  <!-- Cheat Sheet Unit III -->
+  <div class="extra-section">
+    <h3>🧠 Unit III — Memory Tips</h3>
+    <div class="tip-grid">
+      <div class="tip-card"><div class="tip-title">Hash Function Goal</div>"Spread keys uniformly across all slots." Use prime table size m.</div>
+      <div class="tip-card"><div class="tip-title">Collision Methods</div>External: Chaining. Internal: Linear/Quad/Double Hashing.</div>
+      <div class="tip-card"><div class="tip-title">Double Hashing</div>h1(k)+i*h2(k). h2 must never = 0. Best open addressing method.</div>
+      <div class="tip-card"><div class="tip-title">Heap Property</div>Max-Heap: parent ≥ children. Min-Heap: parent ≤ children.</div>
+      <div class="tip-card"><div class="tip-title">Load Factor α</div>α = n/m. Keep α &lt; 0.7 for open addressing. Chaining handles α &gt; 1.</div>
+    </div>
+  </div>
+  <div class="extra-section">
+    <h3>📋 Unit III — Cheat Sheet</h3>
+    <div class="tip-grid">
+      <div class="tip-card"><div class="tip-title">Priority Queue Ops</div>Insert O(log n), Extract-Max O(log n), Peek O(1)</div>
+      <div class="tip-card"><div class="tip-title">Heap Array</div>Parent(i)=(i-1)/2, Left=2i+1, Right=2i+2</div>
+      <div class="tip-card"><div class="tip-title">Chaining Search</div>O(1 + α) average, O(n) worst</div>
+      <div class="tip-card"><div class="tip-title">Linear Probe</div>h(k, i) = (h(k)+i) mod m. Primary clustering problem.</div>
+      <div class="tip-card"><div class="tip-title">Double Hash</div>h(k,i) = (h1(k)+i*h2(k)) mod m. No clustering.</div>
+      <div class="tip-card"><div class="tip-title">h2 Rule</div>h2(k) = 1 + (k mod (m-1)) → ensures h2 ≠ 0</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ UNIT IV ════════════════════ -->
+<section class="unit-section" id="unit4">
+  <div class="unit-header">
+    <span class="unit-badge">CO4 · BT L3–L4</span>
+    <h2>Unit IV — BST Analysis, Heaps &amp; Applications</h2>
+  </div>
+
+  <div class="q-group-label">Question Set 1</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">1a</span>
+      <span class="q-text">Discuss the applications of priority queues in real-world scenarios (e.g., job scheduling, shortest path algorithms).</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO4</span><span class="badge">L4</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Real-World Applications</div>
+        <div class="ans-text"><ol>
+          <li><strong>CPU Job Scheduling (SJF/Priority Scheduling):</strong> OS uses a min-heap priority queue. Process with lowest burst time (or highest priority) gets CPU next. Insert new process: O(log n); schedule next: O(log n).</li>
+          <li><strong>Dijkstra's Shortest Path:</strong> Min-heap stores (distance, vertex) pairs. Always extract the vertex with minimum tentative distance → greedy optimal. O((V + E) log V) with priority queue.</li>
+          <li><strong>Prim's MST Algorithm:</strong> Priority queue extracts minimum-weight edge at each step.</li>
+          <li><strong>Huffman Coding (Data Compression):</strong> Min-heap selects two lowest-frequency symbols to merge — builds optimal prefix-free code.</li>
+          <li><strong>Event-Driven Simulation:</strong> Events sorted by timestamp; earliest event processed first (min-heap).</li>
+          <li><strong>A* Search Algorithm:</strong> Priority queue (open list) stores nodes ordered by f(n) = g(n) + h(n).</li>
+          <li><strong>Hospital Emergency Room:</strong> Patients prioritized by severity; critical patients seen first regardless of arrival.</li>
+          <li><strong>Network Packet Routing (QoS):</strong> Priority queue ensures high-priority packets (VoIP, video) transmitted before regular data.</li>
+        </ol></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">1b</span>
+      <span class="q-text">Analyse the time complexity of searching, inserting, and deleting a node in a BST. Discuss balanced vs unbalanced BST performance.</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO4</span><span class="badge">L4</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="table-wrap">
+        <table>
+          <tr><th>Operation</th><th>Balanced BST</th><th>Unbalanced BST</th><th>Reason</th></tr>
+          <tr><td>Search</td><td>O(log n)</td><td>O(n)</td><td>Height = log n vs n</td></tr>
+          <tr><td>Insert</td><td>O(log n)</td><td>O(n)</td><td>Must find correct position</td></tr>
+          <tr><td>Delete</td><td>O(log n)</td><td>O(n)</td><td>Find node then restructure</td></tr>
+          <tr><td>Space</td><td>O(n)</td><td>O(n)</td><td>Stores n nodes</td></tr>
+          <tr><td>Height h</td><td>O(log n)</td><td>O(n) worst</td><td>Skewed tree</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Why Balance Matters</div>
+        <div class="code-block">Balanced BST (inserting 1,3,5,7,9 with rotation):
+         5
+        / \
+       3   7
+      / \ / \
+     1  4 6  9
+Height = 3 ≈ log₂(7)   Search = O(log n)
+
+Unbalanced BST (same elements, inserted sorted: 1,3,5,7,9):
+1
+ \
+  3
+   \
+    5
+     \
+      7
+       \
+        9
+Height = 4 = n-1   Search = O(n) ← DEGRADED!</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Delete in BST — 3 Cases</div>
+        <div class="ans-text"><ol>
+          <li><strong>Leaf node:</strong> Simply remove it</li>
+          <li><strong>One child:</strong> Replace node with its child</li>
+          <li><strong>Two children:</strong> Replace with in-order successor (smallest in right subtree) or in-order predecessor</li>
+        </ol></div>
+      </div>
+      <div class="highlight"><strong>Conclusion:</strong> Always use self-balancing BSTs (AVL, Red-Black) for guaranteed O(log n) operations, especially when data arrives in sorted order.</div>
+    </div>
+  </div>
+
+  <div class="q-group-label">Question Set 2</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">2a</span>
+      <span class="q-text">Explain how a heap is represented in an array and the parent-child relationships based on array indices.</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO4</span><span class="badge">L3</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Array Representation</div>
+        <div class="ans-text"><p>A heap is a <strong>complete binary tree</strong> stored compactly in an array using level-order traversal (BFS order). No pointers needed — structure derived from index.</p></div>
+        <div class="code-block">Max-Heap Array:  [100, 90, 80, 70, 60, 50, 40, 30, 20]
+Index (0-based):   0    1   2   3   4   5   6   7   8
+
+Tree Structure:
+              100 (idx 0)
+             /          \
+          90(1)          80(2)
+         /    \         /    \
+       70(3)  60(4)  50(5)  40(6)
+      /   \
+   30(7) 20(8)</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Index Formulas (0-based indexing)</div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Relationship</th><th>Formula</th><th>Example (i=3)</th></tr>
+            <tr><td>Parent of i</td><td>(i - 1) / 2 (floor)</td><td>(3-1)/2 = 1 → node 90</td></tr>
+            <tr><td>Left child of i</td><td>2*i + 1</td><td>2*3+1 = 7 → node 30</td></tr>
+            <tr><td>Right child of i</td><td>2*i + 2</td><td>2*3+2 = 8 → node 20</td></tr>
+            <tr><td>Last non-leaf</td><td>(n/2) - 1</td><td>For n=9: idx 3</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Advantages of Array Representation</div>
+        <div class="ans-text"><ul>
+          <li>No pointer overhead (saves space)</li>
+          <li>Cache-friendly (contiguous memory)</li>
+          <li>O(1) access to parent and children</li>
+          <li>Compact — no wasted slots (complete binary tree property)</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">2b</span>
+      <span class="q-text">Evaluate the differences in time complexity and use cases for pre-order, in-order, and post-order traversals of a BST.</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO4</span><span class="badge">L4</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="table-wrap">
+        <table>
+          <tr><th>Traversal</th><th>Order</th><th>Time</th><th>Space</th><th>BST Use Case</th></tr>
+          <tr><td>Pre-order</td><td>Root→L→R</td><td>O(n)</td><td>O(h)</td><td>Serialize/copy BST structure; generate prefix expression</td></tr>
+          <tr><td>In-order</td><td>L→Root→R</td><td>O(n)</td><td>O(h)</td><td>Sorted output; BST validation; kth smallest element</td></tr>
+          <tr><td>Post-order</td><td>L→R→Root</td><td>O(n)</td><td>O(h)</td><td>Delete tree; compute subtree sizes; evaluate expression</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">BST-Specific Applications</div>
+        <div class="code-block">BST:     8
+        / \
+       3   10
+      / \    \
+     1   6   14
+        / \  /
+       4   7 13
+
+In-order: 1,3,4,6,7,8,10,13,14 → SORTED! ✓
+Pre-order: 8,3,1,6,4,7,10,14,13 → Reconstruct same BST
+Post-order: 1,4,7,6,3,13,14,10,8 → Delete nodes bottom-up</div>
+      </div>
+      <div class="highlight"><strong>Key Insight for BST:</strong> In-order traversal is uniquely powerful for BST — it produces sorted output in O(n), which is optimal (can't sort faster than O(n) output). Used in database query result ordering.</div>
+    </div>
+  </div>
+
+  <div class="q-group-label">Question Set 3</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">3a</span>
+      <span class="q-text">Compare the performance of BSTs with that of hash tables and linked lists.</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO4</span><span class="badge">L4</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="table-wrap">
+        <table>
+          <tr><th>Operation</th><th>Balanced BST</th><th>Hash Table</th><th>Linked List</th></tr>
+          <tr><td>Search</td><td>O(log n)</td><td>O(1) avg, O(n) worst</td><td>O(n)</td></tr>
+          <tr><td>Insert</td><td>O(log n)</td><td>O(1) avg</td><td>O(1) head / O(n) sorted</td></tr>
+          <tr><td>Delete</td><td>O(log n)</td><td>O(1) avg</td><td>O(n)</td></tr>
+          <tr><td>Min/Max</td><td>O(log n)</td><td>O(n)</td><td>O(n)</td></tr>
+          <tr><td>Range Query</td><td>O(k + log n)</td><td>Not supported</td><td>O(n)</td></tr>
+          <tr><td>Sorted Output</td><td>O(n) in-order</td><td>O(n log n) sort</td><td>O(n) if sorted</td></tr>
+          <tr><td>Ordered?</td><td>Yes</td><td>No</td><td>Optional</td></tr>
+          <tr><td>Memory</td><td>O(n) predictable</td><td>O(n) + load factor</td><td>O(n) + pointers</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Recommendation</div>
+        <div class="ans-text"><ul>
+          <li><strong>Need ordered data / range queries:</strong> Use Balanced BST (AVL / Red-Black)</li>
+          <li><strong>Need fastest lookup/insert:</strong> Use Hash Table</li>
+          <li><strong>Need sequential access / simple implementation:</strong> Use Linked List</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">3b</span>
+      <span class="q-text">Analyze how the BST performs when all elements are inserted in increasing or decreasing order. What issues arise, and how can they be mitigated?</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO4</span><span class="badge">L4</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Degeneration Problem</div>
+        <div class="code-block">Insert sorted: 10, 20, 30, 40, 50
+
+10
+ \
+  20
+   \
+    30
+     \
+      40
+       \
+        50
+
+Height = n-1 = 4 (instead of log₂(5) ≈ 2.3)
+Search for 50: 5 comparisons (instead of 3)</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Issues</div>
+        <div class="ans-text"><ol>
+          <li><strong>Skewed Tree:</strong> BST becomes equivalent to a linked list</li>
+          <li><strong>O(n) Operations:</strong> Search, insert, delete all degrade to O(n)</li>
+          <li><strong>Memory Inefficiency:</strong> No left subtrees — half the pointers are NULL</li>
+          <li><strong>Stack Overflow:</strong> Recursive traversal on deep tree causes stack overflow</li>
+        </ol></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Mitigation Strategies</div>
+        <div class="ans-text"><ol>
+          <li><strong>AVL Trees:</strong> Self-balancing, height strictly ≤ 1.44 log n. Rotations after every insert/delete. O(log n) guaranteed.</li>
+          <li><strong>Red-Black Trees:</strong> Less strict balancing (height ≤ 2 log n). Fewer rotations than AVL. Used in Java TreeMap, C++ STL map.</li>
+          <li><strong>Randomized Insertion:</strong> Randomly shuffle input before inserting. Expected height O(log n).</li>
+          <li><strong>B-Trees:</strong> For disk-based systems — multi-way branching keeps height very small.</li>
+          <li><strong>Treaps:</strong> BST + random heap property → O(log n) expected height.</li>
+        </ol></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-group-label">Question Set 4 &amp; 5</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">4a</span>
+      <span class="q-text">Discuss the advantages and limitations of using BSTs for storing and retrieving data.</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO4</span><span class="badge">L4</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Advantages</div>
+        <div class="ans-text"><ol>
+          <li><strong>Efficient Search:</strong> O(log n) average — eliminates half the data per comparison</li>
+          <li><strong>Dynamic:</strong> Supports insertions and deletions without reorganizing entire structure</li>
+          <li><strong>Ordered Data:</strong> In-order traversal produces sorted sequence in O(n)</li>
+          <li><strong>Range Queries:</strong> Find all elements between values L and R efficiently</li>
+          <li><strong>Floor/Ceiling Operations:</strong> Find closest value to a query</li>
+          <li><strong>No Rehashing Needed:</strong> Unlike hash tables, no periodic rehashing required</li>
+          <li><strong>Worst-case guarantee (balanced):</strong> AVL/RB trees guarantee O(log n)</li>
+        </ol></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Limitations</div>
+        <div class="ans-text"><ol>
+          <li><strong>Worst-case O(n):</strong> Unbalanced BST (sorted input) degrades performance</li>
+          <li><strong>Balancing Overhead:</strong> Self-balancing trees require rotations — complex implementation</li>
+          <li><strong>Pointer Overhead:</strong> Each node stores left, right, and (in AVL) parent pointers</li>
+          <li><strong>Not Cache-Friendly:</strong> Nodes scattered in memory — poor cache performance vs arrays</li>
+          <li><strong>Slower than Hash Table:</strong> O(log n) vs O(1) for lookups</li>
+        </ol></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">4b / 5b</span>
+      <span class="q-text">Show how a BST can be used to implement a phone directory / library system. Illustrate how the search operation helps users locate entries quickly.</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO4</span><span class="badge">L4</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">BST for Phone Directory</div>
+        <div class="ans-text"><p>Store (Name, Phone) pairs in BST ordered by Name (alphabetical = ASCII comparison).</p></div>
+        <div class="code-block">Phone Directory BST:
+Node: | name | phone | left | right |
+
+Insert: Mary(9876), John(1234), Tom(5555), Alice(7777), Kate(3333)
+
+           Mary(9876)
+          /           \
+       John(1234)    Tom(5555)
+       /     \
+  Alice(7777) Kate(3333)
+
+Search("Kate"):
+  1. Compare "Kate" with "Mary" → Kate &lt; Mary → go LEFT
+  2. Compare "Kate" with "John" → Kate &gt; John → go RIGHT
+  3. Compare "Kate" with "Kate" → FOUND! Phone: 3333
+  Only 3 comparisons for 5 entries!</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Operations</div>
+        <div class="code-block">Search(name): O(log n) — compare name at each node
+Insert(name, phone): O(log n) — find correct sorted position
+Delete(name): O(log n) — find and remove using BST delete
+List all (sorted): O(n) — in-order traversal
+Alphabetical range ["J" to "N"]: O(k + log n)</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Library System Application</div>
+        <div class="ans-text"><p>BST stores book titles alphabetically. Search "DataStructures": binary search through BST finds it in O(log n). In-order traversal lists all books alphabetically.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">5a</span>
+      <span class="q-text">Explain the concept of self-balancing trees and why balancing is essential for efficient operations.</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO4</span><span class="badge">L3</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Self-Balancing Trees</div>
+        <div class="ans-text"><p>A <strong>self-balancing BST</strong> automatically performs structural reorganizations (rotations, color changes) after insertions and deletions to maintain a bounded height, ensuring O(log n) operations.</p></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Why Balancing is Essential</div>
+        <div class="ans-text"><ul>
+          <li><strong>Height controls performance:</strong> All BST operations are O(h). If h = log n → O(log n). If h = n → O(n).</li>
+          <li><strong>Sorted input destroys BST:</strong> Without balancing, real-world data (often partially sorted) creates skewed trees.</li>
+          <li><strong>Database performance:</strong> A database with 1 million records: balanced BST needs ≈20 comparisons. Skewed BST needs up to 1,000,000 comparisons.</li>
+        </ul></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Tree Type</th><th>Balance Factor</th><th>Height Guarantee</th><th>Rotations</th></tr>
+          <tr><td>AVL Tree</td><td>|BF| ≤ 1</td><td>≤ 1.44 log n</td><td>O(log n)</td></tr>
+          <tr><td>Red-Black Tree</td><td>Color-based</td><td>≤ 2 log n</td><td>O(1) per op</td></tr>
+          <tr><td>B-Tree (order m)</td><td>All leaves same level</td><td>O(log_m n)</td><td>Split/merge</td></tr>
+          <tr><td>Splay Tree</td><td>Amortized</td><td>O(log n) amortized</td><td>Splay op</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cheat Sheet Unit IV -->
+  <div class="extra-section">
+    <h3>🧠 Unit IV — Memory Tips</h3>
+    <div class="tip-grid">
+      <div class="tip-card"><div class="tip-title">BST Delete 3 Cases</div>Leaf→remove. One child→replace. Two children→inorder successor.</div>
+      <div class="tip-card"><div class="tip-title">Heap Indices</div>Parent=(i-1)/2, Left=2i+1, Right=2i+2 (0-based)</div>
+      <div class="tip-card"><div class="tip-title">Sorted Input = Skewed</div>Inserting sorted data → O(n) height → use AVL/RB tree!</div>
+      <div class="tip-card"><div class="tip-title">Priority Queue</div>Max-heap for max-priority. Min-heap for min-priority.</div>
+    </div>
+  </div>
+  <div class="extra-section">
+    <h3>📋 Unit IV — Cheat Sheet</h3>
+    <div class="tip-grid">
+      <div class="tip-card"><div class="tip-title">BST vs Hash</div>BST: ordered, range. Hash: O(1) lookup. No ordering.</div>
+      <div class="tip-card"><div class="tip-title">Balanced BST Height</div>AVL: 1.44 log n. RB: 2 log n. Unbalanced: up to n.</div>
+      <div class="tip-card"><div class="tip-title">Heap Build</div>O(n) — start from last non-leaf, heapify down each node</div>
+      <div class="tip-card"><div class="tip-title">Heap Sort</div>O(n log n) time, O(1) space. In-place!</div>
+      <div class="tip-card"><div class="tip-title">Dijkstra + PQ</div>O((V+E) log V) with min-heap priority queue</div>
+      <div class="tip-card"><div class="tip-title">In-order = Sorted</div>BST in-order traversal always gives sorted output</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ UNIT V ════════════════════ -->
+<section class="unit-section" id="unit5">
+  <div class="unit-header">
+    <span class="unit-badge">CO5 · BT L3–L5</span>
+    <h2>Unit V — Self-Balancing Trees: AVL, Red-Black, B-Trees &amp; Splay</h2>
+  </div>
+
+  <div class="q-group-label">Question Set 1</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">1a</span>
+      <span class="q-text">Write the algorithm for inserting a node into an AVL tree. Explain the different rotations (LL, RR, LR, RL) required for balancing.</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO5</span><span class="badge">L4</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">AVL Tree Properties</div>
+        <div class="ans-text"><p><strong>Balance Factor (BF)</strong> = height(left subtree) − height(right subtree). For AVL tree, BF ∈ {-1, 0, +1} for every node.</p></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Insertion Algorithm</div>
+        <div class="code-block">Algorithm AVL_INSERT(root, key):
+  1. Perform standard BST insert
+  2. Update height of each ancestor node
+  3. Check Balance Factor: BF = height(left) - height(right)
+  4. IF |BF| > 1: Apply appropriate rotation
+
+Algorithm GET_HEIGHT(node):
+  IF node == NULL: RETURN 0
+  RETURN 1 + max(height(node.left), height(node.right))
+
+Algorithm GET_BF(node):
+  RETURN height(node.left) - height(node.right)</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">4 Rotation Cases</div>
+        <div class="code-block">── CASE 1: LL ROTATION (Right Rotate) ──
+Trigger: BF > 1 AND key < node.left.key
+     Z(BF=2)           Y
+    /        →        / \
+   Y(BF=1)           X   Z
+  /
+ X
+Algorithm: Z.left = Y.right; Y.right = Z; RETURN Y
+
+── CASE 2: RR ROTATION (Left Rotate) ──
+Trigger: BF < -1 AND key > node.right.key
+ Z(BF=-2)              Y
+   \         →        / \
+    Y(BF=-1)         Z   X
+     \
+      X
+Algorithm: Z.right = Y.left; Y.left = Z; RETURN Y
+
+── CASE 3: LR ROTATION (Left-Right) ──
+Trigger: BF > 1 AND key > node.left.key
+     Z(BF=2)            Z           X
+    /         →        /    →      / \
+   Y(BF=-1)           X           Y   Z
+    \                /
+     X              Y
+Step1: Left Rotate Y; Step2: Right Rotate Z
+
+── CASE 4: RL ROTATION (Right-Left) ──
+Trigger: BF < -1 AND key < node.right.key
+ Z(BF=-2)       Z               X
+   \      →      \      →      / \
+    Y(BF=1)       X           Z   Y
+   /               \
+  X                 Y
+Step1: Right Rotate Y; Step2: Left Rotate Z</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Complexity</div>
+        <div class="ans-text"><ul>
+          <li><strong>Insert:</strong> O(log n) — at most O(log n) rotations</li>
+          <li><strong>Search:</strong> O(log n) guaranteed</li>
+          <li><strong>Height guarantee:</strong> ≤ 1.44 log₂(n+2)</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">1b</span>
+      <span class="q-text">Explain how an AVL tree can be used to implement a priority-based scheduling system, ensuring tasks are retrieved in sorted order.</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO5</span><span class="badge">L3</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Design</div>
+        <div class="ans-text"><p>Store tasks in an AVL tree keyed by <strong>priority value</strong>. Lower value = higher priority (min-AVL). The leftmost node always contains the highest-priority task.</p></div>
+        <div class="code-block">Task Node: | priority | task_name | deadline | left | right | height |
+
+AVL Tree (keyed by priority):
+              5(task C)
+             /          \
+           2(task A)    8(task D)
+          /
+         1(task B)  ← Highest priority!
+
+Schedule next task = in-order first = task B (priority 1)
+After execution, delete priority 1 → O(log n) rebalance</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Operations</div>
+        <div class="ans-text"><ul>
+          <li><strong>Add new task:</strong> AVL Insert with priority key → O(log n)</li>
+          <li><strong>Execute next task:</strong> Find minimum (leftmost node) → O(log n), delete it → O(log n)</li>
+          <li><strong>List all tasks in priority order:</strong> In-order traversal → O(n) sorted output</li>
+          <li><strong>Priority update:</strong> Delete old key, insert with new key → O(log n)</li>
+          <li><strong>Check task exists:</strong> BST search → O(log n)</li>
+        </ul></div>
+      </div>
+      <div class="highlight"><strong>Advantage over Heap:</strong> AVL tree supports range queries ("all tasks with priority 3 to 7") which heaps cannot. Both support O(log n) insert/extract-min.</div>
+    </div>
+  </div>
+
+  <div class="q-group-label">Question Set 2</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">2a</span>
+      <span class="q-text">Why are B-trees preferred over AVL and red-black trees for disk-based storage systems?</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO5</span><span class="badge">L4</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">B-Tree Properties</div>
+        <div class="ans-text"><p>A B-tree of order m is a balanced multi-way search tree where each node can hold up to <strong>m-1 keys</strong> and have up to <strong>m children</strong>. All leaves are at the same level.</p></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Why B-Trees are Preferred for Disk Storage</div>
+        <div class="ans-text"><ol>
+          <li><strong>Disk I/O Minimization:</strong> Each disk read brings an entire block (4KB-16KB). B-tree node = one disk block containing many keys. AVL/RB nodes contain only 1 key per read → many more I/O operations.</li>
+          <li><strong>Lower Height:</strong> B-tree of order 1000 has height ≤ 4 for 1 billion records (vs ~30 for BST). Fewer levels = fewer disk accesses.</li>
+          <li><strong>Large Branching Factor:</strong> B-tree with m=1000 accesses at most log₁₀₀₀(n) nodes. For n=10⁹: only 3 levels!</li>
+          <li><strong>All Leaves at Same Level:</strong> Guaranteed O(log n) worst-case for all operations.</li>
+          <li><strong>Sequential Access:</strong> B+ tree (variant) — all data in leaves with leaf-level links → efficient range queries and full scans.</li>
+        </ol></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Property</th><th>B-Tree</th><th>AVL / RB Tree</th></tr>
+          <tr><td>Node capacity</td><td>m-1 keys per node</td><td>1 key per node</td></tr>
+          <tr><td>Height (n=10⁶)</td><td>≈ 4-6 (m=100)</td><td>≈ 20 (log₂ n)</td></tr>
+          <tr><td>Disk accesses</td><td>O(log_m n)</td><td>O(log₂ n)</td></tr>
+          <tr><td>Memory model</td><td>Disk block-aligned</td><td>RAM pointer-based</td></tr>
+          <tr><td>Used in</td><td>MySQL, PostgreSQL, filesystems</td><td>In-memory data structures</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">2b</span>
+      <span class="q-text">Insert the keys 30, 40, 50, 60, and 70 into a Red-Black tree. Show how the color rules and rotations are applied.</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO5</span><span class="badge">L5</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Red-Black Tree Rules</div>
+        <div class="ans-text"><ol>
+          <li>Every node is Red or Black</li>
+          <li>Root is always Black</li>
+          <li>NULL leaves are Black</li>
+          <li>No two consecutive Red nodes (Red parent → Black children)</li>
+          <li>All paths from any node to NULL leaves have same number of Black nodes</li>
+        </ol></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Step-by-Step Insertion</div>
+        <div class="code-block">New nodes are inserted as RED.
+
+Step 1: Insert 30
+  30(B) ← root, color to Black
+  Tree: 30(B)
+
+Step 2: Insert 40
+  40 > 30 → right child of 30, color RED
+  Tree: 30(B) → 40(R)
+  No violation (parent 30 is Black)
+
+Step 3: Insert 50
+  50 > 30 → right; 50 > 40 → right child of 40, RED
+  Tree: 30(B)
+            \
+            40(R)
+               \
+               50(R)  ← VIOLATION! 40(R)→50(R) consecutive reds
+
+  Fix: Uncle of 50 = NULL (Black), zig-zag? No, straight line RR case.
+  LEFT ROTATE 30, recolor:
+    40(B)
+   /    \
+  30(R)  50(R)
+
+Step 4: Insert 60
+  60 > 40 → right; 60 > 50 → right child of 50, RED
+  Tree:    40(B)
+          /    \
+        30(R)  50(R)
+                  \
+                  60(R)  ← VIOLATION! 50(R)→60(R)
+  
+  Uncle of 60 = 30(R) → Case: Uncle RED → Recolor
+  50(B), 30(B), 40(R)... but 40 is root → color Black
+    40(B)
+   /    \
+ 30(B)  50(B)
+            \
+            60(R) ← No violation now
+
+Step 5: Insert 70
+  70 > 40 → right; 70 > 50 → right; 70 > 60 → right child of 60, RED
+  Tree:  40(B)
+        /    \
+      30(B)  50(B)
+                 \
+                 60(R)
+                     \
+                     70(R) ← VIOLATION! 60(R)→70(R)
+
+  Uncle of 70 = NULL (Black), straight line RR → Left Rotate 50
+  60(B)
+ /    \
+50(R)  70(R)
+  
+  Final tree:
+        40(B)
+       /    \
+     30(B)  60(B)
+           /    \
+         50(R)  70(R)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-group-label">Question Set 3</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">3a</span>
+      <span class="q-text">Write the algorithm for inserting a node into a red-black tree. Explain how the tree maintains balance using color changes and rotations.</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO5</span><span class="badge">L4</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">RB-Tree Insert Algorithm</div>
+        <div class="code-block">Algorithm RB_INSERT(T, z):
+  1. BST insert z with color = RED
+  2. CALL RB_INSERT_FIXUP(T, z)
+
+Algorithm RB_INSERT_FIXUP(T, z):
+  WHILE z.parent.color == RED:
+    IF z.parent == z.parent.parent.left:  // Parent is left child
+      y ← z.parent.parent.right          // Uncle y
+
+      CASE 1 (Uncle RED):
+        z.parent.color = BLACK
+        y.color = BLACK
+        z.parent.parent.color = RED
+        z ← z.parent.parent            // Move up tree
+
+      CASE 2 (Uncle BLACK, z is right child):
+        z ← z.parent
+        LEFT_ROTATE(T, z)              // Convert to Case 3
+
+      CASE 3 (Uncle BLACK, z is left child):
+        z.parent.color = BLACK
+        z.parent.parent.color = RED
+        RIGHT_ROTATE(T, z.parent.parent)
+
+    ELSE: (mirror cases — parent is right child)
+      // Same with left/right swapped
+
+  T.root.color = BLACK                  // Rule 2: Root always Black</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Fixup Cases Summary</div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Case</th><th>Condition</th><th>Action</th></tr>
+            <tr><td>1</td><td>Uncle is Red</td><td>Recolor parent, uncle → Black; grandparent → Red; move z up</td></tr>
+            <tr><td>2</td><td>Uncle Black, z is right child</td><td>Left rotate parent → converts to Case 3</td></tr>
+            <tr><td>3</td><td>Uncle Black, z is left child</td><td>Recolor + Right rotate grandparent</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Complexity</div>
+        <div class="ans-text"><ul>
+          <li><strong>Insert:</strong> O(log n) — at most O(log n) color changes, at most 2 rotations per insert</li>
+          <li><strong>Height:</strong> ≤ 2 log₂(n+1) — slightly more relaxed than AVL</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">3b</span>
+      <span class="q-text">Show how a Red-Black tree can be used to manage a database index efficiently.</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO5</span><span class="badge">L4</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Database Index using RB-Tree</div>
+        <div class="ans-text"><p>Database index stores (key, record_pointer) pairs. RB-tree ensures O(log n) operations regardless of insertion order — critical for databases receiving arbitrary data.</p></div>
+        <div class="code-block">RB-Tree Index Node:
+  | key (e.g., employee_id) | record_ptr | color | left | right |
+
+Example: Employee table, indexing on employee_id
+
+           50(B)
+          /     \
+        30(R)   70(R)
+       /   \   /   \
+     20(B) 40(B) 60(B) 80(B)
+
+Operations:
+  INSERT employee_id=35:
+    BST insert: 35 < 50→left, 35 > 30→right, 35 < 40→left
+    35 inserted as RED, fixup if needed → O(log n)
+
+  SEARCH employee_id=60:
+    60 > 50 → right
+    60 < 70 → left
+    60 == 60 → FOUND, follow record_ptr → O(log n)
+
+  RANGE QUERY (30 ≤ id ≤ 70):
+    In-order traversal from node ≥ 30 to ≤ 70 → O(k + log n)
+
+  DELETE employee_id=30:
+    RB delete with fixup → O(log n), max 3 rotations</div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Why RB-Tree for DB Index</div>
+        <div class="ans-text"><ul>
+          <li><strong>Consistent O(log n)</strong> regardless of insertion order (sequential employee IDs don't degrade performance)</li>
+          <li><strong>Fewer rotations than AVL</strong> — O(1) rotations per insert/delete. Less write overhead.</li>
+          <li><strong>Used in:</strong> Java TreeMap, C++ std::map, Linux kernel CFS scheduler, PostgreSQL indexes</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-group-label">Question Set 4</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">4a</span>
+      <span class="q-text">What are the real-world applications of splay trees?</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO5</span><span class="badge">L4</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">Splay Tree — Concept</div>
+        <div class="ans-text"><p>A <strong>Splay Tree</strong> is a self-adjusting BST where every accessed node is moved to the root through a series of rotations called <strong>"splaying."</strong> No explicit balance factor stored. Provides O(log n) <strong>amortized</strong> operations.</p></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Real-World Applications</div>
+        <div class="ans-text"><ol>
+          <li><strong>Cache Implementations (LRU Cache):</strong> Most recently accessed node reaches the root. Frequently accessed data stays near top → faster future access. Used in web browser caches.</li>
+          <li><strong>Data Compression — LZW Algorithm:</strong> LZW needs to look up and insert recently used patterns. Splay tree moves recently used patterns to root → amortized O(1) for working set. Better than hash tables for temporal locality.</li>
+          <li><strong>Network Routing (IP Tables):</strong> Frequently accessed IP routes naturally bubble to root. Reduces lookup time for common destinations.</li>
+          <li><strong>Text Editors (Rope Data Structure):</strong> Splay trees used in rope data structure for string operations. Recently edited positions accessed faster.</li>
+          <li><strong>Virtual Memory Management:</strong> Page table lookups — recently accessed pages move to root of splay tree.</li>
+          <li><strong>Garbage Collectors:</strong> Memory allocators use splay trees to track free memory blocks. Most recently freed/allocated blocks remain near root.</li>
+          <li><strong>Game AI Path Caching:</strong> Recently computed paths stay near root for O(1) retrieval.</li>
+        </ol></div>
+      </div>
+      <div class="highlight"><strong>Key Advantage:</strong> Splay trees exploit <strong>temporal locality</strong> — if you access X recently, you'll likely access X again soon. No other balanced BST offers this property.</div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">4b</span>
+      <span class="q-text">Compare the performance of Red-Black trees and Splay trees in systems with a large number of sequential searches.</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO5</span><span class="badge">L4</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="table-wrap">
+        <table>
+          <tr><th>Property</th><th>Red-Black Tree</th><th>Splay Tree</th></tr>
+          <tr><td>Search (worst)</td><td>O(log n)</td><td>O(n) single op</td></tr>
+          <tr><td>Search (amortized)</td><td>O(log n)</td><td>O(log n)</td></tr>
+          <tr><td>Repeated same key</td><td>O(log n) every time</td><td>O(1) after first splay!</td></tr>
+          <tr><td>Sequential patterns</td><td>Consistent O(log n)</td><td>Excellent for hot keys</td></tr>
+          <tr><td>Worst case guarantee</td><td>Yes — O(log n)</td><td>No — can be O(n)</td></tr>
+          <tr><td>Balance overhead</td><td>O(1) rotations/op</td><td>O(log n) splay/op amortized</td></tr>
+          <tr><td>Extra storage</td><td>Color bit per node</td><td>None</td></tr>
+          <tr><td>Cache performance</td><td>Uniform height → predictable</td><td>Hot data near root → excellent</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Analysis for Sequential Searches</div>
+        <div class="ans-text">
+          <p><strong>Scenario 1: Random queries</strong> — Both O(log n). RB-Tree preferred for guaranteed performance.</p>
+          <p><strong>Scenario 2: Repeated queries on same keys (high temporal locality)</strong> — Splay Tree wins. After first access, subsequent accesses to same key are O(1). Example: 1000 searches for same key → Splay: O(log n) + 999*O(1). RB: 1000*O(log n).</p>
+          <p><strong>Scenario 3: Sequential insertion + search (sorted order)</strong> — RB-Tree performs better as splay may temporarily degrade during sequential splaying.</p>
+        </div>
+      </div>
+      <div class="highlight"><strong>Conclusion:</strong> RB-Tree for predictable, worst-case guaranteed performance. Splay Tree for workloads with strong temporal locality (repeated access patterns).</div>
+    </div>
+  </div>
+
+  <div class="q-group-label">Question Set 5</div>
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">5a</span>
+      <span class="q-text">Compare the performance of splay trees with that of AVL and red-black trees for frequently accessed data.</span>
+      <div class="q-meta"><span class="badge">7M</span><span class="badge">CO5</span><span class="badge">L5</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="table-wrap">
+        <table>
+          <tr><th>Property</th><th>AVL Tree</th><th>Red-Black Tree</th><th>Splay Tree</th></tr>
+          <tr><td>Search (avg)</td><td>O(log n)</td><td>O(log n)</td><td>O(log n) amortized</td></tr>
+          <tr><td>Freq. accessed key</td><td>O(log n) always</td><td>O(log n) always</td><td>O(1) after splaying</td></tr>
+          <tr><td>Height guarantee</td><td>1.44 log n (tightest)</td><td>2 log n</td><td>No guarantee (amortized)</td></tr>
+          <tr><td>Insert rotations</td><td>O(log n) per insert</td><td>O(1) per insert</td><td>O(log n) amortized</td></tr>
+          <tr><td>Memory overhead</td><td>Height field/node</td><td>Color bit/node</td><td>None</td></tr>
+          <tr><td>Cache (temporal)</td><td>No benefit</td><td>No benefit</td><td>Huge benefit!</td></tr>
+          <tr><td>Worst case single op</td><td>O(log n)</td><td>O(log n)</td><td>O(n)</td></tr>
+          <tr><td>Best for</td><td>Predictable reads</td><td>Balanced insert/delete</td><td>Hot data / LRU</td></tr>
+        </table>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Working Set Theorem</div>
+        <div class="ans-text"><p>Splay trees satisfy the <strong>Working Set Property</strong>: accessing the t-th most recently accessed element takes O(log t) time. If your application repeatedly accesses the same small set of "hot" keys, splay trees outperform both AVL and RB trees significantly.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-header" onclick="toggleCard(this)">
+      <span class="q-num">5b</span>
+      <span class="q-text">Discuss why Splay trees are suitable for implementing data compression algorithms like Lempel-Ziv-Welch (LZW), where frequently accessed elements dominate.</span>
+      <div class="q-meta"><span class="badge">8M</span><span class="badge">CO5</span><span class="badge">L5</span></div>
+      <span class="q-arrow">▼</span>
+    </div>
+    <div class="q-body">
+      <div class="ans-section">
+        <div class="ans-label">LZW Algorithm Overview</div>
+        <div class="ans-text"><p>LZW maintains a <strong>dictionary</strong> of previously seen substrings (patterns). During compression, it repeatedly looks up the <strong>longest matching pattern</strong> in the dictionary, outputs its code, and adds the new pattern (extended by one character).</p></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Why LZW Favors Splay Trees</div>
+        <div class="ans-text"><ol>
+          <li><strong>Temporal Locality:</strong> In real text, the same substrings appear repeatedly ("the", "and", common words). Splay tree moves these to the root → subsequent accesses O(1) vs O(log n) for AVL/RB.</li>
+          <li><strong>Working Set Dominance:</strong> LZW dictionary lookup follows 80/20 rule — 20% of patterns account for 80% of accesses. Splay keeps this hot 20% near root.</li>
+          <li><strong>Dynamic Dictionary Growth:</strong> LZW continuously adds new patterns. Splay tree handles insertions with the same amortized O(log n) as AVL/RB, but with no color/height bookkeeping overhead.</li>
+          <li><strong>No Extra Storage:</strong> Splay tree needs no color bits or height fields → lighter memory footprint for large LZW dictionaries (up to 4096 entries in standard LZW).</li>
+          <li><strong>Access Frequency Adaptation:</strong> As compression proceeds, more common patterns naturally settle near the root — the tree self-optimizes for the input data's character distribution.</li>
+        </ol></div>
+      </div>
+      <div class="ans-section">
+        <div class="ans-label">Concrete Example</div>
+        <div class="code-block">Compressing: "ABABABAB..."
+
+LZW Dictionary after initial processing:
+  "A"→65, "B"→66, "AB"→256, "BA"→257, "ABA"→258...
+
+Splay Tree after 100 compressions:
+       "ABA"(root) ← most accessed
+       /          \
+    "AB"          "B"
+   /
+ "A"            ... other patterns deeper
+
+Search "ABA": O(1) — already at root!
+Search "AB":  O(1) — left child of root!
+vs AVL/RB: O(log 4096) ≈ 12 comparisons every time</div>
+      </div>
+      <div class="highlight"><strong>Conclusion:</strong> Splay trees are ideal for LZW because LZW exhibits strong temporal locality — a small subset of patterns dominates. Splay's self-optimization reduces average lookup time from O(log n) to O(1) for the working set, significantly speeding up compression/decompression.</div>
+    </div>
+  </div>
+
+  <!-- Cheat Sheet Unit V -->
+  <div class="extra-section">
+    <h3>🧠 Unit V — Memory Tips</h3>
+    <div class="tip-grid">
+      <div class="tip-card"><div class="tip-title">AVL Rotations</div>LL→Right Rotate. RR→Left Rotate. LR→Left then Right. RL→Right then Left.</div>
+      <div class="tip-card"><div class="tip-title">RB Tree Rules</div>Root=Black. No 2 reds consecutive. Equal black-height on all paths.</div>
+      <div class="tip-card"><div class="tip-title">B-Tree = Disk</div>Big nodes = fewer disk reads. Height = O(log_m n). m=1000→height≈3!</div>
+      <div class="tip-card"><div class="tip-title">Splay = Cache</div>Move accessed node to ROOT. Best for repeated access. Temporal locality!</div>
+      <div class="tip-card"><div class="tip-title">RB vs AVL</div>AVL: tighter balance (faster reads). RB: fewer rotations (faster writes).</div>
+      <div class="tip-card"><div class="tip-title">LZW + Splay</div>Common patterns → root → O(1) lookup. Perfect match for compression.</div>
+    </div>
+  </div>
+  <div class="extra-section">
+    <h3>📋 Unit V — Cheat Sheet</h3>
+    <div class="tip-grid">
+      <div class="tip-card"><div class="tip-title">AVL Balance Factor</div>BF = h(left) - h(right). Must be ∈ {-1, 0, 1}</div>
+      <div class="tip-card"><div class="tip-title">AVL Height</div>≤ 1.44 log₂(n+2). Tightest balance of all trees.</div>
+      <div class="tip-card"><div class="tip-title">RB Height</div>≤ 2 log₂(n+1). O(1) rotations per insert/delete.</div>
+      <div class="tip-card"><div class="tip-title">B-Tree Height</div>O(log_m n). All leaves at same depth. m = order.</div>
+      <div class="tip-card"><div class="tip-title">Splay Complexity</div>All ops O(log n) amortized. Repeated key → O(1).</div>
+      <div class="tip-card"><div class="tip-title">RB Insert Cases</div>Case1: Uncle Red→Recolor. Case2: Uncle Black+right→Rotate. Case3: Uncle Black+left→Recolor+Rotate.</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+// ── Theme Toggle ──
+let isDark = true;
+function toggleTheme() {
+  isDark = !isDark;
+  document.body.classList.toggle('light', !isDark);
+}
+
+// ── Tab Navigation ──
+function showUnit(n, tab) {
+  document.querySelectorAll('.unit-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('unit' + n).classList.add('active');
+  tab.classList.add('active');
+  document.getElementById('searchResults').style.display = 'none';
+  document.getElementById('searchInput').value = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Card Toggle ──
+function toggleCard(header) {
+  const card = header.parentElement;
+  const wasOpen = card.classList.contains('open');
+  card.classList.toggle('open', !wasOpen);
+}
+
+// ── Search ──
+function doSearch(query) {
+  const q = query.trim().toLowerCase();
+  const resultsDiv = document.getElementById('searchResults');
+
+  if (!q) {
+    resultsDiv.style.display = 'none';
+    document.querySelectorAll('.unit-section').forEach(s => {
+      if (s.classList.contains('was-active')) {
+        s.classList.add('active');
+        s.classList.remove('was-active');
+      }
+    });
+    return;
+  }
+
+  // Hide unit sections
+  document.querySelectorAll('.unit-section').forEach(s => {
+    if (s.classList.contains('active')) s.classList.add('was-active');
+    s.classList.remove('active');
+  });
+
+  const cards = document.querySelectorAll('.q-card');
+  let results = [];
+
+  cards.forEach(card => {
+    const qText = card.querySelector('.q-text').textContent.toLowerCase();
+    const bodyText = card.querySelector('.q-body') ? card.querySelector('.q-body').textContent.toLowerCase() : '';
+    if (qText.includes(q) || bodyText.includes(q)) {
+      results.push(card);
+    }
+  });
+
+  if (results.length === 0) {
+    resultsDiv.style.display = 'block';
+    resultsDiv.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-muted)">No questions found matching "<strong>' + query + '</strong>"</div>';
+    return;
+  }
+
+  let html = '<div style="padding:8px 0 16px;font-size:0.78rem;color:var(--text-muted);">Found ' + results.length + ' result(s) for "' + query + '"</div>';
+  results.forEach(card => {
+    const unitSection = card.closest('.unit-section');
+    const unitName = unitSection ? unitSection.querySelector('.unit-header h2').textContent : '';
+    const cloned = card.cloneNode(true);
+    cloned.querySelector('.q-header').setAttribute('onclick', '');
+    cloned.classList.add('open');
+    cloned.querySelector('.q-body').style.display = 'block';
+    html += '<div style="margin-bottom:6px;font-size:0.7rem;font-weight:800;text-transform:uppercase;color:var(--text-dim);padding-left:4px">' + unitName + '</div>' + cloned.outerHTML;
+  });
+
+  resultsDiv.innerHTML = html;
+  resultsDiv.style.display = 'block';
+
+  // Re-attach toggle for cloned cards
+  resultsDiv.querySelectorAll('.q-header').forEach(h => {
+    h.addEventListener('click', function() { toggleCard(this); });
+  });
+}
+</script>
+</body>
+</html>

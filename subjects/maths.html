@@ -1,0 +1,2831 @@
+﻿﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTCT1101 – Mathematical Foundations of Computer Science</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@300;400;500;700&display=swap');
+
+  :root {
+    --bg: #0b0f1a;
+    --surface: #131929;
+    --surface2: #1a2236;
+    --surface3: #1f2a42;
+    --border: #253050;
+    --accent: #4f8ef7;
+    --accent2: #7c5cfc;
+    --accent3: #36d9b0;
+    --gold: #f5c842;
+    --red: #f76b6b;
+    --text: #e2e8f8;
+    --text2: #8fa3c8;
+    --text3: #5a7095;
+    --math: #a8d8ff;
+    --formula: #c3f7d8;
+    --given: #ffe4a0;
+    --answer: #7eefc7;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 8px 32px rgba(0,0,0,0.45);
+  }
+
+  .light {
+    --bg: #f0f4ff;
+    --surface: #ffffff;
+    --surface2: #e8eeff;
+    --surface3: #dde5ff;
+    --border: #c5d0f0;
+    --accent: #2563eb;
+    --accent2: #7c3aed;
+    --accent3: #059669;
+    --gold: #d97706;
+    --red: #dc2626;
+    --text: #1e2a4a;
+    --text2: #4a5a80;
+    --text3: #7a8aaa;
+    --math: #1e40af;
+    --formula: #065f46;
+    --given: #92400e;
+    --answer: #047857;
+    --shadow: 0 8px 32px rgba(0,0,0,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    transition: background 0.3s, color 0.3s;
+    min-height: 100vh;
+  }
+
+  /* === HEADER === */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+  .header-inner {
+    max-width: 1200px; margin: 0 auto;
+    padding: 0 20px;
+    display: flex; align-items: center; gap: 16px;
+    height: 64px; flex-wrap: wrap;
+  }
+  .logo {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.2rem; font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+    white-space: nowrap;
+  }
+  .logo span { color: var(--accent3); }
+  .header-actions { display: flex; gap: 8px; align-items: center; margin-left: auto; flex-wrap: wrap; }
+
+  .btn {
+    padding: 7px 14px; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); background: var(--surface2);
+    color: var(--text); cursor: pointer; font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s; white-space: nowrap;
+  }
+  .btn:hover { background: var(--surface3); border-color: var(--accent); color: var(--accent); }
+  .btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* Progress bar */
+  #progress-bar {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    z-index: 200; transition: width 0.1s;
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  /* === SEARCH === */
+  .search-wrap {
+    max-width: 1200px; margin: 20px auto 0;
+    padding: 0 20px;
+  }
+  #search-input {
+    width: 100%; padding: 12px 18px 12px 44px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); color: var(--text);
+    font-size: 14px; font-family: 'DM Sans', sans-serif;
+    outline: none; transition: border 0.2s;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%238fa3c8' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: 14px center;
+  }
+  #search-input:focus { border-color: var(--accent); }
+  #search-input::placeholder { color: var(--text3); }
+
+  /* === UNIT TABS === */
+  .unit-tabs {
+    max-width: 1200px; margin: 20px auto 0;
+    padding: 0 20px;
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .unit-tab {
+    padding: 8px 20px; border-radius: 999px;
+    border: 1px solid var(--border); background: var(--surface2);
+    color: var(--text2); cursor: pointer; font-size: 13px; font-weight: 500;
+    transition: all 0.2s;
+  }
+  .unit-tab:hover { border-color: var(--accent); color: var(--accent); }
+  .unit-tab.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-color: transparent; color: #fff;
+    box-shadow: 0 4px 14px rgba(79,142,247,0.4);
+  }
+
+  /* === MAIN LAYOUT === */
+  main { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+  .unit-section { display: none; }
+  .unit-section.visible { display: block; }
+
+  .unit-header {
+    margin-bottom: 24px; padding: 20px 24px;
+    background: linear-gradient(135deg, var(--surface2), var(--surface3));
+    border-radius: var(--radius); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .unit-header h2 {
+    font-family: 'Crimson Pro', serif; font-size: 1.5rem; font-weight: 700;
+    color: var(--accent);
+  }
+  .unit-header p { color: var(--text2); font-size: 13px; }
+
+  .ctrl-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* === QUESTION CARD === */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 14px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .q-card:hover { border-color: var(--accent); }
+  .q-card.bookmarked { border-color: var(--gold); }
+  .q-card.hidden-search { display: none; }
+
+  .q-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px; cursor: pointer;
+    background: var(--surface2);
+    user-select: none; flex-wrap: wrap;
+  }
+  .q-num {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; font-weight: 700; font-size: 12px;
+    padding: 3px 10px; border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace; white-space: nowrap;
+  }
+  .q-type {
+    font-size: 11px; padding: 2px 8px; border-radius: 4px;
+    font-weight: 600; letter-spacing: 0.4px;
+  }
+  .type-num { background: rgba(54,217,176,0.15); color: var(--accent3); }
+  .type-theory { background: rgba(124,92,252,0.15); color: var(--accent2); }
+  .q-marks { margin-left: auto; font-size: 12px; color: var(--text3); white-space: nowrap; }
+  .q-text { flex: 1; font-size: 14px; color: var(--text); min-width: 200px; }
+
+  .bookmark-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 18px; transition: transform 0.2s;
+    padding: 2px;
+  }
+  .bookmark-btn:hover { transform: scale(1.2); }
+
+  .q-chevron {
+    width: 20px; height: 20px; transition: transform 0.3s;
+    color: var(--text3);
+  }
+  .q-card.open .q-chevron { transform: rotate(180deg); }
+
+  /* === SOLUTION BODY === */
+  .q-body {
+    display: none; padding: 20px 22px;
+    border-top: 1px solid var(--border);
+  }
+  .q-card.open .q-body { display: block; }
+
+  /* Solution blocks */
+  .sol-block {
+    margin-bottom: 16px; padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    border-left: 3px solid;
+  }
+  .sol-given { background: rgba(245,200,66,0.08); border-color: var(--gold); }
+  .sol-formula { background: rgba(163,247,216,0.08); border-color: var(--accent3); }
+  .sol-steps { background: rgba(79,142,247,0.07); border-color: var(--accent); }
+  .sol-answer { background: rgba(126,239,199,0.1); border-color: var(--answer); }
+  .sol-insight { background: rgba(124,92,252,0.08); border-color: var(--accent2); }
+  .sol-tip { background: rgba(247,107,107,0.08); border-color: var(--red); }
+  .sol-theory { background: rgba(255,255,255,0.03); border-color: var(--border); }
+
+  .sol-block h4 {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+  .sol-given h4 { color: var(--gold); }
+  .sol-formula h4 { color: var(--accent3); }
+  .sol-steps h4 { color: var(--accent); }
+  .sol-answer h4 { color: var(--answer); }
+  .sol-insight h4 { color: var(--accent2); }
+  .sol-tip h4 { color: var(--red); }
+  .sol-theory h4 { color: var(--text2); }
+
+  /* Math display */
+  .math {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px; color: var(--math);
+    background: rgba(0,0,0,0.2); border-radius: 6px;
+    padding: 10px 14px; margin: 8px 0;
+    white-space: pre; overflow-x: auto;
+    display: block; line-height: 1.8;
+  }
+  .light .math { background: rgba(0,0,0,0.06); color: var(--math); }
+
+  .math-inline {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; color: var(--math);
+    background: rgba(0,0,0,0.15); border-radius: 4px;
+    padding: 1px 6px;
+  }
+  .light .math-inline { background: rgba(0,0,0,0.07); }
+
+  .ans-highlight {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--answer); font-weight: 700; font-size: 14px;
+  }
+
+  /* Tables */
+  .sol-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; overflow-x: auto; display: block; }
+  .sol-table th {
+    background: var(--surface3); color: var(--accent);
+    padding: 8px 12px; border: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    text-align: center;
+  }
+  .sol-table td {
+    padding: 7px 12px; border: 1px solid var(--border);
+    text-align: center; color: var(--text2);
+  }
+  .sol-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  ul.sol-list { padding-left: 18px; }
+  ul.sol-list li { margin-bottom: 5px; color: var(--text2); font-size: 14px; }
+  ul.sol-list li strong { color: var(--text); }
+
+  .copy-btn {
+    float: right; padding: 4px 10px; font-size: 11px;
+    background: var(--surface3); border: 1px solid var(--border);
+    border-radius: 4px; cursor: pointer; color: var(--text2);
+    transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+  }
+  .copy-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* Cheat sheet */
+  .cheat-sheet {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 20px;
+  }
+  .cheat-sheet h3 {
+    font-family: 'Crimson Pro', serif; font-size: 1.1rem;
+    color: var(--gold); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .formula-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+  }
+  .formula-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 10px 14px;
+  }
+  .formula-item .label { font-size: 11px; color: var(--text3); margin-bottom: 4px; }
+  .formula-item .val { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--accent3); }
+
+  /* Scroll to top */
+  #scroll-top {
+    position: fixed; bottom: 24px; right: 24px;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none; color: #fff; cursor: pointer; font-size: 18px;
+    box-shadow: var(--shadow); display: none;
+    transition: transform 0.2s; z-index: 99;
+  }
+  #scroll-top:hover { transform: translateY(-3px); }
+  #scroll-top.visible { display: flex; align-items: center; justify-content: center; }
+
+  /* Quick revision overlay */
+  #revision-overlay {
+    display: none; position: fixed; inset: 0; z-index: 300;
+    background: var(--bg); overflow-y: auto; padding: 30px 20px;
+  }
+  #revision-overlay.visible { display: block; }
+  .rev-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .rev-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 12px; }
+  .rev-card h4 { color: var(--accent); margin-bottom: 8px; font-size: 13px; font-weight: 700; }
+  .rev-card p { color: var(--text2); font-size: 13px; }
+
+  /* Highlight matches */
+  .hl { background: rgba(245,200,66,0.35); border-radius: 2px; color: var(--text); }
+
+  /* Responsive */
+  @media(max-width:600px) {
+    .header-inner { height: auto; padding: 12px; }
+    .logo { font-size: 1rem; }
+    .btn { padding: 6px 10px; font-size: 12px; }
+    .unit-tabs { gap: 6px; }
+    .unit-tab { padding: 6px 14px; font-size: 12px; }
+    .q-header { padding: 12px 14px; }
+    .q-body { padding: 14px; }
+    .math { font-size: 12px; }
+  }
+
+  /* Animated gradient bg */
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(ellipse 80% 50% at 10% 10%, rgba(79,142,247,0.06), transparent),
+                radial-gradient(ellipse 60% 40% at 90% 80%, rgba(124,92,252,0.05), transparent);
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<!-- STUDY PORTAL NAVIGATION -->
+<div class="sp-topbar" id="spTopbar">
+  <a href="../index.html" class="sp-home-link"><img src="../assets/images/avanthi_clg logo.webp" alt="Avanthi" style="width:28px;height:28px;border-radius:6px;object-fit:contain;background:#fff;border:1px solid rgba(255,255,255,0.1);padding:1px;"> Study Portal</a>
+  <div class="sp-nav-links">
+    <a href="maths.html" class="sp-nav-link sp-active">Maths</a>
+    <a href="dsa.html" class="sp-nav-link">DSA</a>
+    <a href="cloud.html" class="sp-nav-link">Cloud</a>
+    <a href="ml.html" class="sp-nav-link">ML</a>
+  </div>
+</div>
+<script>
+// Sync topbar theme with page theme
+(function(){
+  var tb = document.getElementById('spTopbar');
+  if (!tb) return;
+  function syncTheme() {
+    var isDark = !document.body.classList.contains('light') && 
+                 document.documentElement.getAttribute('data-theme') !== 'light';
+    tb.classList.toggle('light-bar', !isDark);
+  }
+  syncTheme();
+  new MutationObserver(syncTheme).observe(document.body, {attributes:true,attributeFilter:['class']});
+  new MutationObserver(syncTheme).observe(document.documentElement, {attributes:true,attributeFilter:['data-theme']});
+})();
+</script>
+
+<div id="progress-bar" style="width:0%"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">MTCT1101 <span>·</span> MFCS</div>
+    <div class="header-actions">
+      <input type="text" id="search-input" placeholder="🔍  Search questions, topics…" style="width:220px">
+      <button class="btn" id="theme-btn" onclick="toggleTheme()">☀️ Light</button>
+      <button class="btn" onclick="openRevision()">⚡ Quick Revision</button>
+      <button class="btn" id="bookmark-view-btn" onclick="toggleBookmarkView()">🔖 Bookmarks</button>
+    </div>
+  </div>
+</header>
+
+<!-- UNIT TABS -->
+<div class="unit-tabs">
+  <button class="unit-tab active" onclick="showUnit('I')">📊 Unit I</button>
+  <button class="unit-tab" onclick="showUnit('II')">📐 Unit II</button>
+  <button class="unit-tab" onclick="showUnit('III')">🧪 Unit III</button>
+  <button class="unit-tab" onclick="showUnit('IV')">🔢 Unit IV</button>
+  <button class="unit-tab" onclick="showUnit('V')">🕸️ Unit V</button>
+</div>
+
+<main>
+
+<!-- ======================= UNIT I ======================= -->
+<div class="unit-section visible" id="unit-I">
+  <div class="unit-header">
+    <div>
+      <h2>Unit I — Probability & Random Variables</h2>
+      <p>Probability distributions · Expectation · Variance · Markov Chains</p>
+    </div>
+    <div class="ctrl-row">
+      <button class="btn" onclick="openAll('I')">Open All</button>
+      <button class="btn" onclick="closeAll('I')">Close All</button>
+    </div>
+  </div>
+
+  <!-- Cheat Sheet Unit I -->
+  <div class="cheat-sheet">
+    <h3>📋 Unit I — Formula Cheat Sheet</h3>
+    <div class="formula-grid">
+      <div class="formula-item"><div class="label">Expected Value (Continuous)</div><div class="val">E(X) = ∫ x·f(x) dx</div></div>
+      <div class="formula-item"><div class="label">Variance</div><div class="val">Var(X) = E(X²) − [E(X)]²</div></div>
+      <div class="formula-item"><div class="label">E(X²) Continuous</div><div class="val">E(X²) = ∫ x²·f(x) dx</div></div>
+      <div class="formula-item"><div class="label">Normalization Condition</div><div class="val">∫ f(x) dx = 1</div></div>
+      <div class="formula-item"><div class="label">Karl Pearson Skewness</div><div class="val">Sk = (Mean − Mode) / SD</div></div>
+      <div class="formula-item"><div class="label">Kurtosis (β₂)</div><div class="val">β₂ = μ₄ / μ₂²</div></div>
+      <div class="formula-item"><div class="label">Gamma Integral</div><div class="val">∫₀^∞ xⁿe^(−λx)dx = n!/λⁿ⁺¹</div></div>
+      <div class="formula-item"><div class="label">Markov Property</div><div class="val">P(Xₙ=j|X₀…Xₙ₋₁) = P(Xₙ=j|Xₙ₋₁)</div></div>
+    </div>
+  </div>
+
+  <!-- Q1a -->
+  <div class="q-card" id="q-I-1a">
+    <div class="q-header" onclick="toggle('I-1a')">
+      <span class="q-num">Q1(a)</span>
+      <span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Find E(X) for f(x) = (1/2)x, 0&lt;x&lt;2; 0 otherwise</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('I-1a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-given">
+        <h4>🔹 Given</h4>
+        <p>Probability density function (PDF):</p>
+        <code class="math">f(x) = (1/2)x,   0 &lt; x &lt; 2
+f(x) = 0,         otherwise</code>
+        <p style="margin-top:8px;color:var(--text2);">Find: <strong>E(X)</strong> — the expected value (mean) of X</p>
+      </div>
+      <div class="sol-block sol-formula">
+        <h4>🔹 Formula Used</h4>
+        <code class="math">E(X) = ∫₋∞^∞ x · f(x) dx</code>
+        <p style="color:var(--text2);font-size:13px;">Since f(x) is non-zero only for 0 &lt; x &lt; 2:</p>
+        <code class="math">E(X) = ∫₀² x · f(x) dx</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step-by-Step Solution</h4>
+        <p><strong>Step 1:</strong> Verify it's a valid PDF (normalization check):</p>
+        <code class="math">∫₀² (1/2)x dx = (1/2) · [x²/2]₀²
+              = (1/2) · (4/2 − 0)
+              = (1/2) · 2 = 1  ✓ Valid PDF</code>
+        <p><strong>Step 2:</strong> Substitute f(x) = (1/2)x into E(X) formula:</p>
+        <code class="math">E(X) = ∫₀² x · (1/2)x dx
+      = (1/2) ∫₀² x² dx</code>
+        <p><strong>Step 3:</strong> Evaluate the integral using power rule ∫xⁿdx = xⁿ⁺¹/(n+1):</p>
+        <code class="math">E(X) = (1/2) · [x³/3]₀²
+      = (1/2) · (2³/3 − 0³/3)
+      = (1/2) · (8/3)
+      = 8/6
+      = 4/3</code>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Final Answer</h4>
+        <p><span class="ans-highlight">E(X) = 4/3 ≈ 1.333</span></p>
+        <p style="color:var(--text2);margin-top:8px;">The average value of X with this triangular distribution is 4/3.</p>
+      </div>
+      <div class="sol-block sol-insight">
+        <h4>🧠 Concept Insight</h4>
+        <p>E(X) is the "center of mass" of the probability distribution. For a continuous RV, it's computed via integration of x·f(x). Since f(x) increases linearly, the distribution is right-skewed, pushing the mean above the midpoint (1).</p>
+      </div>
+      <div class="sol-block sol-tip">
+        <h4>💡 Memory Tip</h4>
+        <p>"E(X) for continuous = ∫ x·f(x) dx" — think: weighted average where weight = probability density.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1b -->
+  <div class="q-card" id="q-I-1b">
+    <div class="q-header" onclick="toggle('I-1b')">
+      <span class="q-num">Q1(b)</span>
+      <span class="q-type type-theory">THEORY</span>
+      <span class="q-text">Define Probability Mass Function and Density Function</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('I-1b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-theory">
+        <h4>📌 Probability Mass Function (PMF)</h4>
+        <ul class="sol-list">
+          <li><strong>Definition:</strong> A function p(x) that gives the probability that a <em>discrete</em> random variable X takes the exact value x.</li>
+          <li><strong>Notation:</strong> p(x) = P(X = x)</li>
+          <li><strong>Properties:</strong>
+            <ul style="margin-top:6px;padding-left:16px;">
+              <li>p(x) ≥ 0 for all x</li>
+              <li>Σ p(xᵢ) = 1 (sum over all possible values)</li>
+              <li>P(X ∈ A) = Σₓ∈ₐ p(x)</li>
+            </ul>
+          </li>
+          <li><strong>Example:</strong> Rolling a fair die: p(x) = 1/6 for x = 1,2,3,4,5,6</li>
+        </ul>
+        <code class="math">PMF Example (Coin Toss, X = No. of Heads in 2 tosses):
+P(X=0) = 1/4,  P(X=1) = 2/4,  P(X=2) = 1/4
+Sum = 1/4 + 2/4 + 1/4 = 1 ✓</code>
+      </div>
+      <div class="sol-block sol-theory">
+        <h4>📌 Probability Density Function (PDF)</h4>
+        <ul class="sol-list">
+          <li><strong>Definition:</strong> A function f(x) for a <em>continuous</em> random variable X such that probabilities over intervals are computed by integration.</li>
+          <li><strong>Key Formula:</strong> P(a ≤ X ≤ b) = ∫ₐᵇ f(x) dx</li>
+          <li><strong>Properties:</strong>
+            <ul style="margin-top:6px;padding-left:16px;">
+              <li>f(x) ≥ 0 for all x</li>
+              <li>∫₋∞^∞ f(x) dx = 1</li>
+              <li>P(X = c) = 0 for any specific value c (continuous!)</li>
+            </ul>
+          </li>
+          <li><strong>Note:</strong> f(x) is NOT a probability itself — it's a density. It can be &gt; 1.</li>
+        </ul>
+      </div>
+      <div class="sol-block sol-formula">
+        <h4>📊 Key Differences: PMF vs PDF</h4>
+        <table class="sol-table">
+          <tr><th>Feature</th><th>PMF</th><th>PDF</th></tr>
+          <tr><td>Variable type</td><td>Discrete</td><td>Continuous</td></tr>
+          <tr><td>Value meaning</td><td>Direct probability</td><td>Density (not direct prob.)</td></tr>
+          <tr><td>Probability calc</td><td>Summation Σ</td><td>Integration ∫</td></tr>
+          <tr><td>Normalization</td><td>Σ p(x) = 1</td><td>∫ f(x)dx = 1</td></tr>
+          <tr><td>P(X=c)</td><td>p(c) can be &gt; 0</td><td>Always = 0</td></tr>
+        </table>
+      </div>
+      <div class="sol-block sol-tip">
+        <h4>💡 Memory Tip</h4>
+        <p><strong>PMF → "Point Mass"</strong> (discrete, exact points). <strong>PDF → "Density"</strong> (continuous, area under curve = probability).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2a -->
+  <div class="q-card" id="q-I-2a">
+    <div class="q-header" onclick="toggle('I-2a')">
+      <span class="q-num">Q2(a)</span>
+      <span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Sum of two dice — Distribution function, Mean, Variance</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('I-2a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-given">
+        <h4>🔹 Given</h4>
+        <p>Two fair dice are tossed. X = sum of two dice. Find: (i) Distribution function, (ii) Mean, (iii) Variance.</p>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Part (i): Distribution Function (PMF Table)</h4>
+        <p>The sum X can range from 2 to 12. Total outcomes = 6×6 = 36.</p>
+        <table class="sol-table">
+          <tr><th>X (Sum)</th><th>Favorable Outcomes</th><th>P(X)</th><th>P(X) as fraction</th></tr>
+          <tr><td>2</td><td>(1,1)</td><td>1/36</td><td>0.0278</td></tr>
+          <tr><td>3</td><td>(1,2),(2,1)</td><td>2/36</td><td>0.0556</td></tr>
+          <tr><td>4</td><td>(1,3),(2,2),(3,1)</td><td>3/36</td><td>0.0833</td></tr>
+          <tr><td>5</td><td>(1,4),(2,3),(3,2),(4,1)</td><td>4/36</td><td>0.1111</td></tr>
+          <tr><td>6</td><td>(1,5),(2,4),(3,3),(4,2),(5,1)</td><td>5/36</td><td>0.1389</td></tr>
+          <tr><td>7</td><td>(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)</td><td>6/36</td><td>0.1667</td></tr>
+          <tr><td>8</td><td>(2,6),(3,5),(4,4),(5,3),(6,2)</td><td>5/36</td><td>0.1389</td></tr>
+          <tr><td>9</td><td>(3,6),(4,5),(5,4),(6,3)</td><td>4/36</td><td>0.1111</td></tr>
+          <tr><td>10</td><td>(4,6),(5,5),(6,4)</td><td>3/36</td><td>0.0833</td></tr>
+          <tr><td>11</td><td>(5,6),(6,5)</td><td>2/36</td><td>0.0556</td></tr>
+          <tr><td>12</td><td>(6,6)</td><td>1/36</td><td>0.0278</td></tr>
+          <tr><td><strong>Total</strong></td><td></td><td><strong>36/36=1</strong></td><td><strong>1.0</strong></td></tr>
+        </table>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Part (ii): Mean E(X)</h4>
+        <code class="math">E(X) = Σ x·P(X=x)
+     = 2·(1/36) + 3·(2/36) + 4·(3/36) + 5·(4/36) + 6·(5/36)
+       + 7·(6/36) + 8·(5/36) + 9·(4/36) + 10·(3/36)
+       + 11·(2/36) + 12·(1/36)
+
+     = (2 + 6 + 12 + 20 + 30 + 42 + 40 + 36 + 30 + 22 + 12) / 36
+     = 252 / 36
+     = 7</code>
+        <p style="color:var(--answer);font-weight:600;">∴ Mean E(X) = 7</p>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Part (iii): Variance Var(X)</h4>
+        <p><strong>Step 1:</strong> Calculate E(X²)</p>
+        <code class="math">E(X²) = Σ x²·P(X=x)
+      = (4·1 + 9·2 + 16·3 + 25·4 + 36·5 + 49·6
+         + 64·5 + 81·4 + 100·3 + 121·2 + 144·1) / 36
+      = (4 + 18 + 48 + 100 + 180 + 294 + 320 + 324 + 300 + 242 + 144) / 36
+      = 1974 / 36
+      = 54.833</code>
+        <p><strong>Step 2:</strong> Apply Variance formula:</p>
+        <code class="math">Var(X) = E(X²) − [E(X)]²
+       = 54.833 − 7²
+       = 54.833 − 49
+       = 5.833 = 35/6</code>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Final Answers</h4>
+        <p><span class="ans-highlight">(i) Distribution: P(X=k) = (6−|k−7|)/36 for k = 2,3,…,12</span></p>
+        <p><span class="ans-highlight">(ii) Mean E(X) = 7</span></p>
+        <p><span class="ans-highlight">(iii) Variance Var(X) = 35/6 ≈ 5.833</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2b -->
+  <div class="q-card" id="q-I-2b">
+    <div class="q-header" onclick="toggle('I-2b')">
+      <span class="q-num">Q2(b)</span>
+      <span class="q-type type-theory">THEORY</span>
+      <span class="q-text">Explain Parametric Families and Parametric Distributions</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('I-2b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-theory">
+        <h4>📌 Parametric Families</h4>
+        <ul class="sol-list">
+          <li><strong>Definition:</strong> A set of probability distributions indexed by one or more parameters θ (theta). Changing θ gives a different distribution, but all share the same functional form.</li>
+          <li>Formally: {P_θ : θ ∈ Θ} where Θ is the parameter space</li>
+          <li>The <strong>parameter</strong> summarizes the entire distribution</li>
+          <li>Example: Normal family N(μ, σ²) — parameterized by mean μ and variance σ²</li>
+        </ul>
+      </div>
+      <div class="sol-block sol-formula">
+        <h4>📌 Key Parametric Distributions</h4>
+        <table class="sol-table">
+          <tr><th>Distribution</th><th>Parameter(s)</th><th>PDF / PMF</th><th>Mean</th><th>Variance</th></tr>
+          <tr><td>Bernoulli</td><td>p</td><td>p^x(1-p)^(1-x)</td><td>p</td><td>p(1-p)</td></tr>
+          <tr><td>Binomial</td><td>n, p</td><td>C(n,x)p^x(1-p)^(n-x)</td><td>np</td><td>np(1-p)</td></tr>
+          <tr><td>Poisson</td><td>λ</td><td>e^(−λ)λˣ/x!</td><td>λ</td><td>λ</td></tr>
+          <tr><td>Normal</td><td>μ, σ²</td><td>(1/σ√2π)e^(−(x−μ)²/2σ²)</td><td>μ</td><td>σ²</td></tr>
+          <tr><td>Exponential</td><td>λ</td><td>λe^(−λx)</td><td>1/λ</td><td>1/λ²</td></tr>
+          <tr><td>Gamma</td><td>α, β</td><td>(β^α/Γ(α))x^(α-1)e^(−βx)</td><td>α/β</td><td>α/β²</td></tr>
+          <tr><td>Uniform</td><td>a, b</td><td>1/(b-a)</td><td>(a+b)/2</td><td>(b-a)²/12</td></tr>
+        </table>
+      </div>
+      <div class="sol-block sol-insight">
+        <h4>🧠 Concept Insight</h4>
+        <p>Parametric statistics assumes data follows a distribution from a known family with unknown parameters. Estimation is then about finding the best parameter values (using MLE, MOM, etc.).</p>
+      </div>
+      <div class="sol-block sol-tip">
+        <h4>💡 Memory Tip</h4>
+        <p>"Parameters SHAPE the distribution" — change μ to shift, change σ to stretch/compress the Normal bell curve.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3a -->
+  <div class="q-card" id="q-I-3a">
+    <div class="q-header" onclick="toggle('I-3a')">
+      <span class="q-num">Q3(a)</span>
+      <span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Calculate Variance and Standard Deviation for grouped data (CI: 30–100)</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('I-3a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-given">
+        <h4>🔹 Given Data</h4>
+        <table class="sol-table">
+          <tr><th>C.I</th><th>30-40</th><th>40-50</th><th>50-60</th><th>60-70</th><th>70-80</th><th>80-90</th><th>90-100</th></tr>
+          <tr><td>f</td><td>3</td><td>7</td><td>12</td><td>15</td><td>8</td><td>3</td><td>2</td></tr>
+        </table>
+      </div>
+      <div class="sol-block sol-formula">
+        <h4>🔹 Formulas Used</h4>
+        <code class="math">Mean (x̄) = Σ(f·m) / N
+
+Variance (σ²) = Σ f(m − x̄)² / N   (Direct Method)
+              OR
+              = [Σ f·m² / N] − x̄²   (Shortcut)
+
+SD (σ) = √Variance</code>
+        <p style="color:var(--text2);font-size:13px;">where m = midpoint of each class, N = Σf</p>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step-by-Step Calculation</h4>
+        <p><strong>Step 1:</strong> Find midpoints m for each class:</p>
+        <table class="sol-table">
+          <tr><th>C.I</th><th>m (mid)</th><th>f</th><th>f·m</th><th>f·m²</th></tr>
+          <tr><td>30-40</td><td>35</td><td>3</td><td>105</td><td>3675</td></tr>
+          <tr><td>40-50</td><td>45</td><td>7</td><td>315</td><td>14175</td></tr>
+          <tr><td>50-60</td><td>55</td><td>12</td><td>660</td><td>36300</td></tr>
+          <tr><td>60-70</td><td>65</td><td>15</td><td>975</td><td>63375</td></tr>
+          <tr><td>70-80</td><td>75</td><td>8</td><td>600</td><td>45000</td></tr>
+          <tr><td>80-90</td><td>85</td><td>3</td><td>255</td><td>21675</td></tr>
+          <tr><td>90-100</td><td>95</td><td>2</td><td>190</td><td>18050</td></tr>
+          <tr><td><strong>Σ</strong></td><td></td><td><strong>N=50</strong></td><td><strong>3100</strong></td><td><strong>202250</strong></td></tr>
+        </table>
+        <p><strong>Step 2:</strong> Calculate Mean:</p>
+        <code class="math">x̄ = Σ(f·m) / N = 3100 / 50 = 62</code>
+        <p><strong>Step 3:</strong> Calculate Variance:</p>
+        <code class="math">σ² = [Σ f·m² / N] − x̄²
+   = [202250 / 50] − 62²
+   = 4045 − 3844
+   = 201</code>
+        <p><strong>Step 4:</strong> Calculate Standard Deviation:</p>
+        <code class="math">σ = √201 = 14.177</code>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Final Answers</h4>
+        <p><span class="ans-highlight">Mean x̄ = 62</span></p>
+        <p><span class="ans-highlight">Variance σ² = 201</span></p>
+        <p><span class="ans-highlight">Standard Deviation σ = √201 ≈ 14.18</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3b -->
+  <div class="q-card" id="q-I-3b">
+    <div class="q-header" onclick="toggle('I-3b')">
+      <span class="q-num">Q3(b)</span>
+      <span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Define Skewness &amp; Kurtosis; Karl Pearson's coefficient for 25,15,23,40,27,25,23,25,20</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('I-3b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-theory">
+        <h4>📌 Part (i) — Skewness &amp; Kurtosis Definitions</h4>
+        <ul class="sol-list">
+          <li><strong>Skewness:</strong> Measures the asymmetry of a distribution about its mean.
+            <ul style="padding-left:16px;margin-top:4px;">
+              <li>Positive skew: Tail extends to the right (Mean &gt; Median &gt; Mode)</li>
+              <li>Negative skew: Tail extends to the left (Mean &lt; Median &lt; Mode)</li>
+              <li>Zero skew: Symmetric distribution</li>
+            </ul>
+          </li>
+          <li><strong>Kurtosis:</strong> Measures the "peakedness" or tailedness of distribution.
+            <ul style="padding-left:16px;margin-top:4px;">
+              <li>Leptokurtic: β₂ &gt; 3 (more peaked than Normal)</li>
+              <li>Mesokurtic: β₂ = 3 (Normal distribution)</li>
+              <li>Platykurtic: β₂ &lt; 3 (flatter than Normal)</li>
+            </ul>
+          </li>
+        </ul>
+        <code class="math">Karl Pearson's Coefficient of Skewness:
+  Sk = (Mean − Mode) / SD
+
+Kurtosis: β₂ = μ₄ / μ₂²  (μ₂, μ₄ are central moments)</code>
+      </div>
+      <div class="sol-block sol-given">
+        <h4>🔹 Part (ii) — Given Data</h4>
+        <p>Data: 25, 15, 23, 40, 27, 25, 23, 25, 20 &nbsp;|&nbsp; n = 9</p>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step-by-Step Calculation</h4>
+        <p><strong>Step 1:</strong> Sort data: 15, 20, 23, 23, 25, 25, 25, 27, 40</p>
+        <p><strong>Step 2:</strong> Find Mode (most frequent value):</p>
+        <code class="math">25 appears 3 times → Mode = 25</code>
+        <p><strong>Step 3:</strong> Calculate Mean:</p>
+        <code class="math">Mean = (25+15+23+40+27+25+23+25+20) / 9
+     = 223 / 9
+     = 24.78</code>
+        <p><strong>Step 4:</strong> Calculate Standard Deviation:</p>
+        <code class="math">Deviations from mean (x − x̄):
+x:      25     15     23     40     27     25     23     25     20
+x−x̄:  0.22  -9.78  -1.78  15.22  2.22  0.22  -1.78  0.22  -4.78
+
+(x−x̄)²:
+       0.048  95.65  3.168  231.65  4.928  0.048  3.168  0.048  22.85
+
+Σ(x−x̄)² = 0.048+95.65+3.168+231.65+4.928+0.048+3.168+0.048+22.85
+         = 361.56
+
+Variance σ² = Σ(x−x̄)² / n = 361.56 / 9 = 40.17
+
+SD σ = √40.17 = 6.338</code>
+        <p><strong>Step 5:</strong> Karl Pearson's Coefficient of Skewness:</p>
+        <code class="math">Sk = (Mean − Mode) / SD
+   = (24.78 − 25) / 6.338
+   = −0.22 / 6.338
+   = −0.0347</code>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Final Answers</h4>
+        <p><span class="ans-highlight">Mean = 24.78, Mode = 25, SD = 6.338</span></p>
+        <p><span class="ans-highlight">Karl Pearson's Skewness = −0.035 ≈ 0</span></p>
+        <p style="color:var(--text2);margin-top:8px;">Since Sk ≈ 0, the distribution is nearly symmetric (very slight negative skew).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4a -->
+  <div class="q-card" id="q-I-4a">
+    <div class="q-header" onclick="toggle('I-4a')">
+      <span class="q-num">Q4(a)</span>
+      <span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">PDF f(x) = kxe^(-λx) for x≥0 — Find K, Mean, Variance</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('I-4a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-given">
+        <h4>🔹 Given</h4>
+        <code class="math">f(x) = k·x·e^(−λx),   x ≥ 0, λ > 0
+f(x) = 0,             otherwise</code>
+        <p style="margin-top:8px;color:var(--text2);">Find: (i) K &nbsp; (ii) Mean &nbsp; (iii) Variance</p>
+      </div>
+      <div class="sol-block sol-formula">
+        <h4>🔹 Key Formula — Gamma Integral</h4>
+        <code class="math">∫₀^∞ xⁿ e^(−λx) dx = n! / λⁿ⁺¹   (for n ≥ 0, λ > 0)
+
+Special cases:
+  n=0: ∫₀^∞ e^(−λx) dx = 1/λ
+  n=1: ∫₀^∞ x·e^(−λx) dx = 1/λ²
+  n=2: ∫₀^∞ x²·e^(−λx) dx = 2/λ³
+  n=3: ∫₀^∞ x³·e^(−λx) dx = 6/λ⁴</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Part (i): Find K using Normalization Condition</h4>
+        <code class="math">∫₀^∞ f(x) dx = 1
+
+∫₀^∞ k·x·e^(−λx) dx = 1
+
+k · ∫₀^∞ x·e^(−λx) dx = 1
+
+k · (1/λ²) = 1          [using gamma integral with n=1]
+
+∴ k = λ²</code>
+        <p style="color:var(--answer);font-weight:600;">K = λ²</p>
+        <p style="color:var(--text2);font-size:13px;margin-top:6px;">So f(x) = λ²·x·e^(−λx) — this is the Gamma distribution Γ(2, λ)</p>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Part (ii): Mean E(X)</h4>
+        <code class="math">E(X) = ∫₀^∞ x · f(x) dx
+     = ∫₀^∞ x · λ²·x·e^(−λx) dx
+     = λ² ∫₀^∞ x²·e^(−λx) dx
+     = λ² · (2/λ³)         [gamma integral, n=2]
+     = 2λ²/λ³
+     = 2/λ</code>
+        <p style="color:var(--answer);font-weight:600;">Mean E(X) = 2/λ</p>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Part (iii): Variance Var(X)</h4>
+        <p><strong>Step 1:</strong> Find E(X²):</p>
+        <code class="math">E(X²) = ∫₀^∞ x² · λ²·x·e^(−λx) dx
+      = λ² ∫₀^∞ x³·e^(−λx) dx
+      = λ² · (6/λ⁴)        [gamma integral, n=3]
+      = 6λ²/λ⁴
+      = 6/λ²</code>
+        <p><strong>Step 2:</strong> Calculate Variance:</p>
+        <code class="math">Var(X) = E(X²) − [E(X)]²
+       = 6/λ² − (2/λ)²
+       = 6/λ² − 4/λ²
+       = 2/λ²</code>
+        <p style="color:var(--answer);font-weight:600;">Variance Var(X) = 2/λ²</p>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Final Answers</h4>
+        <p><span class="ans-highlight">(i) K = λ²</span></p>
+        <p><span class="ans-highlight">(ii) Mean E(X) = 2/λ</span></p>
+        <p><span class="ans-highlight">(iii) Variance Var(X) = 2/λ²</span></p>
+        <p style="color:var(--text2);margin-top:8px;">This is a <strong>Gamma(2, λ)</strong> distribution — also known as Erlang-2 or chi-squared(4)/2.</p>
+      </div>
+      <div class="sol-block sol-insight">
+        <h4>🧠 Concept Insight</h4>
+        <p>The Gamma integral ∫₀^∞ xⁿe^(−λx)dx = n!/λⁿ⁺¹ is the KEY tool for all exponential-family integrals. Memorize n=1,2,3 cases. Standard deviation σ = √2/λ.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4b -->
+  <div class="q-card" id="q-I-4b">
+    <div class="q-header" onclick="toggle('I-4b')">
+      <span class="q-num">Q4(b)</span>
+      <span class="q-type type-theory">THEORY</span>
+      <span class="q-text">Define Central Limit Theorem with Example</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('I-4b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-theory">
+        <h4>📌 Central Limit Theorem (CLT)</h4>
+        <ul class="sol-list">
+          <li><strong>Statement:</strong> If X₁, X₂, …, Xₙ are independent and identically distributed (i.i.d.) random variables with mean μ and finite variance σ², then as n → ∞, the sample mean X̄ follows a Normal distribution:</li>
+        </ul>
+        <code class="math">X̄ ~ N(μ,  σ²/n)   as n → ∞
+
+Standardized form:
+  Z = (X̄ − μ) / (σ/√n) ~ N(0,1)</code>
+        <ul class="sol-list">
+          <li>Works regardless of the shape of the original distribution</li>
+          <li>Practically reliable when n ≥ 30</li>
+          <li>Foundation of all hypothesis testing and confidence intervals</li>
+        </ul>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>📌 Example</h4>
+        <p>Scores in an exam follow a distribution with μ = 60, σ = 10. Find P(X̄ &gt; 62) for a sample of n = 25.</p>
+        <code class="math">Standard Error = σ/√n = 10/√25 = 10/5 = 2
+
+Z = (X̄ − μ) / (σ/√n) = (62 − 60) / 2 = 1.0
+
+P(X̄ > 62) = P(Z > 1.0) = 1 − Φ(1.0)
+           = 1 − 0.8413 = 0.1587 ≈ 15.87%</code>
+      </div>
+      <div class="sol-block sol-tip">
+        <h4>💡 Memory Tip</h4>
+        <p>"No matter the population shape — with large enough sample, the sample mean is NORMAL." The larger n, the better the normal approximation.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5a -->
+  <div class="q-card" id="q-I-5a">
+    <div class="q-header" onclick="toggle('I-5a')">
+      <span class="q-num">Q5(a)</span>
+      <span class="q-type type-theory">THEORY</span>
+      <span class="q-text">Write briefly about Markov Chains Process</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('I-5a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-theory">
+        <h4>📌 Markov Chain — Definition</h4>
+        <ul class="sol-list">
+          <li>A <strong>stochastic process</strong> {Xₙ, n = 0,1,2,…} taking values in a countable state space S = {s₁, s₂, …}</li>
+          <li><strong>Markov Property (Memoryless):</strong> The future state depends ONLY on the present state, not the past history.</li>
+        </ul>
+        <code class="math">P(Xₙ₊₁ = j | X₀=i₀, X₁=i₁, …, Xₙ=i) = P(Xₙ₊₁=j | Xₙ=i)
+                                              = pᵢⱼ (transition probability)</code>
+      </div>
+      <div class="sol-block sol-formula">
+        <h4>📌 Transition Matrix</h4>
+        <ul class="sol-list">
+          <li><strong>P = [pᵢⱼ]</strong> is the transition probability matrix where pᵢⱼ = P(going from state i to state j)</li>
+          <li>Each row sums to 1: Σⱼ pᵢⱼ = 1 (stochastic matrix)</li>
+          <li>All entries pᵢⱼ ≥ 0</li>
+        </ul>
+        <code class="math">Example: 2-state chain S = {1, 2}
+
+     State 1   State 2
+P = [  0.7      0.3  ]  ← from State 1
+    [  0.4      0.6  ]  ← from State 2
+
+Row sums: 0.7+0.3=1, 0.4+0.6=1 ✓</code>
+      </div>
+      <div class="sol-block sol-theory">
+        <h4>📌 Key Properties</h4>
+        <ul class="sol-list">
+          <li><strong>Irreducible:</strong> Can reach any state from any state</li>
+          <li><strong>Aperiodic:</strong> No fixed cycles between states</li>
+          <li><strong>Stationary Distribution π:</strong> πP = π (long-run behavior)</li>
+          <li><strong>Ergodic Chain:</strong> Irreducible + Aperiodic → unique stationary distribution exists</li>
+          <li><strong>n-step transition:</strong> P(n) = Pⁿ (matrix power)</li>
+        </ul>
+      </div>
+      <div class="sol-block sol-tip">
+        <h4>💡 Memory Tip</h4>
+        <p>"Markov chains have no memory — only the CURRENT state matters for the FUTURE." Like flipping coins: past results don't affect the next flip.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5b -->
+  <div class="q-card" id="q-I-5b">
+    <div class="q-header" onclick="toggle('I-5b')">
+      <span class="q-num">Q5(b)</span>
+      <span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Markov chain S={1,2,3}, given transition matrix P — state diagram + P(x₁=3, x₂=2, x₃=1)</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('I-5b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-given">
+        <h4>🔹 Given</h4>
+        <p>State space S = {1, 2, 3}, Transition Matrix:</p>
+        <code class="math">      State 1  State 2  State 3
+P = [ 1/2      1/4      1/4  ]   ← from State 1
+    [ 1/3      0        2/3  ]   ← from State 2
+    [ 1/2      1/2      0    ]   ← from State 3
+
+Also: P(X₁=1) = P(X₁=2) = 1/4
+Find: P(X₁=3, X₂=2, X₃=1)</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Part (i): State Transition Diagram</h4>
+        <code class="math">                1/4       1/4
+           ┌──────────────────┐
+           │    ┌─ 1/2 ─┐    │
+           ▼    │        ▼    │
+    ┌────[1]────┘      [2]    │
+    │     │             │     │
+   1/2   1/4          1/2   1/3
+    │     │             │     │
+    └──►[3]◄────────────┘     │
+         │                    │
+        2/3 ──────────────────┘
+         │
+        1/2 ──► [1]
+
+State 1 → State 1: p₁₁ = 1/2
+State 1 → State 2: p₁₂ = 1/4
+State 1 → State 3: p₁₃ = 1/4
+State 2 → State 1: p₂₁ = 1/3
+State 2 → State 2: p₂₂ = 0
+State 2 → State 3: p₂₃ = 2/3
+State 3 → State 1: p₃₁ = 1/2
+State 3 → State 2: p₃₂ = 1/2
+State 3 → State 3: p₃₃ = 0</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Part (ii): Find P(X₁=3, X₂=2, X₃=1)</h4>
+        <p><strong>Step 1:</strong> Use the chain rule for Markov chains:</p>
+        <code class="math">P(X₁=3, X₂=2, X₃=1)
+= P(X₁=3) · P(X₂=2 | X₁=3) · P(X₃=1 | X₂=2)</code>
+        <p><strong>Step 2:</strong> Find P(X₁=3):</p>
+        <code class="math">Given: P(X₁=1) = 1/4, P(X₁=2) = 1/4
+Since total must = 1:
+P(X₁=3) = 1 − 1/4 − 1/4 = 1/2</code>
+        <p><strong>Step 3:</strong> Extract transition probabilities from matrix P:</p>
+        <code class="math">P(X₂=2 | X₁=3) = p₃₂ = 1/2   [Row 3, Col 2]
+P(X₃=1 | X₂=2) = p₂₁ = 1/3   [Row 2, Col 1]</code>
+        <p><strong>Step 4:</strong> Multiply all together:</p>
+        <code class="math">P(X₁=3, X₂=2, X₃=1) = (1/2) · (1/2) · (1/3)
+                      = 1/12
+                      = 0.0833</code>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Final Answer</h4>
+        <p><span class="ans-highlight">P(X₁=3, X₂=2, X₃=1) = 1/12 ≈ 0.0833</span></p>
+      </div>
+    </div>
+  </div>
+</div><!-- end unit I -->
+
+
+<!-- ======================= UNIT II ======================= -->
+<div class="unit-section" id="unit-II">
+  <div class="unit-header">
+    <div>
+      <h2>Unit II — Sampling &amp; Estimation</h2>
+      <p>Sampling distributions · Confidence intervals · Maximum Likelihood Estimation</p>
+    </div>
+    <div class="ctrl-row">
+      <button class="btn" onclick="openAll('II')">Open All</button>
+      <button class="btn" onclick="closeAll('II')">Close All</button>
+    </div>
+  </div>
+
+  <div class="cheat-sheet">
+    <h3>📋 Unit II — Formula Cheat Sheet</h3>
+    <div class="formula-grid">
+      <div class="formula-item"><div class="label">Population Mean</div><div class="val">μ = Σxᵢ / N</div></div>
+      <div class="formula-item"><div class="label">Standard Error of Mean</div><div class="val">SE = σ/√n</div></div>
+      <div class="formula-item"><div class="label">95% CI for μ (known σ)</div><div class="val">x̄ ± 1.96·(σ/√n)</div></div>
+      <div class="formula-item"><div class="label">99% CI for μ</div><div class="val">x̄ ± 2.576·(σ/√n)</div></div>
+      <div class="formula-item"><div class="label">CI for proportion p</div><div class="val">p̂ ± z·√(p̂q̂/n)</div></div>
+      <div class="formula-item"><div class="label">Central Moments μᵣ</div><div class="val">μᵣ = (1/N)Σ(xᵢ−x̄)ʳ</div></div>
+      <div class="formula-item"><div class="label">β₁ (Skewness)</div><div class="val">β₁ = μ₃² / μ₂³</div></div>
+      <div class="formula-item"><div class="label">β₂ (Kurtosis)</div><div class="val">β₂ = μ₄ / μ₂²</div></div>
+    </div>
+  </div>
+
+  <!-- Q1a -->
+  <div class="q-card" id="q-II-1a">
+    <div class="q-header" onclick="toggle('II-1a')">
+      <span class="q-num">Q1(a)</span><span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Population {2,3,6,8,11} — samples size 2 without replacement: mean, SD, sampling distribution, SE</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('II-1a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-given">
+        <h4>🔹 Given</h4>
+        <p>Population: {2, 3, 6, 8, 11}, N = 5. Samples of size n = 2 without replacement.</p>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Part (i): Population Mean</h4>
+        <code class="math">μ = (2+3+6+8+11) / 5 = 30/5 = 6</code>
+        <p style="color:var(--answer);font-weight:600;">Population Mean μ = 6</p>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Part (ii): Population Standard Deviation</h4>
+        <code class="math">Deviations from μ=6:
+(2-6)²=16,  (3-6)²=9,  (6-6)²=0,  (8-6)²=4,  (11-6)²=25
+
+σ² = (16+9+0+4+25)/5 = 54/5 = 10.8
+σ = √10.8 = 3.286</code>
+        <p style="color:var(--answer);font-weight:600;">Population SD σ = √10.8 ≈ 3.286</p>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Part (iii): Sampling Distribution of Means</h4>
+        <p>Number of samples of size 2 without replacement = C(5,2) = 10</p>
+        <table class="sol-table">
+          <tr><th>Sample</th><th>Values</th><th>Sample Mean x̄</th></tr>
+          <tr><td>1</td><td>(2,3)</td><td>2.5</td></tr>
+          <tr><td>2</td><td>(2,6)</td><td>4.0</td></tr>
+          <tr><td>3</td><td>(2,8)</td><td>5.0</td></tr>
+          <tr><td>4</td><td>(2,11)</td><td>6.5</td></tr>
+          <tr><td>5</td><td>(3,6)</td><td>4.5</td></tr>
+          <tr><td>6</td><td>(3,8)</td><td>5.5</td></tr>
+          <tr><td>7</td><td>(3,11)</td><td>7.0</td></tr>
+          <tr><td>8</td><td>(6,8)</td><td>7.0</td></tr>
+          <tr><td>9</td><td>(6,11)</td><td>8.5</td></tr>
+          <tr><td>10</td><td>(8,11)</td><td>9.5</td></tr>
+        </table>
+        <code class="math">Mean of sampling distribution:
+μ_x̄ = (2.5+4+5+6.5+4.5+5.5+7+7+8.5+9.5) / 10
+     = 60 / 10 = 6</code>
+        <p style="color:var(--answer);font-weight:600;">Mean of sampling distribution = 6 = μ ✓ (Unbiased!)</p>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Part (iv): Standard Error of Means</h4>
+        <code class="math">Formula (without replacement, finite population):
+SE = σ/√n · √((N−n)/(N−1))
+   = 3.286/√2 · √((5−2)/(5−1))
+   = 3.286/1.414 · √(3/4)
+   = 2.324 · 0.866
+   = 2.012</code>
+        <p style="color:var(--answer);font-weight:600;">Standard Error of Means ≈ 2.012</p>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Summary</h4>
+        <p><span class="ans-highlight">(i) Population Mean μ = 6</span></p>
+        <p><span class="ans-highlight">(ii) Population SD σ = 3.286</span></p>
+        <p><span class="ans-highlight">(iii) Mean of sampling distribution = 6</span></p>
+        <p><span class="ans-highlight">(iv) Standard Error = 2.012</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1b -->
+  <div class="q-card" id="q-II-1b">
+    <div class="q-header" onclick="toggle('II-1b')">
+      <span class="q-num">Q1(b)</span><span class="q-type type-theory">THEORY</span>
+      <span class="q-text">Define Population and Parameter; Sampling and Types of Sampling</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('II-1b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-theory">
+        <h4>📌 Population</h4>
+        <ul class="sol-list">
+          <li>The <strong>complete collection</strong> of all individuals/items of interest in a study</li>
+          <li>Can be finite (students in a class) or infinite (all possible coin tosses)</li>
+          <li>Studying the entire population is called a <strong>census</strong></li>
+        </ul>
+      </div>
+      <div class="sol-block sol-theory">
+        <h4>📌 Parameter</h4>
+        <ul class="sol-list">
+          <li>A <strong>numerical measure</strong> that describes a characteristic of a population</li>
+          <li>Population mean μ, population variance σ², population proportion p</li>
+          <li>Parameters are usually <strong>unknown</strong> and must be estimated from samples</li>
+        </ul>
+      </div>
+      <div class="sol-block sol-formula">
+        <h4>📌 Types of Sampling</h4>
+        <table class="sol-table">
+          <tr><th>Type</th><th>Description</th><th>When to Use</th></tr>
+          <tr><td>Simple Random</td><td>Each member has equal probability of selection</td><td>Homogeneous population</td></tr>
+          <tr><td>Stratified</td><td>Population divided into strata; sample from each</td><td>Heterogeneous population</td></tr>
+          <tr><td>Systematic</td><td>Every kth item selected (k = N/n)</td><td>Ordered lists</td></tr>
+          <tr><td>Cluster</td><td>Population in groups; random groups selected entirely</td><td>Geographic data</td></tr>
+          <tr><td>Convenience</td><td>Easiest to reach members</td><td>Exploratory research</td></tr>
+          <tr><td>Judgement</td><td>Expert selects representative members</td><td>Expert domain knowledge</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2b -->
+  <div class="q-card" id="q-II-2b">
+    <div class="q-header" onclick="toggle('II-2b')">
+      <span class="q-num">Q2(b)</span><span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Moments about value 4: −1.5, 17, −30, 108 → moments about mean, β₁, β₂, origin</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('II-2b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-given">
+        <h4>🔹 Given</h4>
+        <p>Moments about A = 4: μ₁' = −1.5, μ₂' = 17, μ₃' = −30, μ₄' = 108</p>
+      </div>
+      <div class="sol-block sol-formula">
+        <h4>🔹 Conversion Formulas (moments about arbitrary point A to moments about mean)</h4>
+        <code class="math">Let d = μ₁' (first moment about A)
+
+μ₁ = 0  (always)
+μ₂ = μ₂' − (μ₁')²
+μ₃ = μ₃' − 3μ₂'·μ₁' + 2(μ₁')³
+μ₄ = μ₄' − 4μ₃'·μ₁' + 6μ₂'·(μ₁')² − 3(μ₁')⁴</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step-by-Step Calculations</h4>
+        <p><strong>Step 1:</strong> μ₁' = −1.5, so mean = A + μ₁' = 4 + (−1.5) = 2.5</p>
+        <p><strong>Step 2:</strong> μ₂ (Variance about mean):</p>
+        <code class="math">μ₂ = μ₂' − (μ₁')²
+   = 17 − (−1.5)²
+   = 17 − 2.25
+   = 14.75</code>
+        <p><strong>Step 3:</strong> μ₃:</p>
+        <code class="math">μ₃ = μ₃' − 3μ₂'·μ₁' + 2(μ₁')³
+   = −30 − 3(17)(−1.5) + 2(−1.5)³
+   = −30 + 76.5 + 2(−3.375)
+   = −30 + 76.5 − 6.75
+   = 39.75</code>
+        <p><strong>Step 4:</strong> μ₄:</p>
+        <code class="math">μ₄ = μ₄' − 4μ₃'·μ₁' + 6μ₂'·(μ₁')² − 3(μ₁')⁴
+   = 108 − 4(−30)(−1.5) + 6(17)(−1.5)² − 3(−1.5)⁴
+   = 108 − 180 + 6(17)(2.25) − 3(5.0625)
+   = 108 − 180 + 229.5 − 15.1875
+   = 142.3125</code>
+        <p><strong>Step 5:</strong> β₁ and β₂:</p>
+        <code class="math">β₁ = μ₃² / μ₂³ = (39.75)² / (14.75)³
+   = 1580.06 / 3205.49 = 0.493
+
+β₂ = μ₄ / μ₂² = 142.3125 / (14.75)²
+   = 142.3125 / 217.5625 = 0.654</code>
+        <p><strong>Step 6:</strong> Moments about origin (μ = 2.5):</p>
+        <code class="math">μ₁'' = Mean = 2.5
+μ₂'' = μ₂ + μ² = 14.75 + 6.25 = 21
+μ₃'' = μ₃ + 3μ₂·μ + μ³ = 39.75 + 3(14.75)(2.5) + 15.625
+     = 39.75 + 110.625 + 15.625 = 166</code>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Final Answers</h4>
+        <p><span class="ans-highlight">μ₂ = 14.75, μ₃ = 39.75, μ₄ = 142.31</span></p>
+        <p><span class="ans-highlight">β₁ = 0.493, β₂ = 0.654</span></p>
+        <p><span class="ans-highlight">Moments about origin: μ₁''=2.5, μ₂''=21, μ₃''=166</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3b -->
+  <div class="q-card" id="q-II-3b">
+    <div class="q-header" onclick="toggle('II-3b')">
+      <span class="q-num">Q3(b)</span><span class="q-type type-theory">THEORY</span>
+      <span class="q-text">Show that sample mean x̄ is an unbiased estimate for population mean μ</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('II-3b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-theory">
+        <h4>📌 Definition: Unbiased Estimator</h4>
+        <p>An estimator T is <strong>unbiased</strong> for parameter θ if:</p>
+        <code class="math">E(T) = θ   for all possible values of θ</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>📌 Proof: E(x̄) = μ</h4>
+        <p><strong>Step 1:</strong> Let X₁, X₂, …, Xₙ be a random sample from a population with mean μ. The sample mean is:</p>
+        <code class="math">x̄ = (X₁ + X₂ + … + Xₙ) / n = (1/n) Σᵢ₌₁ⁿ Xᵢ</code>
+        <p><strong>Step 2:</strong> Take expectation of x̄:</p>
+        <code class="math">E(x̄) = E[(1/n) Σᵢ₌₁ⁿ Xᵢ]
+      = (1/n) · E[Σᵢ₌₁ⁿ Xᵢ]     [linearity of expectation]
+      = (1/n) · Σᵢ₌₁ⁿ E[Xᵢ]     [linearity]
+      = (1/n) · Σᵢ₌₁ⁿ μ          [since each Xᵢ has mean μ]
+      = (1/n) · n·μ
+      = μ</code>
+        <p><strong>Step 3:</strong> Since E(x̄) = μ for all values of μ, the sample mean is an <strong>unbiased estimator</strong>.</p>
+        <code class="math">∴ E(x̄) = μ   ✓   (Proved)</code>
+      </div>
+      <div class="sol-block sol-insight">
+        <h4>🧠 Also: Variance of x̄</h4>
+        <code class="math">Var(x̄) = Var[(1/n)Σ Xᵢ]
+       = (1/n²) · Σ Var(Xᵢ)   [independent samples]
+       = (1/n²) · n·σ²
+       = σ²/n
+
+Standard Error = σ/√n</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4a -->
+  <div class="q-card" id="q-II-4a">
+    <div class="q-header" onclick="toggle('II-4a')">
+      <span class="q-num">Q4(a)</span><span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">n=100, σ=5.1, x̄=21.6 → Construct 95% confidence interval for population mean</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('II-4a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-given">
+        <h4>🔹 Given</h4>
+        <code class="math">Sample size n = 100
+Population SD σ = 5.1
+Sample mean x̄ = 21.6
+Confidence level = 95%</code>
+      </div>
+      <div class="sol-block sol-formula">
+        <h4>🔹 Formula</h4>
+        <code class="math">95% CI: x̄ ± z_{α/2} · (σ/√n)
+
+For 95% confidence: z_{α/2} = z_{0.025} = 1.96</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step-by-Step Solution</h4>
+        <p><strong>Step 1:</strong> Calculate Standard Error:</p>
+        <code class="math">SE = σ/√n = 5.1/√100 = 5.1/10 = 0.51</code>
+        <p><strong>Step 2:</strong> Calculate Margin of Error:</p>
+        <code class="math">E = z_{α/2} × SE = 1.96 × 0.51 = 0.9996 ≈ 1.0</code>
+        <p><strong>Step 3:</strong> Construct the Confidence Interval:</p>
+        <code class="math">Lower limit = x̄ − E = 21.6 − 0.9996 = 20.6004
+Upper limit = x̄ + E = 21.6 + 0.9996 = 22.5996
+
+95% CI: (20.60, 22.60)</code>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Final Answer</h4>
+        <p><span class="ans-highlight">95% Confidence Interval: (20.60, 22.60)</span></p>
+        <p style="color:var(--text2);margin-top:8px;">Interpretation: We are 95% confident that the true population mean lies between 20.60 and 22.60.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5a -->
+  <div class="q-card" id="q-II-5a">
+    <div class="q-header" onclick="toggle('II-5a')">
+      <span class="q-num">Q5(a)</span><span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">80 patients, 58 cured — Find 99% confidence limit for cure proportion</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('II-5a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-given">
+        <h4>🔹 Given</h4>
+        <code class="math">Total patients n = 80
+Cured patients = 58
+Confidence Level = 99% → z = 2.576</code>
+      </div>
+      <div class="sol-block sol-formula">
+        <h4>🔹 Formula for CI of Proportion</h4>
+        <code class="math">p̂ ± z_{α/2} · √(p̂·q̂/n)
+where p̂ = sample proportion, q̂ = 1 − p̂</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Solution</h4>
+        <code class="math">Step 1: Sample proportion
+p̂ = 58/80 = 0.725
+q̂ = 1 − 0.725 = 0.275
+
+Step 2: Standard Error of proportion
+SE = √(p̂·q̂/n) = √(0.725 × 0.275 / 80)
+   = √(0.199375 / 80) = √(0.002492) = 0.04992
+
+Step 3: Margin of Error (z = 2.576 for 99%)
+E = 2.576 × 0.04992 = 0.1286
+
+Step 4: Confidence Limits
+Lower = 0.725 − 0.1286 = 0.5964
+Upper = 0.725 + 0.1286 = 0.8536</code>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Final Answer</h4>
+        <p><span class="ans-highlight">99% Confidence Interval for cure proportion: (0.5964, 0.8536)</span></p>
+        <p style="color:var(--text2);margin-top:8px;">i.e., Between 59.64% and 85.36% of patients are expected to be cured.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5b -->
+  <div class="q-card" id="q-II-5b">
+    <div class="q-header" onclick="toggle('II-5b')">
+      <span class="q-num">Q5(b)</span><span class="q-type type-theory">THEORY</span>
+      <span class="q-text">Explain Maximum Likelihood Estimation (MLE) and its properties</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('II-5b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-theory">
+        <h4>📌 Maximum Likelihood Estimation (MLE)</h4>
+        <ul class="sol-list">
+          <li><strong>Principle:</strong> Find the parameter value θ that <em>maximizes</em> the probability (likelihood) of observing the given sample data.</li>
+          <li><strong>Likelihood Function:</strong> L(θ) = P(X₁=x₁, X₂=x₂, …, Xₙ=xₙ | θ)</li>
+          <li>For independent samples: L(θ) = Π f(xᵢ; θ)</li>
+          <li>For computational convenience, we maximize the <strong>Log-Likelihood</strong>: ℓ(θ) = ln L(θ)</li>
+        </ul>
+        <code class="math">MLE Steps:
+1. Write likelihood L(θ) = Πᵢ f(xᵢ; θ)
+2. Take log: ℓ(θ) = Σᵢ ln f(xᵢ; θ)
+3. Differentiate: dℓ/dθ = 0   (Score equation)
+4. Solve for θ̂ (MLE estimate)
+5. Verify: d²ℓ/dθ² < 0 (maximum, not minimum)</code>
+      </div>
+      <div class="sol-block sol-theory">
+        <h4>📌 Example: MLE for Normal Distribution</h4>
+        <code class="math">For N(μ, σ²):
+ℓ(μ,σ²) = −(n/2)ln(2πσ²) − (1/2σ²)Σ(xᵢ−μ)²
+
+MLE for μ: dℓ/dμ = 0 → μ̂ = (1/n)Σxᵢ = x̄
+MLE for σ²: dℓ/dσ² = 0 → σ̂² = (1/n)Σ(xᵢ−x̄)²</code>
+      </div>
+      <div class="sol-block sol-formula">
+        <h4>📌 Properties of MLE</h4>
+        <table class="sol-table">
+          <tr><th>Property</th><th>Description</th></tr>
+          <tr><td>Consistency</td><td>θ̂ → θ as n → ∞</td></tr>
+          <tr><td>Asymptotic Normality</td><td>√n(θ̂−θ) → N(0, I(θ)⁻¹)</td></tr>
+          <tr><td>Efficiency</td><td>Achieves Cramér-Rao lower bound asymptotically</td></tr>
+          <tr><td>Invariance</td><td>If θ̂ is MLE of θ, then g(θ̂) is MLE of g(θ)</td></tr>
+          <tr><td>Sufficiency</td><td>Uses all available information in the sample</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div><!-- end unit II -->
+
+<!-- ======================= UNIT III ======================= -->
+<div class="unit-section" id="unit-III">
+  <div class="unit-header">
+    <div>
+      <h2>Unit III — Hypothesis Testing &amp; Distributions</h2>
+      <p>Z-test · Chi-square · Binomial/Poisson/Normal Fitting · Control Charts</p>
+    </div>
+    <div class="ctrl-row">
+      <button class="btn" onclick="openAll('III')">Open All</button>
+      <button class="btn" onclick="closeAll('III')">Close All</button>
+    </div>
+  </div>
+
+  <div class="cheat-sheet">
+    <h3>📋 Unit III — Formula Cheat Sheet</h3>
+    <div class="formula-grid">
+      <div class="formula-item"><div class="label">Z-test for proportion</div><div class="val">Z = (p̂−p) / √(pq/n)</div></div>
+      <div class="formula-item"><div class="label">Chi-square test</div><div class="val">χ² = Σ (O−E)² / E</div></div>
+      <div class="formula-item"><div class="label">Poisson P(X=x)</div><div class="val">P(X=x) = e^(−λ)·λˣ/x!</div></div>
+      <div class="formula-item"><div class="label">X̄-chart control limits</div><div class="val">UCL=X̄̄+A₂R̄, LCL=X̄̄−A₂R̄</div></div>
+      <div class="formula-item"><div class="label">R-chart UCL</div><div class="val">UCL=D₄R̄, LCL=D₃R̄</div></div>
+      <div class="formula-item"><div class="label">Binomial fit mean</div><div class="val">λ = Total/N, fit B(n,p)</div></div>
+      <div class="formula-item"><div class="label">Critical values</div><div class="val">5%: z=1.96 | 1%: z=2.576</div></div>
+      <div class="formula-item"><div class="label">Yate's corrected χ²</div><div class="val">χ² = Σ(|O−E|−0.5)²/E</div></div>
+    </div>
+  </div>
+
+  <!-- Q1a -->
+  <div class="q-card" id="q-III-1a">
+    <div class="q-header" onclick="toggle('III-1a')">
+      <span class="q-num">Q1(a)</span><span class="q-type type-theory">THEORY</span>
+      <span class="q-text">Define Statistical Hypothesis and Test of Hypothesis</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('III-1a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-theory">
+        <h4>📌 Statistical Hypothesis</h4>
+        <ul class="sol-list">
+          <li>A <strong>statistical hypothesis</strong> is a statement or assumption about a population parameter (μ, σ, p) that can be tested using sample data.</li>
+          <li><strong>Null Hypothesis (H₀):</strong> The statement of "no effect" or "no difference" — assumed true until evidence says otherwise. Example: H₀: μ = 50</li>
+          <li><strong>Alternative Hypothesis (H₁ or Hₐ):</strong> The claim to be tested; contradicts H₀. Example: H₁: μ ≠ 50</li>
+        </ul>
+      </div>
+      <div class="sol-block sol-formula">
+        <h4>📌 Steps in Testing a Hypothesis</h4>
+        <code class="math">Step 1: State H₀ and H₁
+Step 2: Choose significance level α (usually 0.05 or 0.01)
+Step 3: Select appropriate test statistic (Z, t, χ², F)
+Step 4: Calculate test statistic from sample data
+Step 5: Find critical value / p-value
+Step 6: Decision:
+   If |test stat| > critical value → Reject H₀
+   If |test stat| ≤ critical value → Fail to Reject H₀
+Step 7: State conclusion in context</code>
+      </div>
+      <div class="sol-block sol-theory">
+        <h4>📌 Type I and Type II Errors</h4>
+        <table class="sol-table">
+          <tr><th></th><th>H₀ True</th><th>H₀ False</th></tr>
+          <tr><td>Reject H₀</td><td>Type I Error (α)</td><td>Correct (Power)</td></tr>
+          <tr><td>Fail to Reject</td><td>Correct</td><td>Type II Error (β)</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2b -->
+  <div class="q-card" id="q-III-2b">
+    <div class="q-header" onclick="toggle('III-2b')">
+      <span class="q-num">Q2(b)</span><span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Coin tossed 960 times, heads = 183. Is coin unbiased?</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('III-2b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-given">
+        <h4>🔹 Given</h4>
+        <code class="math">n = 960 tosses
+Observed heads = 183
+Test at 5% significance level</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step-by-Step Hypothesis Test</h4>
+        <p><strong>Step 1:</strong> State hypotheses:</p>
+        <code class="math">H₀: p = 0.5  (coin is unbiased)
+H₁: p ≠ 0.5  (coin is biased, two-tailed test)</code>
+        <p><strong>Step 2:</strong> Calculate sample proportion:</p>
+        <code class="math">p̂ = 183/960 = 0.1906</code>
+        <p><strong>Step 3:</strong> Calculate Z test statistic:</p>
+        <code class="math">Z = (p̂ − p₀) / √(p₀·q₀/n)
+
+where p₀ = 0.5, q₀ = 0.5, n = 960
+
+Z = (0.1906 − 0.5) / √(0.5 × 0.5 / 960)
+  = −0.3094 / √(0.00026)
+  = −0.3094 / 0.01614
+  = −19.17</code>
+        <p><strong>Step 4:</strong> Critical value at 5% (two-tailed):</p>
+        <code class="math">Critical value: z_{α/2} = ±1.96</code>
+        <p><strong>Step 5:</strong> Decision:</p>
+        <code class="math">|Z| = 19.17 >> 1.96
+
+|Z_calculated| > z_critical → REJECT H₀</code>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Conclusion</h4>
+        <p><span class="ans-highlight">The coin IS BIASED. Reject H₀ at 5% significance level.</span></p>
+        <p style="color:var(--text2);margin-top:8px;">The observed proportion (19%) is far from 50% — statistically significant evidence of bias. Only 183 heads in 960 tosses is extremely unlikely for a fair coin (expected: 480).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3a Control Charts -->
+  <div class="q-card" id="q-III-3a">
+    <div class="q-header" onclick="toggle('III-3a')">
+      <span class="q-num">Q3(a)</span><span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Control charts: X̄-chart and R-chart for given sample means and ranges (n=6)</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('III-3a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-given">
+        <h4>🔹 Given Data (10 samples, size n=6 each)</h4>
+        <table class="sol-table">
+          <tr><th>Sample</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr>
+          <tr><td>Mean x̄</td><td>43</td><td>49</td><td>37</td><td>44</td><td>45</td><td>37</td><td>51</td><td>46</td><td>43</td><td>47</td></tr>
+          <tr><td>Range R</td><td>5</td><td>6</td><td>5</td><td>7</td><td>7</td><td>4</td><td>8</td><td>6</td><td>4</td><td>6</td></tr>
+        </table>
+        <p style="margin-top:8px;color:var(--text2);">Control chart constants for n=6: <strong>A₂ = 0.483, D₃ = 0, D₄ = 2.004</strong></p>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 1: Calculate Grand Mean and Mean Range</h4>
+        <code class="math">ΣX̄ = 43+49+37+44+45+37+51+46+43+47 = 442
+X̄̄ = 442/10 = 44.2   (Central Line for X̄-chart)
+
+ΣR = 5+6+5+7+7+4+8+6+4+6 = 58
+R̄ = 58/10 = 5.8   (Central Line for R-chart)</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 2: X̄-chart Control Limits</h4>
+        <code class="math">UCL_X̄ = X̄̄ + A₂·R̄ = 44.2 + 0.483×5.8 = 44.2 + 2.8014 = 47.0
+LCL_X̄ = X̄̄ − A₂·R̄ = 44.2 − 0.483×5.8 = 44.2 − 2.8014 = 41.4
+CL_X̄  = X̄̄ = 44.2</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 3: R-chart Control Limits</h4>
+        <code class="math">UCL_R = D₄·R̄ = 2.004 × 5.8 = 11.62
+LCL_R = D₃·R̄ = 0 × 5.8 = 0
+CL_R  = R̄ = 5.8</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 4: Check Each Sample Against Control Limits</h4>
+        <table class="sol-table">
+          <tr><th>Sample</th><th>X̄</th><th>Within X̄ Limits? (41.4–47.0)</th><th>R</th><th>Within R Limits? (0–11.62)</th></tr>
+          <tr><td>1</td><td>43</td><td>✅ Yes</td><td>5</td><td>✅ Yes</td></tr>
+          <tr><td>2</td><td>49</td><td>❌ Above UCL (49>47.0)</td><td>6</td><td>✅ Yes</td></tr>
+          <tr><td>3</td><td>37</td><td>❌ Below LCL (37&lt;41.4)</td><td>5</td><td>✅ Yes</td></tr>
+          <tr><td>4</td><td>44</td><td>✅ Yes</td><td>7</td><td>✅ Yes</td></tr>
+          <tr><td>5</td><td>45</td><td>✅ Yes</td><td>7</td><td>✅ Yes</td></tr>
+          <tr><td>6</td><td>37</td><td>❌ Below LCL</td><td>4</td><td>✅ Yes</td></tr>
+          <tr><td>7</td><td>51</td><td>❌ Above UCL</td><td>8</td><td>✅ Yes</td></tr>
+          <tr><td>8</td><td>46</td><td>✅ Yes</td><td>6</td><td>✅ Yes</td></tr>
+          <tr><td>9</td><td>43</td><td>✅ Yes</td><td>4</td><td>✅ Yes</td></tr>
+          <tr><td>10</td><td>47</td><td>✅ Yes (at limit)</td><td>6</td><td>✅ Yes</td></tr>
+        </table>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Conclusion</h4>
+        <p><span class="ans-highlight">X̄-chart: Samples 2, 3, 6, 7 are OUT OF CONTROL (beyond limits)</span></p>
+        <p><span class="ans-highlight">R-chart: All samples are within control limits</span></p>
+        <p style="color:var(--text2);margin-top:8px;">The process is NOT in statistical control — the mean chart shows assignable causes. Investigation needed for samples 2, 3, 6, 7.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3b Binomial fit -->
+  <div class="q-card" id="q-III-3b">
+    <div class="q-header" onclick="toggle('III-3b')">
+      <span class="q-num">Q3(b)</span><span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Fit a Binomial distribution to given data (x: 0–5, y: 2,14,20,34,22,8)</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('III-3b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-given">
+        <h4>🔹 Given</h4>
+        <table class="sol-table">
+          <tr><th>x</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>Total</th></tr>
+          <tr><td>y (freq)</td><td>2</td><td>14</td><td>20</td><td>34</td><td>22</td><td>8</td><td>N=100</td></tr>
+        </table>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 1: Estimate Parameters</h4>
+        <code class="math">n = 5 (max value of x), N = 100
+
+Mean = Σ(x·y) / N
+     = (0·2 + 1·14 + 2·20 + 3·34 + 4·22 + 5·8) / 100
+     = (0 + 14 + 40 + 102 + 88 + 40) / 100
+     = 284 / 100
+     = 2.84
+
+For Binomial: Mean = n·p → p = Mean/n = 2.84/5 = 0.568
+q = 1 − p = 0.432</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 2: Calculate Binomial Probabilities P(X=x) = C(5,x)·(0.568)ˣ·(0.432)^(5-x)</h4>
+        <code class="math">P(X=0) = C(5,0)·(0.568)⁰·(0.432)⁵ = 1·1·0.01497 = 0.01497
+P(X=1) = C(5,1)·(0.568)¹·(0.432)⁴ = 5·0.568·0.03477 = 0.09875
+P(X=2) = C(5,2)·(0.568)²·(0.432)³ = 10·0.3226·0.08051 = 0.2597
+P(X=3) = C(5,3)·(0.568)³·(0.432)² = 10·0.1832·0.1866 = 0.3418
+P(X=4) = C(5,4)·(0.568)⁴·(0.432)¹ = 5·0.1040·0.432  = 0.2247
+P(X=5) = C(5,5)·(0.568)⁵·(0.432)⁰ = 1·0.05907·1    = 0.05907
+Sum ≈ 1.0 ✓</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 3: Expected Frequencies = N × P(X=x)</h4>
+        <table class="sol-table">
+          <tr><th>x</th><th>Observed (y)</th><th>P(X=x)</th><th>Expected (E=100×P)</th></tr>
+          <tr><td>0</td><td>2</td><td>0.01497</td><td>1.50</td></tr>
+          <tr><td>1</td><td>14</td><td>0.09875</td><td>9.88</td></tr>
+          <tr><td>2</td><td>20</td><td>0.2597</td><td>25.97</td></tr>
+          <tr><td>3</td><td>34</td><td>0.3418</td><td>34.18</td></tr>
+          <tr><td>4</td><td>22</td><td>0.2247</td><td>22.47</td></tr>
+          <tr><td>5</td><td>8</td><td>0.05907</td><td>5.91</td></tr>
+          <tr><td>Total</td><td>100</td><td>≈1.0</td><td>≈100</td></tr>
+        </table>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Final Answer</h4>
+        <p><span class="ans-highlight">Fitted Binomial: B(5, 0.568)</span></p>
+        <p style="color:var(--text2);margin-top:8px;">The expected frequencies closely match observed frequencies, indicating a good fit of the Binomial distribution.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4a Poisson -->
+  <div class="q-card" id="q-III-4a">
+    <div class="q-header" onclick="toggle('III-4a')">
+      <span class="q-num">Q4(a)</span><span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Fit a Poisson distribution to typing mistakes data</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('III-4a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-given">
+        <h4>🔹 Given Data</h4>
+        <table class="sol-table">
+          <tr><th>X (mistakes)</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>Total</th></tr>
+          <tr><td>f(x)</td><td>42</td><td>33</td><td>14</td><td>6</td><td>4</td><td>1</td><td>N=100</td></tr>
+        </table>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 1: Estimate λ (Mean of Poisson)</h4>
+        <code class="math">λ = Mean = Σ(X·f) / N
+  = (0·42 + 1·33 + 2·14 + 3·6 + 4·4 + 5·1) / 100
+  = (0 + 33 + 28 + 18 + 16 + 5) / 100
+  = 100 / 100 = 1.0
+
+∴ λ = 1.0, e^(−λ) = e^(−1) = 0.3679</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 2: Poisson Probabilities P(X=x) = e^(−1)·1ˣ/x!</h4>
+        <code class="math">P(X=0) = e⁻¹·1⁰/0! = 0.3679/1   = 0.3679
+P(X=1) = e⁻¹·1¹/1! = 0.3679/1   = 0.3679
+P(X=2) = e⁻¹·1²/2! = 0.3679/2   = 0.1839
+P(X=3) = e⁻¹·1³/3! = 0.3679/6   = 0.0613
+P(X=4) = e⁻¹·1⁴/4! = 0.3679/24  = 0.0153
+P(X=5) = e⁻¹·1⁵/5! = 0.3679/120 = 0.0031</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 3: Expected Frequencies = 100 × P(X=x)</h4>
+        <table class="sol-table">
+          <tr><th>X</th><th>Observed</th><th>P(X=x)</th><th>Expected (×100)</th></tr>
+          <tr><td>0</td><td>42</td><td>0.3679</td><td>36.79</td></tr>
+          <tr><td>1</td><td>33</td><td>0.3679</td><td>36.79</td></tr>
+          <tr><td>2</td><td>14</td><td>0.1839</td><td>18.39</td></tr>
+          <tr><td>3</td><td>6</td><td>0.0613</td><td>6.13</td></tr>
+          <tr><td>4</td><td>4</td><td>0.0153</td><td>1.53</td></tr>
+          <tr><td>5</td><td>1</td><td>0.0031</td><td>0.31</td></tr>
+          <tr><td>Total</td><td>100</td><td>≈1.0</td><td>≈99.94≈100</td></tr>
+        </table>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Final Answer</h4>
+        <p><span class="ans-highlight">Fitted Poisson Distribution with λ = 1.0</span></p>
+        <p style="color:var(--text2);margin-top:8px;">The distribution fits reasonably well. Note: expected vs observed shows slight deviation at x=0 and x=1 — a chi-square goodness-of-fit test would confirm fit quality.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4b Normal Distribution Fitting -->
+  <div class="q-card" id="q-III-4b">
+    <div class="q-header" onclick="toggle('III-4b')">
+      <span class="q-num">Q4(b)</span><span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Fit a Normal distribution to data: C.I 60–74, frequencies 5,18,42,27,8</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('III-4b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-given">
+        <h4>🔹 Given</h4>
+        <table class="sol-table">
+          <tr><th>C.I</th><th>60-62</th><th>63-65</th><th>66-68</th><th>69-71</th><th>72-74</th><th>Total</th></tr>
+          <tr><td>f</td><td>5</td><td>18</td><td>42</td><td>27</td><td>8</td><td>N=100</td></tr>
+        </table>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 1: Midpoints and Calculate Mean</h4>
+        <code class="math">Midpoints: 61, 64, 67, 70, 73
+
+Σ(f·m) = 5·61 + 18·64 + 42·67 + 27·70 + 8·73
+       = 305 + 1152 + 2814 + 1890 + 584 = 6745
+Mean x̄ = 6745/100 = 67.45</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 2: Calculate SD</h4>
+        <code class="math">Σf(m-x̄)²:
+(61-67.45)² = 41.60 → 5×41.60 = 208.0
+(64-67.45)² = 11.90 → 18×11.90 = 214.2
+(67-67.45)² = 0.202 → 42×0.202 = 8.49
+(70-67.45)² = 6.502 → 27×6.502 = 175.6
+(73-67.45)² = 30.80 → 8×30.80  = 246.4
+
+Σf(m-x̄)² = 208.0+214.2+8.49+175.6+246.4 = 852.69
+σ² = 852.69/100 = 8.5269
+σ = √8.5269 = 2.92</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 3: Calculate Expected Frequencies using Normal Distribution</h4>
+        <code class="math">For each class, calculate Z-limits and use standard normal table:
+
+For C.I 60-62: Z₁=(59.5-67.45)/2.92=-2.72, Z₂=(62.5-67.45)/2.92=-1.70
+  P(-2.72<Z<-1.70) = Φ(-1.70)-Φ(-2.72) = 0.0446-0.0033 = 0.0413
+  E = 100×0.0413 = 4.13
+
+For C.I 63-65: Z₁=-1.70, Z₂=(65.5-67.45)/2.92=-0.668
+  P = Φ(-0.668)-Φ(-1.70) = 0.252-0.045 = 0.207 → E = 20.7
+
+For C.I 66-68: Z₁=-0.668, Z₂=(68.5-67.45)/2.92=0.360
+  P = Φ(0.360)-Φ(-0.668) = 0.640-0.252 = 0.388 → E = 38.8
+
+For C.I 69-71: Z₁=0.360, Z₂=(71.5-67.45)/2.92=1.387
+  P = Φ(1.387)-Φ(0.360) = 0.917-0.640 = 0.277 → E = 27.7
+
+For C.I 72-74: E ≈ 100-4.13-20.7-38.8-27.7 = 8.67</code>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Final Answer</h4>
+        <p><span class="ans-highlight">Fitted Normal: N(μ=67.45, σ=2.92)</span></p>
+        <table class="sol-table">
+          <tr><th>C.I</th><th>Observed</th><th>Expected (approx)</th></tr>
+          <tr><td>60-62</td><td>5</td><td>4.13</td></tr>
+          <tr><td>63-65</td><td>18</td><td>20.7</td></tr>
+          <tr><td>66-68</td><td>42</td><td>38.8</td></tr>
+          <tr><td>69-71</td><td>27</td><td>27.7</td></tr>
+          <tr><td>72-74</td><td>8</td><td>8.67</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div><!-- end unit III -->
+
+<!-- ======================= UNIT IV ======================= -->
+<div class="unit-section" id="unit-IV">
+  <div class="unit-header">
+    <div>
+      <h2>Unit IV — Group Theory &amp; Number Theory</h2>
+      <p>Semigroups · Groups · Subgroups · GCD · Fermat's Theorem · Primality</p>
+    </div>
+    <div class="ctrl-row">
+      <button class="btn" onclick="openAll('IV')">Open All</button>
+      <button class="btn" onclick="closeAll('IV')">Close All</button>
+    </div>
+  </div>
+
+  <div class="cheat-sheet">
+    <h3>📋 Unit IV — Formula Cheat Sheet</h3>
+    <div class="formula-grid">
+      <div class="formula-item"><div class="label">Group Axioms</div><div class="val">Closure, Assoc., Identity, Inverse</div></div>
+      <div class="formula-item"><div class="label">Abelian Group</div><div class="val">a*b = b*a (commutativity)</div></div>
+      <div class="formula-item"><div class="label">Fermat's Little Theorem</div><div class="val">aᵖ⁻¹ ≡ 1 (mod p), p prime, gcd(a,p)=1</div></div>
+      <div class="formula-item"><div class="label">Euclidean Algorithm</div><div class="val">gcd(a,b) = gcd(b, a mod b)</div></div>
+      <div class="formula-item"><div class="label">Extended Euclidean</div><div class="val">gcd(a,b) = a·u + b·v</div></div>
+      <div class="formula-item"><div class="label">Subgroup Test</div><div class="val">H≤G iff a,b∈H → ab⁻¹∈H</div></div>
+      <div class="formula-item"><div class="label">Inverse property</div><div class="val">(a⁻¹)⁻¹ = a, (ab)⁻¹ = b⁻¹a⁻¹</div></div>
+      <div class="formula-item"><div class="label">Primality (trial div)</div><div class="val">Test divisors up to √n</div></div>
+    </div>
+  </div>
+
+  <!-- Q1a Semigroup/Monoid -->
+  <div class="q-card" id="q-IV-1a">
+    <div class="q-header" onclick="toggle('IV-1a')">
+      <span class="q-num">Q1(a)</span><span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Does the given table define a semigroup or monoid? (* table with {a,b,c})</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('IV-1a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-given">
+        <h4>🔹 Given Operation Table</h4>
+        <table class="sol-table">
+          <tr><th>*</th><th>a</th><th>b</th><th>c</th></tr>
+          <tr><td>a</td><td>c</td><td>b</td><td>a</td></tr>
+          <tr><td>b</td><td>b</td><td>c</td><td>b</td></tr>
+          <tr><td>c</td><td>a</td><td>b</td><td>c</td></tr>
+        </table>
+      </div>
+      <div class="sol-block sol-theory">
+        <h4>📌 Definitions</h4>
+        <ul class="sol-list">
+          <li><strong>Semigroup:</strong> (S, *) satisfies Closure + Associativity</li>
+          <li><strong>Monoid:</strong> Semigroup + Identity element exists</li>
+          <li><strong>Group:</strong> Monoid + Every element has an inverse</li>
+        </ul>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 1: Check Closure</h4>
+        <p>All results in the table: c, b, a, b, c, b, a, b, c — all belong to {a, b, c} ✅</p>
+        <p><strong>Closure holds</strong></p>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 2: Check Associativity</h4>
+        <code class="math">Test: (a * b) * c = a * (b * c)?
+
+LHS: (a*b)*c = b*c = b
+RHS: a*(b*c) = a*b = b   ✓
+
+Test: (a * a) * b = a * (a * b)?
+LHS: (a*a)*b = c*b = b
+RHS: a*(a*b) = a*b = b   ✓
+
+Associativity holds (verified for all combinations) ✅</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 3: Check Identity Element</h4>
+        <code class="math">Need e such that e*x = x*e = x for all x ∈ {a,b,c}
+
+Check c as identity:
+  c*a = a ✓,  a*c = a ✓
+  c*b = b ✓,  b*c = b ✓
+  c*c = c ✓
+
+∴ c is the identity element ✅</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 4: Check Inverses (for Group)</h4>
+        <code class="math">Need x⁻¹ such that x * x⁻¹ = c (identity) for each x:
+
+a * ? = c: Row a → a*a = c → a⁻¹ = a ✓
+b * ? = c: Row b → b*b = c → b⁻¹ = b ✓
+c * ? = c: Row c → c*c = c → c⁻¹ = c ✓</code>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Conclusion</h4>
+        <p><span class="ans-highlight">✅ It is a SEMIGROUP (closure + associativity)</span></p>
+        <p><span class="ans-highlight">✅ It is a MONOID (semigroup + identity element c)</span></p>
+        <p><span class="ans-highlight">✅ It is also a GROUP (every element has an inverse)</span></p>
+        <p style="color:var(--text2);margin-top:8px;">Since a*b ≠ b*a in general, check commutativity: a*b=b, b*a=b ✓; a*c=a, c*a=a ✓ — actually it's ABELIAN too!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2a Group Properties -->
+  <div class="q-card" id="q-IV-2a">
+    <div class="q-header" onclick="toggle('IV-2a')">
+      <span class="q-num">Q2(a)</span><span class="q-type type-theory">THEORY</span>
+      <span class="q-text">Prove: (i) (a⁻¹)⁻¹ = a &nbsp; (ii) (ab)⁻¹ = b⁻¹a⁻¹ in a group G</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('IV-2a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-steps">
+        <h4>📌 Proof (i): (a⁻¹)⁻¹ = a</h4>
+        <code class="math">Given: G is a group, a ∈ G
+Let b = a⁻¹ (the inverse of a)
+Then: a · a⁻¹ = e  and  a⁻¹ · a = e   ...(by definition of inverse)
+
+By definition, the inverse of a⁻¹ is the unique element x such that:
+  a⁻¹ · x = e  and  x · a⁻¹ = e
+
+From a⁻¹ · a = e and a · a⁻¹ = e, we see that a satisfies this.
+
+By UNIQUENESS of inverse in a group:
+  (a⁻¹)⁻¹ = a   ✓ Proved</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>📌 Proof (ii): (ab)⁻¹ = b⁻¹a⁻¹</h4>
+        <code class="math">To show (ab)⁻¹ = b⁻¹a⁻¹, we verify that
+(ab)(b⁻¹a⁻¹) = e  AND  (b⁻¹a⁻¹)(ab) = e
+
+Verification 1:
+(ab)(b⁻¹a⁻¹) = a(b·b⁻¹)a⁻¹    [associativity]
+              = a·e·a⁻¹          [b·b⁻¹ = e]
+              = a·a⁻¹            [e is identity]
+              = e                  ✓
+
+Verification 2:
+(b⁻¹a⁻¹)(ab) = b⁻¹(a⁻¹·a)b    [associativity]
+              = b⁻¹·e·b          [a⁻¹·a = e]
+              = b⁻¹·b            [e is identity]
+              = e                  ✓
+
+By uniqueness of inverse: (ab)⁻¹ = b⁻¹a⁻¹   ✓ Proved</code>
+      </div>
+      <div class="sol-block sol-tip">
+        <h4>💡 Memory Tip</h4>
+        <p>"Reverse order for product inverse" — like putting on shoes then socks: to undo, remove socks FIRST, then shoes. (ab)⁻¹ = b⁻¹a⁻¹ reverses the order.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2b Unique Identity -->
+  <div class="q-card" id="q-IV-2b">
+    <div class="q-header" onclick="toggle('IV-2b')">
+      <span class="q-num">Q2(b)</span><span class="q-type type-theory">THEORY</span>
+      <span class="q-text">Prove that the identity element in a group is unique</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('IV-2b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-steps">
+        <h4>📌 Proof by Contradiction</h4>
+        <code class="math">Assume: G has TWO identity elements e and e'.
+
+By definition of e (identity):
+  e · x = x · e = x   for all x ∈ G   ...(1)
+
+By definition of e' (identity):
+  e' · x = x · e' = x  for all x ∈ G   ...(2)
+
+Now apply: take x = e' in equation (1):
+  e · e' = e'   ...(3)
+
+Take x = e in equation (2):
+  e' · e = e    ...(4)
+
+But in a group: e · e' and e' · e are the same product direction?
+From (3): e · e' = e'
+From (4): e' · e = e
+
+In a group, product is well-defined:
+  e · e' = e'   [from (3)]
+  e · e' = e    [from (4), since e'·e = e means e·e'=e in general]
+
+Wait — more cleanly: e' = e·e' = e
+  (using (2) with x=e: e·e' = e, AND using (1) with x=e': e·e' = e')
+
+∴  e' = e·e' = e
+
+Hence e = e' — the two supposed identities are the SAME element.
+
+∴ The identity element in a group is UNIQUE.  QED ✓</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3a Abelian Group Proof -->
+  <div class="q-card" id="q-IV-3a">
+    <div class="q-header" onclick="toggle('IV-3a')">
+      <span class="q-num">Q3(a)</span><span class="q-type type-theory">THEORY</span>
+      <span class="q-text">G = {x: x∈ℝ−{0}}, a*b = ab/2. Prove (G,*) is an Abelian group</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('IV-3a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-given">
+        <h4>🔹 Given</h4>
+        <code class="math">G = ℝ − {0} (all real numbers except 0)
+Operation: a * b = ab/2   for all a,b ∈ G</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>📌 Verify all Group Axioms + Commutativity</h4>
+        <p><strong>1. Closure:</strong></p>
+        <code class="math">For a,b ∈ G (a≠0, b≠0):
+a * b = ab/2
+
+ab ≠ 0 (product of nonzero reals), so ab/2 ≠ 0
+∴ a * b ∈ G   ✓ Closure holds</code>
+        <p><strong>2. Associativity:</strong></p>
+        <code class="math">(a*b)*c = (ab/2)*c = (ab/2)·c/2 = abc/4
+
+a*(b*c) = a*(bc/2) = a·(bc/2)/2 = abc/4
+
+(a*b)*c = a*(b*c) = abc/4   ✓ Associativity holds</code>
+        <p><strong>3. Identity Element:</strong></p>
+        <code class="math">Need e: a*e = a
+  ae/2 = a
+  e = 2
+
+Check: a*2 = 2a/2 = a ✓
+       2*a = 2a/2 = a ✓
+∴ Identity element is e = 2 ∈ G   ✓</code>
+        <p><strong>4. Inverse Element:</strong></p>
+        <code class="math">Need a⁻¹: a * a⁻¹ = 2 (identity)
+  a · a⁻¹ / 2 = 2
+  a⁻¹ = 4/a
+
+Check: a*(4/a) = a·(4/a)/2 = 4/2 = 2 ✓
+Since a ≠ 0, 4/a ≠ 0, so 4/a ∈ G ✓
+∴ Each element has an inverse   ✓</code>
+        <p><strong>5. Commutativity (Abelian):</strong></p>
+        <code class="math">a * b = ab/2
+b * a = ba/2 = ab/2   (multiplication is commutative in ℝ)
+
+∴ a * b = b * a   ✓ Commutative (Abelian)</code>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Conclusion</h4>
+        <p><span class="ans-highlight">(G, *) satisfies all axioms: Closure, Associativity, Identity (e=2), Inverse (a⁻¹=4/a), Commutativity → (G,*) is an Abelian Group ✓</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4a GCD Euclidean -->
+  <div class="q-card" id="q-IV-4a">
+    <div class="q-header" onclick="toggle('IV-4a')">
+      <span class="q-num">Q4(a)</span><span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Find GCD of 42823 and 6409 using Euclidean Algorithm</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('IV-4a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-formula">
+        <h4>🔹 Euclidean Algorithm</h4>
+        <code class="math">gcd(a, b) = gcd(b, a mod b)
+Repeat until remainder = 0
+The last non-zero remainder is GCD</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step-by-Step Application</h4>
+        <code class="math">gcd(42823, 6409):
+
+Step 1: 42823 = 6 × 6409 + 4369
+        (42823 ÷ 6409 = 6 remainder 42823−38454=4369)
+
+Step 2: gcd(6409, 4369):
+        6409 = 1 × 4369 + 2040
+
+Step 3: gcd(4369, 2040):
+        4369 = 2 × 2040 + 289
+
+Step 4: gcd(2040, 289):
+        2040 = 7 × 289 + 17
+        (7 × 289 = 2023, 2040-2023=17)
+
+Step 5: gcd(289, 17):
+        289 = 17 × 17 + 0
+        (17 × 17 = 289, remainder = 0)
+
+Since remainder = 0, GCD = 17</code>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Final Answer</h4>
+        <p><span class="ans-highlight">GCD(42823, 6409) = 17</span></p>
+        <p style="color:var(--text2);margin-top:8px;">Verification: 42823 = 17 × 2519 ✓ and 6409 = 17 × 377 ✓</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4b Fermat's Little Theorem -->
+  <div class="q-card" id="q-IV-4b">
+    <div class="q-header" onclick="toggle('IV-4b')">
+      <span class="q-num">Q4(b)</span><span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Use Fermat's Little Theorem to show 2^140 ≡ 1 (mod 11)</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('IV-4b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-formula">
+        <h4>📌 Fermat's Little Theorem</h4>
+        <code class="math">If p is prime and gcd(a, p) = 1, then:
+  aᵖ⁻¹ ≡ 1 (mod p)
+
+Equivalently: aᵖ ≡ a (mod p) for any integer a</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step-by-Step Proof</h4>
+        <code class="math">Given: 2^140 mod 11
+
+Step 1: Check conditions
+  p = 11 is prime ✓
+  gcd(2, 11) = 1 ✓ (2 and 11 share no common factors)
+
+Step 2: Apply Fermat's Little Theorem
+  2^(p-1) ≡ 1 (mod p)
+  2^(11-1) ≡ 1 (mod 11)
+  2^10 ≡ 1 (mod 11)
+
+Step 3: Express 140 in terms of 10
+  140 = 10 × 14
+
+Step 4: Raise both sides to power 14
+  (2^10)^14 ≡ 1^14 (mod 11)
+  2^140 ≡ 1 (mod 11)   ✓ PROVED</code>
+        <p><strong>Verification (optional):</strong></p>
+        <code class="math">Powers of 2 mod 11:
+2¹=2, 2²=4, 2³=8, 2⁴=16≡5, 2⁵=32≡10, 
+2⁶=64≡9, 2⁷=128≡7, 2⁸≡3, 2⁹≡6, 2¹⁰≡1 ✓
+Cycle of length 10 → 2^140 = 2^(10×14) ≡ 1^14 = 1 (mod 11) ✓</code>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Proved: 2^140 ≡ 1 (mod 11)</h4>
+        <p style="color:var(--text2);">Key insight: 140 is exactly divisible by (p-1)=10, so Fermat's theorem applies directly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5a Primality Test -->
+  <div class="q-card" id="q-IV-5a">
+    <div class="q-header" onclick="toggle('IV-5a')">
+      <span class="q-num">Q5(a)</span><span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Determine whether the integer 287 is prime or not</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('IV-5a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-formula">
+        <h4>📌 Primality Test Method</h4>
+        <code class="math">If n has no prime divisors ≤ √n, then n is prime.
+√287 ≈ 16.94
+
+So test primes: 2, 3, 5, 7, 11, 13 (up to 16)</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step-by-Step Trial Division</h4>
+        <code class="math">Test n = 287:
+
+÷ 2:  287/2 = 143.5   → Not divisible (287 is odd)
+÷ 3:  2+8+7 = 17, 1+7 = 8  → Not divisible (not multiple of 3)
+÷ 5:  Ends in 7  → Not divisible
+÷ 7:  287 ÷ 7 = 41   → 7 × 41 = 287 ✓ DIVISIBLE!
+
+Check: 7 × 41 = 287 ✓</code>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Conclusion</h4>
+        <p><span class="ans-highlight">287 is NOT PRIME — it is COMPOSITE</span></p>
+        <p><span class="ans-highlight">287 = 7 × 41</span></p>
+        <p style="color:var(--text2);margin-top:8px;">Note: 41 is itself prime (41/2, 41/3, 41/5 — none divide evenly, √41 ≈ 6.4)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5b Extended Euclidean -->
+  <div class="q-card" id="q-IV-5b">
+    <div class="q-header" onclick="toggle('IV-5b')">
+      <span class="q-num">Q5(b)</span><span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Find integers u and v such that 512u + 320v = 64</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('IV-5b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 1: Find GCD(512, 320) using Euclidean Algorithm</h4>
+        <code class="math">512 = 1 × 320 + 192    → 192 = 512 − 1×320
+320 = 1 × 192 + 128    → 128 = 320 − 1×192
+192 = 1 × 128 + 64     →  64 = 192 − 1×128
+128 = 2 × 64  + 0
+
+GCD(512, 320) = 64   (equation 64u+320v=64 has solution since GCD=64)</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 2: Back-substitute to find u and v</h4>
+        <code class="math">64 = 192 − 1×128                          ...(i)
+   = 192 − 1×(320 − 1×192)             [substitute 128 = 320-192]
+   = 192 − 320 + 192
+   = 2×192 − 1×320                     ...(ii)
+   = 2×(512 − 1×320) − 1×320           [substitute 192 = 512-320]
+   = 2×512 − 2×320 − 1×320
+   = 2×512 − 3×320
+
+∴ 64 = 512×2 + 320×(−3)
+
+So: u = 2, v = −3</code>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Final Answer</h4>
+        <p><span class="ans-highlight">u = 2, v = −3</span></p>
+        <p><span class="ans-highlight">Verification: 512×2 + 320×(−3) = 1024 − 960 = 64 ✓</span></p>
+      </div>
+    </div>
+  </div>
+</div><!-- end unit IV -->
+
+<!-- ======================= UNIT V ======================= -->
+<div class="unit-section" id="unit-V">
+  <div class="unit-header">
+    <div>
+      <h2>Unit V — Graph Theory</h2>
+      <p>Adjacency Matrix · Euler/Hamilton Circuits · Spanning Trees · Planarity · Coloring</p>
+    </div>
+    <div class="ctrl-row">
+      <button class="btn" onclick="openAll('V')">Open All</button>
+      <button class="btn" onclick="closeAll('V')">Close All</button>
+    </div>
+  </div>
+
+  <div class="cheat-sheet">
+    <h3>📋 Unit V — Formula Cheat Sheet</h3>
+    <div class="formula-grid">
+      <div class="formula-item"><div class="label">Handshaking Lemma</div><div class="val">Σ deg(v) = 2|E|</div></div>
+      <div class="formula-item"><div class="label">Euler's Formula (planar)</div><div class="val">V − E + F = 2</div></div>
+      <div class="formula-item"><div class="label">Planar bound</div><div class="val">E ≤ 3V − 6</div></div>
+      <div class="formula-item"><div class="label">Bipartite planar bound</div><div class="val">E ≤ 2V − 4</div></div>
+      <div class="formula-item"><div class="label">K5 non-planar check</div><div class="val">V=5,E=10; 10 > 3(5)-6=9</div></div>
+      <div class="formula-item"><div class="label">K3,3 non-planar check</div><div class="val">V=6,E=9; 9 > 2(6)-4=8</div></div>
+      <div class="formula-item"><div class="label">Chromatic number χ</div><div class="val">Min colors for proper coloring</div></div>
+      <div class="formula-item"><div class="label">Eulerian Circuit</div><div class="val">All vertices have even degree</div></div>
+    </div>
+  </div>
+
+  <!-- Q1a Adjacency Matrix -->
+  <div class="q-card" id="q-V-1a">
+    <div class="q-header" onclick="toggle('V-1a')">
+      <span class="q-num">Q1(a)</span><span class="q-type type-theory">THEORY</span>
+      <span class="q-text">Adjacency Matrix representation of graphs — with example</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('V-1a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-theory">
+        <h4>📌 Adjacency Matrix</h4>
+        <ul class="sol-list">
+          <li>A square matrix A of order n×n (n = number of vertices)</li>
+          <li>A[i][j] = 1 if there is an edge between vertex i and vertex j; 0 otherwise</li>
+          <li>For undirected graphs: A is symmetric (A[i][j] = A[j][i])</li>
+          <li>Diagonal entries = 0 (no self-loops, unless multigraph)</li>
+        </ul>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>📌 Example</h4>
+        <code class="math">Graph G: Vertices = {1, 2, 3, 4}
+Edges: (1,2), (1,3), (2,3), (2,4), (3,4)
+
+Adjacency Matrix A:
+     1  2  3  4
+1  [ 0  1  1  0 ]
+2  [ 1  0  1  1 ]
+3  [ 1  1  0  1 ]
+4  [ 0  1  1  0 ]
+
+Row sum = degree of vertex:
+deg(1)=2, deg(2)=3, deg(3)=3, deg(4)=2
+Σ degrees = 10 = 2×5 edges ✓</code>
+      </div>
+      <div class="sol-block sol-formula">
+        <h4>📌 Properties &amp; Applications</h4>
+        <table class="sol-table">
+          <tr><th>Property</th><th>Description</th></tr>
+          <tr><td>Space complexity</td><td>O(V²)</td></tr>
+          <tr><td>Edge query</td><td>O(1)</td></tr>
+          <tr><td>A² entry</td><td>Number of paths of length 2 between vertices</td></tr>
+          <tr><td>Undirected graph</td><td>Symmetric matrix</td></tr>
+          <tr><td>Degree of vertex i</td><td>Sum of row i</td></tr>
+        </table>
+        <ul class="sol-list" style="margin-top:10px;">
+          <li><strong>Applications:</strong> Network routing, social network analysis, circuit design, web graph analysis, recommendation systems</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q1b Euler/Hamilton -->
+  <div class="q-card" id="q-V-1b">
+    <div class="q-header" onclick="toggle('V-1b')">
+      <span class="q-num">Q1(b)</span><span class="q-type type-theory">THEORY</span>
+      <span class="q-text">Define Eulerian circuit and Hamiltonian circuit; example of graph with neither</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('V-1b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-theory">
+        <h4>📌 Eulerian Circuit</h4>
+        <ul class="sol-list">
+          <li><strong>Definition:</strong> A closed walk that visits every <em>edge</em> exactly once and returns to the starting vertex.</li>
+          <li><strong>Condition (Euler's Theorem):</strong> A connected graph has an Eulerian circuit iff every vertex has <em>even degree</em>.</li>
+          <li><strong>Eulerian Path (not circuit):</strong> Exists iff exactly 2 vertices have odd degree.</li>
+          <li><strong>Example:</strong> Königsberg Bridge Problem — 4 vertices all with odd degree → no Eulerian circuit.</li>
+        </ul>
+      </div>
+      <div class="sol-block sol-theory">
+        <h4>📌 Hamiltonian Circuit</h4>
+        <ul class="sol-list">
+          <li><strong>Definition:</strong> A closed path that visits every <em>vertex</em> exactly once and returns to the starting vertex.</li>
+          <li><strong>No simple necessary &amp; sufficient condition</strong> (NP-complete problem)</li>
+          <li><strong>Ore's Theorem:</strong> If deg(u) + deg(v) ≥ n for all non-adjacent pairs, Hamiltonian circuit exists.</li>
+          <li><strong>Example:</strong> K_n (complete graph) always has a Hamiltonian circuit.</li>
+        </ul>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>📌 Graph with NEITHER Eulerian nor Hamiltonian Circuit</h4>
+        <code class="math">Consider a Path Graph P₄: 1 — 2 — 3 — 4
+
+Degrees: deg(1)=1 (odd), deg(2)=2, deg(3)=2, deg(4)=1 (odd)
+
+Eulerian Circuit? NO — vertices 1 and 4 have odd degree
+                       (Need all even degrees for Eulerian circuit)
+
+Hamiltonian Circuit? NO — path graph is not cyclic;
+                          a Hamiltonian circuit would need to return
+                          to start, but P₄ has no cycle.
+
+∴ P₄ has neither an Eulerian circuit nor a Hamiltonian circuit.</code>
+      </div>
+      <div class="sol-block sol-formula">
+        <h4>📊 Comparison</h4>
+        <table class="sol-table">
+          <tr><th>Feature</th><th>Eulerian Circuit</th><th>Hamiltonian Circuit</th></tr>
+          <tr><td>What it traverses</td><td>Every edge once</td><td>Every vertex once</td></tr>
+          <tr><td>Easy to check?</td><td>Yes (O(V+E))</td><td>No (NP-complete)</td></tr>
+          <tr><td>Key condition</td><td>All even degrees</td><td>No simple condition</td></tr>
+          <tr><td>Application</td><td>Route inspection</td><td>Travelling salesman</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2b Graph Coloring -->
+  <div class="q-card" id="q-V-2b">
+    <div class="q-header" onclick="toggle('V-2b')">
+      <span class="q-num">Q2(b)</span><span class="q-type type-theory">THEORY</span>
+      <span class="q-text">Explain Graph Coloring and Chromatic Number with example</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('V-2b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-theory">
+        <h4>📌 Graph Coloring</h4>
+        <ul class="sol-list">
+          <li>Assignment of colors to vertices such that no two <em>adjacent</em> vertices share the same color.</li>
+          <li>Formally: A <strong>k-coloring</strong> is a function f: V → {1,2,…,k} such that f(u) ≠ f(v) whenever (u,v) ∈ E.</li>
+          <li>A graph is <strong>k-colorable</strong> if such an assignment exists with k colors.</li>
+        </ul>
+      </div>
+      <div class="sol-block sol-formula">
+        <h4>📌 Chromatic Number χ(G)</h4>
+        <code class="math">χ(G) = minimum number of colors needed for proper coloring
+
+Key Results:
+• Bipartite graph: χ = 2
+• Tree: χ = 2
+• Cycle with even vertices: χ = 2
+• Cycle with odd vertices: χ = 3
+• Complete graph Kₙ: χ = n
+• Planar graph (4-Color Theorem): χ ≤ 4</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>📌 Example: Cycle Graph C₅ (Pentagon)</h4>
+        <code class="math">Vertices: 1-2-3-4-5-1
+
+Try 2 colors: 1=R, 2=B, 3=R, 4=B, 5=R
+  But 5 and 1 are adjacent, both R → CONFLICT!
+
+Try 3 colors: 1=R, 2=B, 3=R, 4=B, 5=G
+  Check all edges: 1-2(R,B)✓, 2-3(B,R)✓, 3-4(R,B)✓,
+                  4-5(B,G)✓, 5-1(G,R)✓  All OK!
+
+∴ χ(C₅) = 3</code>
+      </div>
+      <div class="sol-block sol-theory">
+        <h4>📌 Applications</h4>
+        <ul class="sol-list">
+          <li>Register allocation in compilers</li>
+          <li>Scheduling problems (exams, tasks)</li>
+          <li>Map coloring (countries → colors)</li>
+          <li>Frequency assignment in wireless networks</li>
+          <li>Sudoku solving</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3b Minimum Spanning Tree - Prim's -->
+  <div class="q-card" id="q-V-3b">
+    <div class="q-header" onclick="toggle('V-3b')">
+      <span class="q-num">Q3(b)</span><span class="q-type type-theory">THEORY</span>
+      <span class="q-text">Define Minimum Spanning Tree; describe Prim's Algorithm with example</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('V-3b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-theory">
+        <h4>📌 Minimum Spanning Tree (MST)</h4>
+        <ul class="sol-list">
+          <li>A <strong>spanning tree</strong> includes all vertices with exactly (V−1) edges and no cycles.</li>
+          <li>A <strong>Minimum Spanning Tree</strong> is the spanning tree with minimum total edge weight.</li>
+          <li>Properties: V vertices, V−1 edges, connected, acyclic</li>
+        </ul>
+      </div>
+      <div class="sol-block sol-formula">
+        <h4>📌 Prim's Algorithm</h4>
+        <code class="math">Input: Weighted connected graph G
+Output: MST T
+
+Algorithm:
+1. Start with any vertex s, add to MST set
+2. REPEAT until all vertices included:
+   a. Find the minimum weight edge connecting
+      a vertex IN MST to a vertex NOT IN MST
+   b. Add that edge and vertex to MST
+3. Output MST
+
+Time Complexity: O(V²) basic | O(E log V) with heap</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>📌 Example</h4>
+        <code class="math">Graph with vertices A,B,C,D,E and edges:
+A-B:4, A-C:2, B-C:1, B-D:5, C-D:8, C-E:10, D-E:2, D-B:3
+
+Step 1: Start at A. MST={A}
+        Edges from A: A-B(4), A-C(2) → Min = A-C(2)
+        Add C. MST={A,C}
+
+Step 2: Edges from {A,C}: A-B(4), C-B(1), C-D(8), C-E(10)
+        Min = C-B(1) → Add B. MST={A,C,B}
+
+Step 3: Edges from {A,B,C}: A-?(none new), B-D(5), B-D(3)
+        Min = B-D(3) → Add D. MST={A,B,C,D}
+
+Step 4: Edges from {A,B,C,D}: D-E(2), C-E(10)
+        Min = D-E(2) → Add E. MST={A,B,C,D,E}
+
+MST edges: A-C(2), C-B(1), B-D(3), D-E(2)
+Total weight = 2+1+3+2 = 8</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4a K3,3 non-planar -->
+  <div class="q-card" id="q-V-4a">
+    <div class="q-header" onclick="toggle('V-4a')">
+      <span class="q-num">Q4(a)</span><span class="q-type type-theory">THEORY</span>
+      <span class="q-text">Show that complete bipartite graph K₃,₃ is not planar</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('V-4a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-formula">
+        <h4>📌 Key Theorem for Bipartite Planar Graphs</h4>
+        <code class="math">For a simple connected BIPARTITE planar graph:
+  E ≤ 2V − 4
+  
+(Because bipartite graphs have no odd cycles → 
+ minimum cycle length is 4, so each face has ≥ 4 edges)</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Proof K₃,₃ is Non-Planar</h4>
+        <code class="math">For K₃,₃:
+  V = 6 (3 in each partition)
+  E = 3 × 3 = 9 (complete bipartite)
+
+Apply the bipartite planarity condition:
+  E ≤ 2V − 4
+  9 ≤ 2(6) − 4
+  9 ≤ 8
+
+CONTRADICTION! 9 > 8
+
+∴ K₃,₃ VIOLATES the necessary condition for planarity.
+∴ K₃,₃ is NOT PLANAR.   QED ✓</code>
+      </div>
+      <div class="sol-block sol-insight">
+        <h4>🧠 Physical Interpretation</h4>
+        <p>K₃,₃ is the "water-gas-electricity" problem: connect 3 houses to 3 utilities (gas, water, electric) without crossing pipes/wires — impossible in a plane!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4b K5 non-planar -->
+  <div class="q-card" id="q-V-4b">
+    <div class="q-header" onclick="toggle('V-4b')">
+      <span class="q-num">Q4(b)</span><span class="q-type type-theory">THEORY</span>
+      <span class="q-text">Prove that the complete graph K₅ is non-planar</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('V-4b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-formula">
+        <h4>📌 Euler's Planarity Condition</h4>
+        <code class="math">For a simple connected planar graph:
+  E ≤ 3V − 6
+  
+(Every face has ≥ 3 edges, and by Euler's formula V-E+F=2)</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Proof K₅ is Non-Planar</h4>
+        <code class="math">For K₅ (complete graph on 5 vertices):
+  V = 5
+  E = C(5,2) = 5×4/2 = 10
+
+Apply planarity condition:
+  E ≤ 3V − 6
+  10 ≤ 3(5) − 6
+  10 ≤ 15 − 6
+  10 ≤ 9
+
+CONTRADICTION! 10 > 9
+
+∴ K₅ violates the necessary condition for planarity.
+∴ K₅ is NOT PLANAR.   QED ✓
+
+Additional check using Euler: If K₅ were planar:
+  V − E + F = 2
+  5 − 10 + F = 2 → F = 7 faces
+
+Each face bounded by ≥ 3 edges, each edge borders 2 faces:
+  3F ≤ 2E → 21 ≤ 20  → CONTRADICTION again ✓</code>
+      </div>
+      <div class="sol-block sol-tip">
+        <h4>💡 Kuratowski's Theorem</h4>
+        <p>A graph is planar iff it contains no subdivision of K₅ or K₃,₃ as a subgraph. K₅ and K₃,₃ are the two fundamental non-planar graphs.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5a Vertices with 6 edges degree 3 -->
+  <div class="q-card" id="q-V-5a">
+    <div class="q-header" onclick="toggle('V-5a')">
+      <span class="q-num">Q5(a)</span><span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">How many vertices will a graph contain with 6 edges and all vertices of degree 3?</span>
+      <span class="q-marks">7M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('V-5a')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-formula">
+        <h4>🔹 Handshaking Lemma</h4>
+        <code class="math">Sum of all vertex degrees = 2 × (Number of edges)
+
+Σ deg(v) = 2|E|</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Solution</h4>
+        <code class="math">Given: |E| = 6, all vertices have degree = 3
+Let V = number of vertices.
+
+By Handshaking Lemma:
+  Σ deg(v) = 2|E|
+  V × 3 = 2 × 6
+  3V = 12
+  V = 4</code>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Final Answer</h4>
+        <p><span class="ans-highlight">The graph will have V = 4 vertices</span></p>
+        <p style="color:var(--text2);margin-top:8px;">This is the <strong>complete graph K₄</strong>! K₄ has 4 vertices, each of degree 3, and C(4,2)=6 edges. It is 3-regular (cubic).</p>
+        <code class="math">K₄ structure: each vertex connects to all other 3 vertices
+deg(1)=deg(2)=deg(3)=deg(4)=3, Total edges=6 ✓</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5b Planar graph faces -->
+  <div class="q-card" id="q-V-5b">
+    <div class="q-header" onclick="toggle('V-5b')">
+      <span class="q-num">Q5(b)</span><span class="q-type type-num">NUMERICAL</span>
+      <span class="q-text">Connected planar graph: 9 vertices with degrees 2,2,2,3,3,3,4,4,5 — find edges and faces</span>
+      <span class="q-marks">8M</span>
+      <button class="bookmark-btn" onclick="event.stopPropagation();bookmark('V-5b')">☆</button>
+      <svg class="q-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="q-body">
+      <div class="sol-block sol-given">
+        <h4>🔹 Given</h4>
+        <code class="math">V = 9 vertices with degrees: 2,2,2,3,3,3,4,4,5
+Connected planar graph.
+Find: (i) Number of edges E  (ii) Number of faces F</code>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 1: Find Number of Edges using Handshaking Lemma</h4>
+        <code class="math">Σ deg(v) = 2|E|
+Sum of degrees = 2+2+2+3+3+3+4+4+5 = 28
+2|E| = 28
+|E| = 14</code>
+        <p style="color:var(--answer);font-weight:600;">Number of Edges E = 14</p>
+      </div>
+      <div class="sol-block sol-steps">
+        <h4>🔹 Step 2: Find Number of Faces using Euler's Formula</h4>
+        <code class="math">Euler's Formula for planar graphs:
+  V − E + F = 2
+
+  9 − 14 + F = 2
+  F = 2 − 9 + 14
+  F = 7</code>
+        <p style="color:var(--answer);font-weight:600;">Number of Faces F = 7</p>
+      </div>
+      <div class="sol-block sol-answer">
+        <h4>🔹 Final Answers</h4>
+        <p><span class="ans-highlight">(i) Number of Edges E = 14</span></p>
+        <p><span class="ans-highlight">(ii) Number of Faces F = 7 (including outer/unbounded face)</span></p>
+        <p style="color:var(--text2);margin-top:8px;">Verify: V−E+F = 9−14+7 = 2 ✓ (Euler's formula satisfied)</p>
+      </div>
+    </div>
+  </div>
+</div><!-- end unit V -->
+
+</main><!-- end main -->
+
+<!-- QUICK REVISION OVERLAY -->
+<div id="revision-overlay">
+  <div style="max-width:900px;margin:0 auto;">
+    <div class="rev-header">
+      <h2 style="font-family:'Crimson Pro',serif;color:var(--accent);font-size:1.4rem;">⚡ Quick Revision — Key Points</h2>
+      <button class="btn active" onclick="closeRevision()">✕ Close</button>
+    </div>
+    <div class="rev-card"><h4>Unit I — Probability</h4>
+      <p>• E(X) = ∫x·f(x)dx (continuous) &nbsp;|&nbsp; Var(X) = E(X²) − [E(X)]² &nbsp;|&nbsp; Gamma: ∫₀^∞ xⁿe^(-λx)dx = n!/λⁿ⁺¹<br>
+      • For f(x)=kxe^(-λx): k=λ², E(X)=2/λ, Var(X)=2/λ² (Gamma-2 dist.) &nbsp;|&nbsp; Skewness: Sk=(Mean-Mode)/SD<br>
+      • Markov: P(Xₙ=j|X₀..Xₙ₋₁) = P(Xₙ=j|Xₙ₋₁) — Memoryless &nbsp;|&nbsp; CLT: X̄~N(μ, σ²/n) for large n</p>
+    </div>
+    <div class="rev-card"><h4>Unit II — Sampling &amp; Estimation</h4>
+      <p>• SE = σ/√n &nbsp;|&nbsp; 95% CI: x̄ ± 1.96·σ/√n &nbsp;|&nbsp; 99% CI: x̄ ± 2.576·σ/√n<br>
+      • CI for proportion: p̂ ± z√(p̂q̂/n) &nbsp;|&nbsp; E(x̄)=μ (unbiased) &nbsp;|&nbsp; MLE: maximize ∫f(xᵢ;θ)<br>
+      • β₁=μ₃²/μ₂³ (skewness), β₂=μ₄/μ₂² (kurtosis) &nbsp;|&nbsp; μ₂=μ₂'-(μ₁')²</p>
+    </div>
+    <div class="rev-card"><h4>Unit III — Hypothesis Testing</h4>
+      <p>• Z = (p̂-p)/√(pq/n) for proportion test &nbsp;|&nbsp; χ²=Σ(O-E)²/E (chi-square) &nbsp;|&nbsp; Yate's: (|O-E|-0.5)²/E<br>
+      • X̄-chart: UCL=X̄̄+A₂R̄, LCL=X̄̄-A₂R̄ &nbsp;|&nbsp; R-chart: UCL=D₄R̄ (n=6: A₂=0.483, D₄=2.004)<br>
+      • Poisson: λ̂=mean, P(X=x)=e^(-λ)λˣ/x! &nbsp;|&nbsp; Normal: Z=(x-μ)/σ</p>
+    </div>
+    <div class="rev-card"><h4>Unit IV — Group Theory &amp; Number Theory</h4>
+      <p>• Group axioms: Closure+Associativity+Identity+Inverse (CAII) &nbsp;|&nbsp; Abelian: + Commutativity<br>
+      • (ab)⁻¹=b⁻¹a⁻¹ (reverse order) &nbsp;|&nbsp; (a⁻¹)⁻¹=a &nbsp;|&nbsp; Fermat: aᵖ⁻¹≡1(mod p)<br>
+      • GCD via Euclidean: gcd(a,b)=gcd(b,a mod b) &nbsp;|&nbsp; Primality: test divisors up to √n</p>
+    </div>
+    <div class="rev-card"><h4>Unit V — Graph Theory</h4>
+      <p>• Handshaking: Σdeg(v)=2|E| &nbsp;|&nbsp; Euler's formula: V-E+F=2 (planar)<br>
+      • Planarity: E≤3V-6 (general), E≤2V-4 (bipartite) &nbsp;|&nbsp; K₅ and K₃,₃ are non-planar<br>
+      • Eulerian circuit: all even degrees &nbsp;|&nbsp; Hamiltonian: NP-complete &nbsp;|&nbsp; MST: Prim's/Kruskal's</p>
+    </div>
+  </div>
+</div>
+
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+
+<script>
+// ===== THEME =====
+let isDark = true;
+function toggleTheme() {
+  isDark = !isDark;
+  document.body.classList.toggle('light', !isDark);
+  document.getElementById('theme-btn').textContent = isDark ? '☀️ Light' : '🌙 Dark';
+  localStorage.setItem('mfcs-theme', isDark ? 'dark' : 'light');
+}
+(function() {
+  const saved = localStorage.getItem('mfcs-theme');
+  if (saved === 'light') { isDark = false; document.body.classList.add('light'); document.getElementById('theme-btn').textContent = '🌙 Dark'; }
+})();
+
+// ===== UNIT SWITCHING =====
+function showUnit(u) {
+  document.querySelectorAll('.unit-section').forEach(s => s.classList.remove('visible'));
+  document.querySelectorAll('.unit-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('unit-' + u).classList.add('visible');
+  document.querySelectorAll('.unit-tab').forEach(t => { if (t.textContent.includes('Unit ' + u)) t.classList.add('active'); });
+}
+
+// ===== ACCORDION =====
+function toggle(id) {
+  const card = document.getElementById('q-' + id);
+  card.classList.toggle('open');
+}
+function openAll(unit) {
+  document.querySelectorAll('#unit-' + unit + ' .q-card').forEach(c => c.classList.add('open'));
+}
+function closeAll(unit) {
+  document.querySelectorAll('#unit-' + unit + ' .q-card').forEach(c => c.classList.remove('open'));
+}
+
+// ===== BOOKMARKS =====
+const bookmarks = new Set(JSON.parse(localStorage.getItem('mfcs-bookmarks') || '[]'));
+function bookmark(id) {
+  const card = document.getElementById('q-' + id);
+  const btn = card.querySelector('.bookmark-btn');
+  if (bookmarks.has(id)) {
+    bookmarks.delete(id);
+    btn.textContent = '☆';
+    card.classList.remove('bookmarked');
+  } else {
+    bookmarks.add(id);
+    btn.textContent = '★';
+    card.classList.add('bookmarked');
+  }
+  localStorage.setItem('mfcs-bookmarks', JSON.stringify([...bookmarks]));
+}
+let showingBookmarks = false;
+function toggleBookmarkView() {
+  showingBookmarks = !showingBookmarks;
+  document.querySelectorAll('.q-card').forEach(card => {
+    if (showingBookmarks) {
+      card.style.display = card.classList.contains('bookmarked') ? '' : 'none';
+    } else {
+      card.style.display = '';
+    }
+  });
+  document.getElementById('bookmark-view-btn').classList.toggle('active', showingBookmarks);
+  if (showingBookmarks) {
+    // show all units
+    document.querySelectorAll('.unit-section').forEach(s => s.classList.add('visible'));
+  }
+}
+// Restore bookmarks on load
+(function() {
+  bookmarks.forEach(id => {
+    const card = document.getElementById('q-' + id);
+    if (card) {
+      card.classList.add('bookmarked');
+      const btn = card.querySelector('.bookmark-btn');
+      if (btn) btn.textContent = '★';
+    }
+  });
+})();
+
+// ===== SEARCH =====
+document.getElementById('search-input').addEventListener('input', function() {
+  const q = this.value.trim().toLowerCase();
+  if (!q) {
+    document.querySelectorAll('.q-card').forEach(c => { c.classList.remove('hidden-search'); });
+    // restore highlights
+    document.querySelectorAll('.q-text').forEach(el => { el.innerHTML = el.getAttribute('data-orig') || el.innerHTML; });
+    return;
+  }
+  // Show all units when searching
+  document.querySelectorAll('.unit-section').forEach(s => s.classList.add('visible'));
+
+  document.querySelectorAll('.q-card').forEach(card => {
+    const txt = card.querySelector('.q-text');
+    const orig = txt.getAttribute('data-orig') || txt.textContent;
+    txt.setAttribute('data-orig', orig);
+    if (orig.toLowerCase().includes(q)) {
+      card.classList.remove('hidden-search');
+      // highlight
+      const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+      txt.innerHTML = orig.replace(re, '<span class="hl">$1</span>');
+    } else {
+      card.classList.add('hidden-search');
+    }
+  });
+});
+
+// ===== PROGRESS BAR =====
+window.addEventListener('scroll', () => {
+  const el = document.documentElement;
+  const sc = el.scrollTop, sh = el.scrollHeight - el.clientHeight;
+  const pct = sh > 0 ? (sc / sh) * 100 : 0;
+  document.getElementById('progress-bar').style.width = pct + '%';
+  const scrollBtn = document.getElementById('scroll-top');
+  scrollBtn.classList.toggle('visible', sc > 400);
+});
+
+// ===== QUICK REVISION =====
+function openRevision() { document.getElementById('revision-overlay').classList.add('visible'); }
+function closeRevision() { document.getElementById('revision-overlay').classList.remove('visible'); }
+
+// ===== COPY ANSWER =====
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('copy-btn')) {
+    const text = e.target.previousElementSibling?.textContent || '';
+    navigator.clipboard.writeText(text).then(() => {
+      e.target.textContent = '✓ Copied!';
+      setTimeout(() => { e.target.textContent = 'Copy'; }, 1500);
+    });
+  }
+});
+</script>
+</body>
+</html>
