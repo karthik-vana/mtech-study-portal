@@ -8,6 +8,19 @@
 
 ---
 
+## 🚀 Live Demo
+
+<p align="center">
+  <a href="https://mtech-study-portal.vercel.app" target="_blank">
+    <img src="https://img.shields.io/badge/Live%20Demo-Click%20Here-success?style=for-the-badge&logo=vercel" alt="Live Demo"/>
+  </a>
+</p>
+
+✨ Experience the **M.Tech Study Portal** in action — explore courses, smart study features, and interactive learning tools directly in your browser.
+
+
+---
+
 ## ✨ Features
 
 | Feature | Description |
