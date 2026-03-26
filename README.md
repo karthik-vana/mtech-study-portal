@@ -1,4 +1,4 @@
-# 🎓 M.Tech CSE (AI/ML) Study Portal
+# 🎓 JNTUV M.Tech CSE (AI/ML) Study Portal
 
 > **A premium, multi-page study platform for M.Tech CSE (AI/ML) 1st Semester** — covering Mathematical Foundations, Advanced DSA, Cloud Computing, and Machine Learning with 188+ questions across 20 units.
 
